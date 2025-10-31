@@ -1,0 +1,100 @@
+.invite-details {
+  margin-top: clamp(40px, 6vw, 80px);
+}
+
+.invite-card-panel {
+  padding: clamp(36px, 5vw, 60px);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(217, 180, 92, 0.35);
+  background: linear-gradient(180deg, rgba(17, 33, 28, 0.92), rgba(7, 15, 13, 0.72));
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+.invite-salaam {
+  font-size: 1rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.invite-names {
+  margin: 16px auto;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  color: var(--gold-soft);
+}
+
+.invite-body {
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.celebrants {
+  margin-top: 8px;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-family: 'Playfair Display', serif;
+  color: var(--cream);
+  letter-spacing: 0.18em;
+}
+
+.date-block {
+  margin-top: 16px;
+  display: grid;
+  gap: 4px;
+}
+
+.date-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.date-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold-soft);
+}
+
+.venue {
+  margin-top: 28px;
+  display: grid;
+  gap: 4px;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.venue-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--cream);
+}
+
+.invite-copy {
+  margin-top: 28px;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.rsvp-actions {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .invite-card-panel {
+    padding: 28px 18px 42px;
+  }
+
+  .rsvp-actions {
+    flex-direction: column;
+  }
+}

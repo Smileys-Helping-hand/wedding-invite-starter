@@ -1,0 +1,29 @@
+[
+  {
+    "code": "lumina001",
+    "guestName": "Aaliyah Rahman",
+    "partnerName": "Imran Rahman",
+    "household": 2,
+    "contact": "aaliyah@example.com",
+    "rsvpStatus": "pending",
+    "notes": "Prefers vegetarian menu"
+  },
+  {
+    "code": "lumina002",
+    "guestName": "Maryam Idris",
+    "partnerName": null,
+    "household": 1,
+    "contact": "maryam@example.com",
+    "rsvpStatus": "pending",
+    "notes": "Allergic to peanuts"
+  },
+  {
+    "code": "lumina003",
+    "guestName": "Yusuf Khan",
+    "partnerName": "Hafsa Khan",
+    "household": 4,
+    "contact": "yusuf@example.com",
+    "rsvpStatus": "confirmed",
+    "notes": "Bringing two children"
+  }
+]

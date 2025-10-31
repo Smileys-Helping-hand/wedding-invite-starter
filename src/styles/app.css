@@ -1,0 +1,104 @@
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app-main {
+  position: relative;
+  padding: 100px 0 120px;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.page-panel {
+  width: min(1100px, 92vw);
+  background: rgba(10, 20, 18, 0.6);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(24px, 4vw, 64px);
+  border: 1px solid rgba(217, 180, 92, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 3vw, 3.2rem);
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--gold-soft);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-subtitle {
+  text-align: center;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 48px;
+}
+
+.grid-two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.section-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: clamp(18px, 3vw, 28px);
+  border: 1px solid rgba(217, 180, 92, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-soft);
+  margin-bottom: 12px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(217, 180, 92, 0.16);
+  color: var(--gold-soft);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 20px);
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.text-accent {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-soft);
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding-top: 80px;
+  }
+
+  .page-panel {
+    padding: 24px 20px 40px;
+    border-radius: 24px;
+  }
+}

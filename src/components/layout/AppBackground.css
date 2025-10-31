@@ -1,0 +1,24 @@
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.sparkle-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  filter: saturate(0.7) brightness(0.6);
+  opacity: 0.65;
+}
+
+.gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top center, rgba(28, 70, 58, 0.65), rgba(4, 9, 8, 0.95));
+  backdrop-filter: blur(8px);
+}

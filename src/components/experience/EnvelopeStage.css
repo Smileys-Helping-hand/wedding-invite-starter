@@ -1,0 +1,34 @@
+.envelope-stage {
+  position: relative;
+  width: min(800px, 86vw);
+  height: clamp(320px, 56vw, 520px);
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+}
+
+.envelope {
+  position: absolute;
+  width: min(90%, 620px);
+  filter: drop-shadow(0 40px 60px rgba(15, 24, 22, 0.45));
+}
+
+.wax-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.waxseal {
+  width: clamp(160px, 22vw, 220px);
+  filter: drop-shadow(0 20px 30px rgba(63, 29, 12, 0.6));
+}
+
+.invite-card {
+  position: absolute;
+  width: min(80%, 500px);
+  z-index: 1;
+  filter: drop-shadow(0 40px 70px rgba(0, 0, 0, 0.35));
+}

@@ -1,0 +1,39 @@
+.bismillah-stage {
+  position: relative;
+  width: min(960px, 90vw);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 64px);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(217, 180, 92, 0.35);
+  background: linear-gradient(160deg, rgba(10, 20, 18, 0.85), rgba(31, 122, 91, 0.18));
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+.bismillah-glow {
+  position: absolute;
+  inset: 15% 10%;
+  border-radius: 40%;
+  filter: blur(70px);
+  background: radial-gradient(circle, rgba(217, 180, 92, 0.45), rgba(7, 17, 15, 0));
+  z-index: 0;
+}
+
+.bismillah-art {
+  position: relative;
+  z-index: 1;
+  width: min(80vw, 720px);
+  margin: 0 auto;
+  filter: drop-shadow(0 10px 40px rgba(217, 180, 92, 0.5));
+}
+
+.bismillah-caption {
+  position: relative;
+  z-index: 1;
+  font-family: 'Playfair Display', serif;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: clamp(22px, 3vw, 32px);
+  font-size: clamp(0.85rem, 1vw, 1rem);
+}

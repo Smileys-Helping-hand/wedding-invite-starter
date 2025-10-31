@@ -1,0 +1,140 @@
+.admin-login {
+  display: grid;
+  place-items: center;
+}
+
+.admin-login__form {
+  width: min(420px, 90%);
+  display: grid;
+  gap: 24px;
+  text-align: center;
+}
+
+.admin-dashboard {
+  display: grid;
+  gap: clamp(32px, 4vw, 48px);
+}
+
+.admin-stats {
+  gap: 18px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(217, 180, 92, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  display: grid;
+  gap: 8px;
+}
+
+.stat-card.full {
+  grid-column: span 2;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--gold-soft);
+}
+
+.guest-table {
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(217, 180, 92, 0.25);
+  overflow: hidden;
+  background: rgba(5, 12, 11, 0.7);
+}
+
+.guest-table__header,
+.guest-table__row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.6fr 0.8fr 1.4fr 1.6fr;
+  gap: 12px;
+  padding: 18px 24px;
+  align-items: center;
+}
+
+.guest-table__header {
+  background: rgba(217, 180, 92, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+}
+
+.guest-table__row:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.guest-table__row span {
+  display: grid;
+  gap: 4px;
+}
+
+.guest-table__row strong {
+  font-family: 'Playfair Display', serif;
+  color: var(--cream);
+}
+
+.guest-table__row small {
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.08em;
+}
+
+.status {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  text-align: center;
+}
+
+.status--confirmed {
+  background: rgba(31, 122, 91, 0.2);
+  color: var(--gold-soft);
+}
+
+.status--pending {
+  background: rgba(217, 180, 92, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.status--declined {
+  background: rgba(204, 98, 98, 0.25);
+  color: #f2a7a7;
+}
+
+.notes {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .guest-table__header,
+  .guest-table__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guest-table__header span:nth-child(n+3),
+  .guest-table__row span:nth-child(n+3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 10px;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}

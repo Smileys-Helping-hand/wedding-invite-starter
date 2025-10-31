@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+dist
+.vite
+.env
+.env.local
+.env.*.local
+.idea
+*.log
+public/assets/*
+!public/assets/
+!public/assets/README.md

@@ -1,0 +1,28 @@
+.curtain-stage {
+  position: relative;
+  width: min(1100px, 90vw);
+  height: clamp(420px, 60vw, 640px);
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3), rgba(4, 8, 7, 0.7));
+  border: 1px solid rgba(217, 180, 92, 0.35);
+  box-shadow: var(--shadow-soft);
+}
+
+.curtain {
+  position: absolute;
+  top: -5%;
+  width: 60%;
+  height: 110%;
+  object-fit: cover;
+  filter: saturate(1.1);
+}
+
+.curtain--left {
+  left: 0;
+}
+
+.curtain--right {
+  right: 0;
+}

@@ -1,0 +1,6 @@
+.not-found {
+  text-align: center;
+  display: grid;
+  place-items: center;
+  min-height: clamp(420px, 60vh, 600px);
+}
