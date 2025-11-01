@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getAssetPath, getWaxSeal } from '../../utils/assetPaths.js';
 import { useTheme } from '../../providers/ThemeProvider.jsx';
@@ -8,6 +8,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
   const { theme } = useTheme();
   const [isMelting, setIsMelting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const openedRef = useRef(false);
   const defaultEnvelope = getAssetPath('envelope');
   const defaultInvite = getAssetPath('inviteCard');
   const [envelopeSrc, setEnvelopeSrc] = useState(theme?.assets?.envelope ?? defaultEnvelope);
@@ -19,7 +20,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
     if (!isMelting) return undefined;
     const timer = window.setTimeout(() => {
       setIsOpen(true);
-      onOpened?.();
+      if (!openedRef.current) {
+        openedRef.current = true;
+        window.requestAnimationFrame(() => {
+          onOpened?.();
+        });
+      }
     }, 1400);
 
     return () => window.clearTimeout(timer);
@@ -62,8 +68,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
       <motion.div
         className={`envelope-shell${isOpen ? ' is-open' : ''}`}
         initial={{ opacity: 0, scale: 0.92, y: 48 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1, ease: [0.25, 0.8, 0.5, 1] }}
+        animate={
+          isOpen
+            ? { opacity: 0.25, scale: 0.95, y: 36 }
+            : { opacity: 1, scale: 1, y: 0 }
+        }
+        transition={{ duration: 1.1, ease: [0.25, 0.8, 0.5, 1] }}
       >
         <div className="envelope-texture" />
         <img
@@ -98,9 +108,9 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
       {isOpen && (
         <motion.div
           className="invite-card-wrapper"
-          initial={{ opacity: 0, y: 140 }}
-          animate={{ opacity: 1, y: -40 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 160 }}
+          animate={{ opacity: 1, y: -36 }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
         >
           <img
             src={inviteSrc}

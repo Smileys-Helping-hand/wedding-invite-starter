@@ -10,6 +10,30 @@
   box-shadow: var(--shadow-soft);
   text-align: center;
   backdrop-filter: blur(16px);
+  display: grid;
+  gap: clamp(18px, 2.4vw, 28px);
+  justify-items: center;
+}
+
+.bismillah-text {
+  display: grid;
+  gap: 8px;
+  text-align: center;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 86%, rgba(255, 255, 255, 0.2));
+}
+
+.bismillah-text__arabic {
+  font-family: 'Scheherazade New', 'Amiri', var(--font-display);
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 58%, rgba(255, 255, 255, 0));
+}
+
+.bismillah-text__translation {
+  font-size: 0.88rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 64%, rgba(60, 51, 41, 0.42));
 }
 
 .invite-salaam {
@@ -78,26 +102,29 @@
 }
 
 .invite-copy {
-  margin-top: 32px;
+  margin-top: 18px;
   font-size: 1rem;
   line-height: 1.8;
   color: var(--ink-soft);
 }
 
 .rsvp-actions {
-  margin-top: 48px;
+  margin-top: clamp(24px, 4vw, 42px);
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
   justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 640px) {
   .invite-card-panel {
     padding: 36px 22px 52px;
+    gap: 20px;
   }
 
   .rsvp-actions {
     flex-direction: column;
+    width: 100%;
   }
 }

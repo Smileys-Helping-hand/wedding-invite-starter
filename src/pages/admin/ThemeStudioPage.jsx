@@ -5,12 +5,46 @@ import { useTheme } from '../../providers/ThemeProvider.jsx';
 import { defaultAssets, waxSeals } from '../../utils/assetPaths.js';
 import './ThemeStudioPage.css';
 
-const fontOptions = [
-  { label: 'Playfair Display', value: "'Playfair Display', serif" },
-  { label: 'Cinzel', value: "'Cinzel', serif" },
-  { label: 'Cormorant Garamond', value: "'Cormorant Garamond', serif" },
+const headingFontGroups = [
+  {
+    label: 'Serif Classics',
+    options: [
+      { label: 'Playfair Display', value: "'Playfair Display', serif" },
+      { label: 'Cinzel', value: "'Cinzel', serif" },
+      { label: 'Cormorant Garamond', value: "'Cormorant Garamond', serif" },
+      { label: 'Didot', value: "'Didot', 'Playfair Display', serif" },
+    ],
+  },
+  {
+    label: 'Script Elegance',
+    options: [
+      { label: 'Great Vibes', value: "'Great Vibes', cursive" },
+      { label: 'Parisienne', value: "'Parisienne', cursive" },
+    ],
+  },
+  {
+    label: 'Arabic Calligraphy',
+    options: [
+      { label: 'Scheherazade New', value: "'Scheherazade New', serif" },
+      { label: 'Amiri', value: "'Amiri', serif" },
+    ],
+  },
+];
+
+const bodyFontOptions = [
   { label: 'Inter', value: "'Inter', sans-serif" },
   { label: 'Lato', value: "'Lato', sans-serif" },
+  { label: 'Josefin Sans', value: "'Josefin Sans', sans-serif" },
+  { label: 'Source Sans 3', value: "'Source Sans 3', sans-serif" },
+];
+
+const tabs = [
+  { id: 'colors', label: 'Colors' },
+  { id: 'fonts', label: 'Fonts' },
+  { id: 'text', label: 'Text Styles' },
+  { id: 'media', label: 'Media' },
+  { id: 'animations', label: 'Animations' },
+  { id: 'overlays', label: 'Overlays & Sparkle' },
 ];
 
 const animationOptions = [
@@ -28,12 +62,14 @@ const ThemeStudioPage = () => {
     saveDraft,
     publishTheme,
     uploadAsset,
+    resetTheme,
     loading,
     error,
     isPublishing,
   } = useTheme();
   const [status, setStatus] = useState('');
   const [selectedWax, setSelectedWax] = useState(theme?.assets?.waxSealVariant ?? 'gold');
+  const [activeTab, setActiveTab] = useState('colors');
   const launchMode = theme?.toggles?.launchMode === true;
 
   useEffect(() => {
@@ -57,23 +93,29 @@ const ThemeStudioPage = () => {
 
   const palette = theme?.palette ?? {};
   const fonts = theme?.fonts ?? {};
+  const text = theme?.text ?? {};
   const toggles = theme?.toggles ?? {};
   const assets = theme?.assets ?? defaultAssets;
 
+  const guardLaunchMode = (message) => {
+    if (!launchMode) return false;
+    setStatus(message);
+    return true;
+  };
+
   const handleColorChange = (key, value) => {
-    if (launchMode) {
-      setStatus('Launch Mode is active. Disable it to edit.');
-      return;
-    }
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
     updateTheme({ palette: { [key]: value } });
   };
 
   const handleFontChange = (key, value) => {
-    if (launchMode) {
-      setStatus('Launch Mode is active. Disable it to edit.');
-      return;
-    }
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
     updateTheme({ fonts: { [key]: value } });
+  };
+
+  const handleTextChange = (key, value) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ text: { [key]: value } });
   };
 
   const handleToggleChange = (key, value) => {
@@ -85,19 +127,13 @@ const ThemeStudioPage = () => {
   };
 
   const handleNameChange = (key, value) => {
-    if (launchMode) {
-      setStatus('Launch Mode is active. Disable it to edit.');
-      return;
-    }
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
     updateTheme({ [key]: value });
   };
 
   const handleAssetUpload = async (field, file) => {
     if (!file) return;
-    if (launchMode) {
-      setStatus('Launch Mode is active. Disable it to replace media.');
-      return;
-    }
+    if (guardLaunchMode('Launch Mode is active. Disable it to replace media.')) return;
     if (!uploadAsset) {
       setStatus('Firebase Storage unavailable. Asset not uploaded.');
       return;
@@ -131,6 +167,336 @@ const ThemeStudioPage = () => {
     setStatus('Theme published.');
   };
 
+  const handlePreset = (presetId, label) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    applyPreset(presetId);
+    const preset = presets.find((entry) => entry.id === presetId);
+    if (preset?.assets?.waxSealVariant) {
+      setSelectedWax(preset.assets.waxSealVariant);
+    }
+    setStatus(`Preset "${label}" applied.`);
+  };
+
+  const handleReset = () => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    resetTheme();
+    setSelectedWax('gold');
+    setStatus('Theme reset to default.');
+  };
+
+  const handleSparkleAmount = (value) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { sparkleAmount: Number(value) } });
+  };
+
+  const renderColorTab = () => (
+    <section className="studio-panel">
+      <h2>Palette</h2>
+      <div className="studio-color-grid">
+        {Object.entries({
+          accent: 'Primary accent',
+          accentSoft: 'Accent glow',
+          background: 'Background',
+          text: 'Primary text',
+          textMuted: 'Soft text',
+          glass: 'Glass fill',
+          border: 'Glass border',
+        }).map(([key, label]) => (
+          <label key={key} className="color-field">
+            <span>{label}</span>
+            <input
+              type="color"
+              value={palette[key] ?? '#ffffff'}
+              onChange={(event) => handleColorChange(key, event.target.value)}
+              disabled={launchMode}
+            />
+          </label>
+        ))}
+      </div>
+    </section>
+  );
+
+  const renderFontTab = () => (
+    <section className="studio-panel">
+      <h2>Fonts</h2>
+      <div className="studio-field-grid">
+        <label className="studio-field">
+          <span>Heading font</span>
+          <select
+            value={fonts.heading ?? headingFontGroups[0].options[0].value}
+            onChange={(event) => handleFontChange('heading', event.target.value)}
+            disabled={launchMode}
+          >
+            {headingFontGroups.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </label>
+        <label className="studio-field">
+          <span>Body font</span>
+          <select
+            value={fonts.body ?? bodyFontOptions[0].value}
+            onChange={(event) => handleFontChange('body', event.target.value)}
+            disabled={launchMode}
+          >
+            {bodyFontOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+    </section>
+  );
+
+  const renderTextTab = () => (
+    <section className="studio-panel">
+      <h2>Text styles</h2>
+      <div className="studio-field-grid">
+        <TextInput
+          label="Bride name"
+          value={theme?.brideName ?? ''}
+          onChange={(event) => handleNameChange('brideName', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Groom name"
+          value={theme?.groomName ?? ''}
+          onChange={(event) => handleNameChange('groomName', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Greeting"
+          value={text.greeting ?? 'Assalamu Alaikum'}
+          onChange={(event) => handleTextChange('greeting', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Greeting suffix when partner present"
+          value={text.greetingSuffix ?? ' wa Rahmatullah'}
+          onChange={(event) => handleTextChange('greetingSuffix', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Bismillah Arabic"
+          value={text.bismillahArabic ?? ''}
+          onChange={(event) => handleTextChange('bismillahArabic', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Bismillah translation"
+          value={text.bismillahTranslation ?? ''}
+          onChange={(event) => handleTextChange('bismillahTranslation', event.target.value)}
+          disabled={launchMode}
+        />
+      </div>
+    </section>
+  );
+
+  const renderMediaTab = () => (
+    <section className="studio-panel">
+      <h2>Media uploads</h2>
+      <div className="upload-grid">
+        <label className="upload-field">
+          <span>Left curtain</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => handleAssetUpload('curtainLeft', event.target.files?.[0])}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="upload-field">
+          <span>Right curtain</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => handleAssetUpload('curtainRight', event.target.files?.[0])}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="upload-field">
+          <span>Envelope texture</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => handleAssetUpload('envelope', event.target.files?.[0])}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="upload-field">
+          <span>Invitation card</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => handleAssetUpload('inviteCard', event.target.files?.[0])}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="upload-field">
+          <span>Nasheed (audio)</span>
+          <input
+            type="file"
+            accept="audio/*"
+            onChange={(event) => handleAssetUpload('nasheed', event.target.files?.[0])}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="upload-field">
+          <span>Sparkle video</span>
+          <input
+            type="file"
+            accept="video/mp4,video/webm"
+            onChange={(event) => handleAssetUpload('sparklesVideo', event.target.files?.[0])}
+            disabled={launchMode}
+          />
+        </label>
+        <div className="wax-grid">
+          <div className="wax-select">
+            <span>Wax seal variant</span>
+            <select
+              value={theme?.assets?.waxSealVariant ?? selectedWax}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+                setSelectedWax(value);
+                updateTheme({ assets: { waxSealVariant: value } });
+              }}
+              disabled={launchMode}
+            >
+              {availableSeals.map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          </div>
+          <label className="upload-field">
+            <span>Replace selected wax seal</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event) => handleAssetUpload('waxSeals', event.target.files?.[0])}
+              disabled={launchMode}
+            />
+          </label>
+        </div>
+      </div>
+    </section>
+  );
+
+  const renderAnimationsTab = () => (
+    <section className="studio-panel">
+      <h2>Animation controls</h2>
+      <div className="studio-field-grid">
+        <label className="studio-field">
+          <span>Animation intensity</span>
+          <select
+            value={toggles.animationIntensity ?? 'medium'}
+            onChange={(event) => handleToggleChange('animationIntensity', event.target.value)}
+            disabled={launchMode}
+          >
+            {animationOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.glow !== false}
+            onChange={(event) => handleToggleChange('glow', event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Glow accents</span>
+        </label>
+        <label className="switch-field launch-mode-switch">
+          <input
+            type="checkbox"
+            checked={launchMode}
+            onChange={(event) => handleToggleChange('launchMode', event.target.checked)}
+          />
+          <span>Launch Mode ON</span>
+        </label>
+      </div>
+    </section>
+  );
+
+  const renderOverlaysTab = () => (
+    <section className="studio-panel">
+      <h2>Atmosphere & overlays</h2>
+      <div className="studio-field-grid">
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.sparkles !== false}
+            onChange={(event) => handleToggleChange('sparkles', event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Gold sparkle overlay</span>
+        </label>
+        <label className="studio-field">
+          <span>Sparkle intensity</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={toggles.sparkleAmount ?? 0.55}
+            onChange={(event) => handleSparkleAmount(event.target.value)}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.lightBokeh === true}
+            onChange={(event) => handleToggleChange('lightBokeh', event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Soft light bokeh</span>
+        </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.petals === true}
+            onChange={(event) => handleToggleChange('petals', event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Floating petals</span>
+        </label>
+      </div>
+    </section>
+  );
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'colors':
+        return renderColorTab();
+      case 'fonts':
+        return renderFontTab();
+      case 'text':
+        return renderTextTab();
+      case 'media':
+        return renderMediaTab();
+      case 'animations':
+        return renderAnimationsTab();
+      case 'overlays':
+        return renderOverlaysTab();
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="theme-studio">
       <div className="theme-studio__header">
@@ -138,11 +504,17 @@ const ThemeStudioPage = () => {
           <span className="badge">Design studio</span>
           <h1 className="page-title">Craft the invitation aesthetic</h1>
           <p className="page-subtitle">
-            Adjust palettes, typography, media, and animation in real time. Save drafts locally or publish to share with guests.
+            Adjust palettes, typography, media, and motion. Save drafts locally or publish for every guest.
           </p>
           {launchMode && <p className="launch-mode-alert">Launch Mode is enabled. Disable it to continue editing.</p>}
         </div>
         <div className="theme-studio__actions">
+          <a className="studio-link" href="/invite" target="_blank" rel="noopener noreferrer">
+            Back to Invitation
+          </a>
+          <Button variant="ghost" size="md" onClick={handleReset} disabled={loading || isPublishing}>
+            Reset to Default
+          </Button>
           <Button variant="ghost" size="md" onClick={handleSaveDraft} disabled={loading || isPublishing}>
             Save Draft
           </Button>
@@ -156,7 +528,22 @@ const ThemeStudioPage = () => {
       {error && <div className="theme-studio__alert">{error}</div>}
       {status && <div className="theme-studio__status">{status}</div>}
 
+      <div className="theme-studio__tabs">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            className={`studio-tab${tab.id === activeTab ? ' is-active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <div className="theme-studio__grid">
+        {renderActiveTab()}
+
         <section className="studio-panel">
           <h2>Theme presets</h2>
           <div className="preset-grid">
@@ -165,15 +552,7 @@ const ThemeStudioPage = () => {
                 key={preset.id}
                 type="button"
                 className={`preset-card${theme?.id === preset.id ? ' is-active' : ''}`}
-                onClick={() => {
-                  if (launchMode) {
-                    setStatus('Launch Mode is active. Disable it to edit.');
-                    return;
-                  }
-                  applyPreset(preset.id);
-                  setSelectedWax(preset.assets?.waxSealVariant ?? 'gold');
-                  setStatus(`Preset "${preset.label}" applied.`);
-                }}
+                onClick={() => handlePreset(preset.id, preset.label)}
                 disabled={loading || isPublishing || launchMode}
               >
                 <span className="preset-card__label">{preset.label}</span>
@@ -183,235 +562,26 @@ const ThemeStudioPage = () => {
           </div>
         </section>
 
-        <section className="studio-panel">
-          <h2>Fonts &amp; names</h2>
-          <div className="studio-field-grid">
-            <label className="studio-field">
-              <span>Heading font</span>
-              <select
-                value={fonts.heading ?? fontOptions[0].value}
-                onChange={(event) => handleFontChange('heading', event.target.value)}
-                disabled={launchMode}
-              >
-                {fontOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="studio-field">
-              <span>Body font</span>
-              <select
-                value={fonts.body ?? "'Inter', sans-serif"}
-                onChange={(event) => handleFontChange('body', event.target.value)}
-                disabled={launchMode}
-              >
-                {fontOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <TextInput
-              label="Bride name"
-              value={theme?.brideName ?? ''}
-              onChange={(event) => handleNameChange('brideName', event.target.value)}
-              disabled={launchMode}
-            />
-            <TextInput
-              label="Groom name"
-              value={theme?.groomName ?? ''}
-              onChange={(event) => handleNameChange('groomName', event.target.value)}
-              disabled={launchMode}
-            />
-          </div>
-        </section>
-
-        <section className="studio-panel">
-          <h2>Palette</h2>
-          <div className="studio-color-grid">
-            {Object.entries({
-              accent: 'Accent',
-              accentSoft: 'Accent glow',
-              background: 'Background',
-              text: 'Primary text',
-              textMuted: 'Subtle text',
-              glass: 'Glass fill',
-              border: 'Glass border',
-            }).map(([key, label]) => (
-              <label key={key} className="color-field">
-                <span>{label}</span>
-                <input
-                  type="color"
-                  value={palette[key] ?? '#ffffff'}
-                  onChange={(event) => handleColorChange(key, event.target.value)}
-                  disabled={launchMode}
-                />
-              </label>
-            ))}
-          </div>
-        </section>
-
-        <section className="studio-panel">
-          <h2>Animations &amp; effects</h2>
-          <div className="studio-field-grid">
-            <label className="studio-field">
-              <span>Animation intensity</span>
-              <select
-                value={toggles.animationIntensity ?? 'medium'}
-                onChange={(event) => handleToggleChange('animationIntensity', event.target.value)}
-                disabled={launchMode}
-              >
-                {animationOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="switch-field">
-              <input
-                type="checkbox"
-                checked={toggles.sparkles !== false}
-                onChange={(event) => handleToggleChange('sparkles', event.target.checked)}
-                disabled={launchMode}
-              />
-              <span>Sparkle overlay</span>
-            </label>
-            <label className="switch-field">
-              <input
-                type="checkbox"
-                checked={toggles.glow !== false}
-                onChange={(event) => handleToggleChange('glow', event.target.checked)}
-                disabled={launchMode}
-              />
-              <span>Bismillah glow</span>
-            </label>
-            <label className="switch-field launch-mode-switch">
-              <input
-                type="checkbox"
-                checked={launchMode}
-                onChange={(event) => handleToggleChange('launchMode', event.target.checked)}
-              />
-              <span>Launch Mode ON</span>
-            </label>
-          </div>
-        </section>
-
-        <section className="studio-panel">
-          <h2>Media uploads</h2>
-          <div className="upload-grid">
-            <label className="upload-field">
-              <span>Marble background curtains</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleAssetUpload('curtainLeft', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleAssetUpload('curtainRight', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-            </label>
-            <label className="upload-field">
-              <span>Bismillah artwork</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleAssetUpload('bismillah', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-            </label>
-            <label className="upload-field">
-              <span>Envelope texture</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleAssetUpload('envelope', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-            </label>
-            <label className="upload-field">
-              <span>Invitation card</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleAssetUpload('inviteCard', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-            </label>
-            <label className="upload-field">
-              <span>Nasheed (audio)</span>
-              <input
-                type="file"
-                accept="audio/*"
-                onChange={(event) => handleAssetUpload('nasheed', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-            </label>
-            <label className="upload-field">
-              <span>Sparkle video</span>
-              <input
-                type="file"
-                accept="video/mp4,video/webm"
-                onChange={(event) => handleAssetUpload('sparklesVideo', event.target.files?.[0])}
-                disabled={launchMode}
-              />
-            </label>
-            <div className="wax-grid">
-              <div className="wax-select">
-                <span>Wax seal variant</span>
-                <select
-                  value={theme?.assets?.waxSealVariant ?? selectedWax}
-                  onChange={(event) => {
-                    const value = event.target.value;
-                    if (launchMode) {
-                      setStatus('Launch Mode is active. Disable it to edit.');
-                      return;
-                    }
-                    setSelectedWax(value);
-                    updateTheme({ assets: { waxSealVariant: value } });
-                  }}
-                  disabled={launchMode}
-                >
-                  {availableSeals.map((key) => (
-                    <option key={key} value={key}>
-                      {key}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <label className="upload-field">
-                <span>Replace selected wax seal</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) => handleAssetUpload('waxSeals', event.target.files?.[0])}
-                  disabled={launchMode}
-                />
-              </label>
-            </div>
-          </div>
-        </section>
-
         <section className="studio-panel preview-panel">
           <h2>Live preview</h2>
           <div className="preview-frame">
             <div className="preview-curtains">
               <img src={assets.curtainLeft ?? defaultAssets.curtainLeft} alt="Left curtain" />
-              <img src={assets.curtainRight ?? defaultAssets.curtainRight} alt="Right curtain" />
+              <img src={assets.curtainRight ?? assets.curtainLeft ?? defaultAssets.curtainRight} alt="Right curtain" />
             </div>
-            <div className="preview-bismillah">
-              <img src={assets.bismillah ?? defaultAssets.bismillah} alt="Bismillah" />
+            <div className="preview-bismillah-text">
+              <span className="preview-bismillah-arabic">{text.bismillahArabic ?? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم'}</span>
+              <span className="preview-bismillah-translation">
+                {text.bismillahTranslation ?? 'In the name of Allah, the Most Merciful, the Most Kind'}
+              </span>
             </div>
             <div className="preview-envelope">
               <img src={assets.envelope ?? defaultAssets.envelope} alt="Envelope" className="preview-envelope__paper" />
-              <img src={(theme?.assets?.waxSeals ?? waxSeals)[theme?.assets?.waxSealVariant ?? selectedWax]} alt="Wax seal" className="preview-envelope__seal" />
+              <img
+                src={(theme?.assets?.waxSeals ?? waxSeals)[theme?.assets?.waxSealVariant ?? selectedWax]}
+                alt="Wax seal"
+                className="preview-envelope__seal"
+              />
             </div>
             <div className="preview-card">
               <img src={assets.inviteCard ?? defaultAssets.inviteCard} alt="Invite card" />

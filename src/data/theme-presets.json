@@ -19,20 +19,52 @@
     "toggles": {
       "sparkles": true,
       "glow": true,
-      "animationIntensity": "medium"
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.55,
+      "lightBokeh": false,
+      "petals": false
     },
     "assets": {
       "waxSealVariant": "gold"
     }
   },
   {
-    "id": "emerald-evening",
-    "label": "Emerald Evening",
-    "description": "Deep emerald stones with luminous gold light trails.",
+    "id": "ivory-blush-gold",
+    "label": "Ivory • Blush • Gold",
+    "description": "Soft blush undertones with ivory marble and luminous golden highlights.",
+    "palette": {
+      "background": "#fdf7f8",
+      "accent": "#d7a07f",
+      "accentSoft": "#fbe1dd",
+      "text": "#2b201c",
+      "textMuted": "rgba(43, 32, 28, 0.68)",
+      "glass": "rgba(255, 248, 246, 0.82)",
+      "border": "rgba(215, 160, 127, 0.34)"
+    },
+    "fonts": {
+      "heading": "'Great Vibes', cursive",
+      "body": "'Josefin Sans', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.65,
+      "lightBokeh": true,
+      "petals": true
+    },
+    "assets": {
+      "waxSealVariant": "rosegold"
+    }
+  },
+  {
+    "id": "emerald-gold",
+    "label": "Emerald & Gold",
+    "description": "Deep emerald stone with luxe gold lighting and serene motion.",
     "palette": {
       "background": "#f7f5f0",
       "accent": "#0f766e",
-      "accentSoft": "#9ef0e5",
+      "accentSoft": "#9fe8d8",
       "text": "#1e1b16",
       "textMuted": "rgba(30, 27, 22, 0.68)",
       "glass": "rgba(247, 250, 249, 0.74)",
@@ -45,33 +77,155 @@
     "toggles": {
       "sparkles": true,
       "glow": true,
-      "animationIntensity": "gentle"
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.5,
+      "lightBokeh": false,
+      "petals": false
     },
     "assets": {
       "waxSealVariant": "emerald"
     }
   },
   {
-    "id": "rose-dawn",
-    "label": "Rose Dawn",
-    "description": "Soft rose quartz with blush gold shimmer and airy motion.",
+    "id": "champagne-pearl",
+    "label": "Champagne Pearl",
+    "description": "Champagne ivory with luminous pearl sheen for evening celebrations.",
     "palette": {
-      "background": "#fdf7f8",
-      "accent": "#d58590",
-      "accentSoft": "#f8c9d3",
-      "text": "#2b1e22",
-      "textMuted": "rgba(43, 30, 34, 0.68)",
-      "glass": "rgba(255, 245, 250, 0.78)",
-      "border": "rgba(213, 133, 144, 0.38)"
+      "background": "#fbf6ee",
+      "accent": "#c9b28b",
+      "accentSoft": "#f4e8d4",
+      "text": "#2a241d",
+      "textMuted": "rgba(42, 36, 29, 0.66)",
+      "glass": "rgba(255, 252, 246, 0.78)",
+      "border": "rgba(201, 178, 139, 0.36)"
     },
     "fonts": {
-      "heading": "'Cormorant Garamond', serif",
+      "heading": "'Didot', 'Playfair Display', serif",
+      "body": "'Source Sans 3', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.58,
+      "lightBokeh": true,
+      "petals": false
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "dusty-rose-gold",
+    "label": "Dusty Rose & Gold",
+    "description": "Dusky rose quartz paired with glowing gold edges for romantic warmth.",
+    "palette": {
+      "background": "#f9f3f4",
+      "accent": "#c77a8a",
+      "accentSoft": "#f5c6d2",
+      "text": "#2b1e24",
+      "textMuted": "rgba(43, 30, 36, 0.7)",
+      "glass": "rgba(255, 244, 248, 0.82)",
+      "border": "rgba(199, 122, 138, 0.32)"
+    },
+    "fonts": {
+      "heading": "'Parisienne', cursive",
       "body": "'Lato', sans-serif"
     },
     "toggles": {
-      "sparkles": false,
+      "sparkles": true,
       "glow": true,
-      "animationIntensity": "gentle"
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.68,
+      "lightBokeh": true,
+      "petals": true
+    },
+    "assets": {
+      "waxSealVariant": "rosegold"
+    }
+  },
+  {
+    "id": "black-gold-evening",
+    "label": "Black & Gold Evening",
+    "description": "Opulent noir marble with molten gold detailing for evening receptions.",
+    "palette": {
+      "background": "#1a1714",
+      "accent": "#d4af37",
+      "accentSoft": "#8f7b47",
+      "text": "#f8f5ef",
+      "textMuted": "rgba(248, 245, 239, 0.7)",
+      "glass": "rgba(28, 24, 22, 0.72)",
+      "border": "rgba(212, 175, 55, 0.38)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Source Sans 3', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "grand",
+      "sparkleAmount": 0.45,
+      "lightBokeh": true,
+      "petals": false
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "peach-olive-garden",
+    "label": "Peach & Olive Garden",
+    "description": "Sunset peach with olive greenery for fresh garden gatherings.",
+    "palette": {
+      "background": "#fef7f1",
+      "accent": "#d9865f",
+      "accentSoft": "#ffe0c8",
+      "text": "#2e251c",
+      "textMuted": "rgba(46, 37, 28, 0.68)",
+      "glass": "rgba(255, 248, 240, 0.8)",
+      "border": "rgba(217, 134, 95, 0.34)"
+    },
+    "fonts": {
+      "heading": "'Great Vibes', cursive",
+      "body": "'Josefin Sans', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.6,
+      "lightBokeh": false,
+      "petals": true
+    },
+    "assets": {
+      "waxSealVariant": "flower"
+    }
+  },
+  {
+    "id": "lavender-champagne",
+    "label": "Lavender & Champagne",
+    "description": "Lavender haze with champagne gold shimmer and soft floating petals.",
+    "palette": {
+      "background": "#f6f4fb",
+      "accent": "#9a87c9",
+      "accentSoft": "#e6dcfb",
+      "text": "#2c2635",
+      "textMuted": "rgba(44, 38, 53, 0.7)",
+      "glass": "rgba(252, 248, 255, 0.78)",
+      "border": "rgba(154, 135, 201, 0.34)"
+    },
+    "fonts": {
+      "heading": "'Scheherazade New', serif",
+      "body": "'Lato', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.62,
+      "lightBokeh": true,
+      "petals": true
     },
     "assets": {
       "waxSealVariant": "rosegold"

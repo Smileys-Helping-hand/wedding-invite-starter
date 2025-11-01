@@ -1,8 +1,9 @@
 .envelope-stage {
   position: relative;
-  width: min(820px, 90vw);
+  width: min(820px, 92vw);
+  min-height: clamp(420px, 58vw, 640px);
   margin: clamp(32px, 6vw, 72px) auto 0;
-  padding: clamp(48px, 7vw, 72px) clamp(18px, 4vw, 36px);
+  padding: clamp(48px, 7vw, 86px) clamp(18px, 4vw, 36px);
   display: grid;
   place-items: center;
   border-radius: 36px;
@@ -36,14 +37,15 @@
 
 .envelope-shell {
   position: relative;
-  width: min(620px, 86vw);
+  width: min(620px, 84vw);
   filter: drop-shadow(0 40px 60px rgba(31, 26, 20, 0.28));
-  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  will-change: transform, opacity;
 }
 
 .envelope-shell.is-open {
-  transform: translateY(48px) scale(0.98);
-  opacity: 0.35;
+  transform: translateY(42px) scale(0.97);
+  opacity: 0.3;
 }
 
 .envelope-texture {
@@ -74,7 +76,7 @@
   background: transparent;
   cursor: pointer;
   padding: 0;
-  margin-top: clamp(0px, -8vw, -40px);
+  margin-top: clamp(-24px, -6vw, -48px);
   transition: filter 0.3s ease;
 }
 
@@ -108,15 +110,17 @@
 
 .invite-card-wrapper {
   position: absolute;
-  bottom: clamp(-220px, -22vw, -160px);
+  bottom: clamp(-220px, -22vw, -140px);
   display: grid;
   place-items: center;
+  width: 100%;
 }
 
 .invite-card {
   width: min(520px, 78vw);
   border-radius: 28px;
   box-shadow: 0 45px 70px color-mix(in srgb, var(--theme-color-text, #2f2721) 22%, transparent);
+  background: color-mix(in srgb, var(--theme-color-background, #f8f6f2) 85%, rgba(255, 255, 255, 0.92));
 }
 
 .invite-card__shimmer {
@@ -131,6 +135,7 @@
   );
   opacity: 0;
   animation: cardSweep 2.4s ease-in-out 0.8s forwards;
+  pointer-events: none;
 }
 
 .envelope-stage[data-intensity='gentle'] .envelope-shell {
@@ -189,18 +194,18 @@
 
 @media (max-width: 640px) {
   .envelope-stage {
-    padding: 38px 18px 96px;
+    padding: 42px 18px 128px;
   }
 
   .invite-card-wrapper {
-    bottom: clamp(-160px, -20vw, -120px);
+    bottom: clamp(-140px, -18vw, -108px);
   }
 }
 
 @media (max-width: 480px) {
   .envelope-stage {
-    width: 92vw;
-    padding: 32px 16px 120px;
+    width: 94vw;
+    padding: 32px 18px 136px;
     border-radius: 28px;
   }
 
@@ -213,10 +218,10 @@
   }
 
   .invite-card {
-    width: 82vw;
+    width: min(86vw, 420px);
   }
 
   .invite-card-wrapper {
-    bottom: -120px;
+    bottom: -118px;
   }
 }

@@ -18,6 +18,12 @@ const DEFAULT_THEME = {
   label: 'Classic Gold & Marble',
   brideName: 'Razia',
   groomName: 'Abduraziq',
+  text: {
+    greeting: 'Assalamu Alaikum',
+    greetingSuffix: ' wa Rahmatullah',
+    bismillahArabic: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
+    bismillahTranslation: 'In the name of Allah, the Most Merciful, the Most Kind',
+  },
   fonts: {
     heading: "'Playfair Display', serif",
     body: "'Inter', sans-serif",
@@ -36,6 +42,9 @@ const DEFAULT_THEME = {
     glow: true,
     animationIntensity: 'medium',
     launchMode: false,
+    sparkleAmount: 0.55,
+    lightBokeh: false,
+    petals: false,
   },
   assets: {
     bismillah: defaultAssets.bismillah,
@@ -87,6 +96,7 @@ const applyThemeToDocument = (theme) => {
   root.style.setProperty('--theme-glass-bg', theme.palette.glass);
   root.style.setProperty('--theme-glass-border', theme.palette.border);
   root.style.setProperty('--theme-animation-intensity', theme.toggles.animationIntensity ?? 'medium');
+  root.style.setProperty('--theme-sparkle-opacity', String(theme.toggles.sparkleAmount ?? 0.5));
 };
 
 const readDraft = () => {

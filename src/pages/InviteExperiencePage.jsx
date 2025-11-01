@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigate } from 'react-router-dom';
 import CurtainReveal from '../components/experience/CurtainReveal.jsx';
-import BismillahReveal from '../components/experience/BismillahReveal.jsx';
 import EnvelopeStage from '../components/experience/EnvelopeStage.jsx';
 import InviteDetails from '../components/experience/InviteDetails.jsx';
 import MemoryWallPlaceholder from '../components/experience/MemoryWallPlaceholder.jsx';
@@ -22,6 +21,7 @@ const InviteExperiencePage = () => {
   const [additionalGuests, setAdditionalGuests] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const experienceRef = useRef(null);
 
   if (!guest) {
     return <Navigate to="/" replace />;
@@ -49,23 +49,35 @@ const InviteExperiencePage = () => {
 
   const showMemoryWall = guest?.rsvpStatus === RSVP_STATUSES.confirmed;
 
+  useEffect(() => {
+    if (phase !== EXPERIENCE_PHASES.invitation) return;
+    const node = experienceRef.current;
+    if (!node) return;
+
+    window.requestAnimationFrame(() => {
+      node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, [phase]);
+
   return (
-    <div className="page-panel invite-experience">
+    <div className="page-panel invite-experience" ref={experienceRef}>
       <AnimatePresence mode="wait">
         {phase === EXPERIENCE_PHASES.curtains && (
-          <motion.div key="curtains" exit={{ opacity: 0 }}>
-            <CurtainReveal onComplete={() => setPhase(EXPERIENCE_PHASES.bismillah)} />
-          </motion.div>
-        )}
-
-        {phase === EXPERIENCE_PHASES.bismillah && (
-          <motion.div key="bismillah" exit={{ opacity: 0 }}>
-            <BismillahReveal onComplete={() => setPhase(EXPERIENCE_PHASES.envelope)} />
+          <motion.div
+            key="curtains"
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <CurtainReveal onComplete={() => setPhase(EXPERIENCE_PHASES.envelope)} />
           </motion.div>
         )}
 
         {phase === EXPERIENCE_PHASES.envelope && (
-          <motion.div key="envelope" exit={{ opacity: 0 }}>
+          <motion.div
+            key="envelope"
+            exit={{ opacity: 0, y: -40 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          >
             <EnvelopeStage
               onOpened={() => setPhase(EXPERIENCE_PHASES.invitation)}
               sealVariant={
@@ -80,7 +92,12 @@ const InviteExperiencePage = () => {
       </AnimatePresence>
 
       {phase === EXPERIENCE_PHASES.invitation && (
-        <div className="experience-content">
+        <motion.div
+          className="experience-content"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
           <InviteDetails
             onRSVP={handleRSVP}
             loading={isSaving || guestLoading}
@@ -114,7 +131,7 @@ const InviteExperiencePage = () => {
           </section>
 
           {showMemoryWall && <MemoryWallPlaceholder />}
-        </div>
+        </motion.div>
       )}
 
       {(guestLoading || isSaving) && <Loader label="Saving your RSVP" />}

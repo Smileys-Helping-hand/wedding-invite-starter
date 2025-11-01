@@ -26,8 +26,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: clamp(96px, 14vw, 128px);
+  height: clamp(96px, 14vw, 128px);
   border-radius: 50%;
   text-decoration: none;
   transform: translateY(6px);
@@ -42,38 +42,39 @@
   height: 100%;
   border-radius: 50%;
   background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.9),
-      color-mix(in srgb, var(--theme-color-accent, #d2b16a) 18%, transparent)
-    ),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 243, 223, 0.96)),
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><filter id="n" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4"/></filter><rect width="120" height="120" filter="url(%23n)" opacity="0.12"/></svg>');
   background-size: cover;
-  border: 2px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 65%, transparent);
-  box-shadow: 0 18px 34px color-mix(in srgb, var(--theme-color-text, #2f2721) 18%, transparent);
+  border: 2px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 55%, transparent);
+  box-shadow:
+    inset 0 0 24px rgba(255, 255, 255, 0.6),
+    0 18px 34px color-mix(in srgb, var(--theme-color-text, #2f2721) 18%, transparent);
   overflow: hidden;
 }
 
 .brand-emblem__ring::after {
   content: '';
   position: absolute;
-  inset: 12px;
+  inset: clamp(10px, 2.5vw, 16px);
   border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 42%, transparent);
-  box-shadow: inset 0 0 18px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 38%, transparent);
+  box-shadow:
+    inset 0 12px 24px rgba(255, 255, 255, 0.35),
+    inset 0 -8px 18px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 32%, transparent);
 }
 
 .brand-emblem__names {
   position: relative;
   z-index: 1;
   font-family: var(--font-display);
-  font-size: 0.95rem;
   text-align: center;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink);
-  max-width: 90px;
+  max-width: clamp(78px, 12vw, 110px);
   line-height: 1.35;
+  display: block;
+  padding: 0 clamp(6px, 1.2vw, 12px);
 }
 
 .top-bar__actions {
@@ -110,39 +111,28 @@
 .audio-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 26px;
+  justify-content: center;
+  width: clamp(52px, 8vw, 60px);
+  height: clamp(52px, 8vw, 60px);
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 48%, transparent);
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--theme-color-accent, #d2b16a) 65%, white 35%),
-    color-mix(in srgb, var(--theme-color-accent, #d2b16a) 88%, #7d5b19 12%)
-  );
-  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 78%, #4a3314 22%);
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 226, 188, 0.92));
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 82%, #6c4b17 18%);
   cursor: pointer;
-  box-shadow: var(--shadow-gold);
+  box-shadow: inset 0 6px 16px rgba(255, 255, 255, 0.65), 0 16px 28px rgba(210, 177, 107, 0.32);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.audio-toggle:hover {
+.audio-toggle:hover,
+.audio-toggle[aria-pressed='true'] {
   transform: translateY(-2px);
-  box-shadow: 0 24px 36px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 42%, transparent);
+  box-shadow: inset 0 4px 14px rgba(255, 255, 255, 0.6), 0 22px 32px rgba(210, 177, 107, 0.38);
 }
 
-.audio-toggle__dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--theme-color-text, #2f2721) 35%, transparent);
-  transition: background 0.25s ease;
-}
-
-.audio-toggle__dot[data-active='true'] {
-  background: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 75%, #fff8e6 25%);
+.audio-toggle__icon {
+  width: clamp(24px, 3vw, 26px);
+  height: clamp(24px, 3vw, 26px);
+  pointer-events: none;
 }
 
 @media (max-width: 720px) {
@@ -159,7 +149,6 @@
   }
 
   .brand-emblem__names {
-    font-size: 0.72rem;
     max-width: 64px;
   }
 
@@ -168,6 +157,7 @@
   }
 
   .audio-toggle {
-    padding: 10px 18px;
+    width: 48px;
+    height: 48px;
   }
 }

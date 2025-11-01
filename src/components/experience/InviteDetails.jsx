@@ -23,6 +23,12 @@ const InviteDetails = ({ onRSVP, loading }) => {
   const partner = guest.partnerName ? ` & ${guest.partnerName}` : '';
   const copy = statusCopy[guest.rsvpStatus] ?? statusCopy[RSVP_STATUSES.pending];
   const coupleNames = `${theme?.brideName ?? 'Razia'} & ${theme?.groomName ?? 'Abduraziq'}`;
+  const greeting = theme?.text?.greeting ?? 'Assalamu Alaikum';
+  const greetingSuffix = theme?.text?.greetingSuffix ?? ' wa Rahmatullah';
+  const salaam = guest.partnerName ? `${greeting}${greetingSuffix}` : greeting;
+  const bismillahArabic = theme?.text?.bismillahArabic ?? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم';
+  const bismillahTranslation =
+    theme?.text?.bismillahTranslation ?? 'In the name of Allah, the Most Merciful, the Most Kind';
 
   return (
     <section className="invite-details">
@@ -32,7 +38,16 @@ const InviteDetails = ({ onRSVP, loading }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
       >
-        <p className="invite-salaam">Assalamu Alaikum{guest.partnerName ? ' wa Rahmatullah' : ''},</p>
+        <motion.div
+          className="bismillah-text"
+          initial={{ opacity: 0, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        >
+          <span className="bismillah-text__arabic">{bismillahArabic}</span>
+          <span className="bismillah-text__translation">{bismillahTranslation}</span>
+        </motion.div>
+        <p className="invite-salaam">{salaam},</p>
         <h1 className="invite-names text-script">
           {guest.guestName}
           {partner}
@@ -55,10 +70,20 @@ const InviteDetails = ({ onRSVP, loading }) => {
         <p className="invite-copy">{copy}</p>
         <CountdownDisplay />
         <div className="rsvp-actions">
-          <Button variant="primary" size="lg" onClick={() => onRSVP(RSVP_STATUSES.confirmed)} loading={loading}>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => onRSVP(RSVP_STATUSES.confirmed)}
+            loading={loading}
+          >
             Accept Invitation
           </Button>
-          <Button variant="outline" size="lg" onClick={() => onRSVP(RSVP_STATUSES.declined)} loading={loading}>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => onRSVP(RSVP_STATUSES.declined)}
+            loading={loading}
+          >
             Send Regrets
           </Button>
         </div>
