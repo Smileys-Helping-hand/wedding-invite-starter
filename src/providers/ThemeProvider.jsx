@@ -21,8 +21,8 @@ const DEFAULT_THEME = {
   text: {
     greeting: 'Assalamu Alaikum',
     greetingSuffix: ' wa Rahmatullah',
-    bismillahArabic: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
-    bismillahTranslation: 'In the name of Allah, the Most Merciful, the Most Kind',
+    bismillahArabic: 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ',
+    bismillahTranslation: 'In the name of Allah, The Most Merciful, The Most Compassionate',
   },
   fonts: {
     heading: "'Playfair Display', serif",
@@ -45,11 +45,13 @@ const DEFAULT_THEME = {
     sparkleAmount: 0.55,
     lightBokeh: false,
     petals: false,
+    vignetteStrength: 0.35,
+    paperTexture: true,
+    goldFoilIntensity: 0.6,
+    waxSealShape: 'round',
+    cardEdgeStyle: 'rounded',
   },
   assets: {
-    bismillah: defaultAssets.bismillah,
-    curtainLeft: defaultAssets.curtainLeft,
-    curtainRight: defaultAssets.curtainRight,
     envelope: defaultAssets.envelope,
     inviteCard: defaultAssets.inviteCard,
     sparklesVideo: defaultAssets.sparklesVideo,
@@ -97,6 +99,11 @@ const applyThemeToDocument = (theme) => {
   root.style.setProperty('--theme-glass-border', theme.palette.border);
   root.style.setProperty('--theme-animation-intensity', theme.toggles.animationIntensity ?? 'medium');
   root.style.setProperty('--theme-sparkle-opacity', String(theme.toggles.sparkleAmount ?? 0.5));
+  root.style.setProperty('--theme-vignette-strength', String(theme.toggles.vignetteStrength ?? 0.35));
+  root.style.setProperty('--theme-paper-texture', theme.toggles.paperTexture === false ? '0' : '1');
+  root.style.setProperty('--theme-gold-foil-intensity', String(theme.toggles.goldFoilIntensity ?? 0.6));
+  root.style.setProperty('--theme-wax-shape', theme.toggles.waxSealShape ?? 'round');
+  root.style.setProperty('--theme-card-edge-style', theme.toggles.cardEdgeStyle ?? 'rounded');
 };
 
 const readDraft = () => {

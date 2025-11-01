@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../../components/common/Button.jsx';
 import TextInput from '../../components/common/TextInput.jsx';
 import { useTheme } from '../../providers/ThemeProvider.jsx';
@@ -11,8 +12,9 @@ const headingFontGroups = [
     options: [
       { label: 'Playfair Display', value: "'Playfair Display', serif" },
       { label: 'Cinzel', value: "'Cinzel', serif" },
-      { label: 'Cormorant Garamond', value: "'Cormorant Garamond', serif" },
       { label: 'Didot', value: "'Didot', 'Playfair Display', serif" },
+      { label: 'Cormorant Garamond', value: "'Cormorant Garamond', serif" },
+      { label: 'Bodoni Moda', value: "'Bodoni Moda', serif" },
     ],
   },
   {
@@ -20,6 +22,7 @@ const headingFontGroups = [
     options: [
       { label: 'Great Vibes', value: "'Great Vibes', cursive" },
       { label: 'Parisienne', value: "'Parisienne', cursive" },
+      { label: 'Alex Brush', value: "'Alex Brush', cursive" },
     ],
   },
   {
@@ -27,6 +30,16 @@ const headingFontGroups = [
     options: [
       { label: 'Scheherazade New', value: "'Scheherazade New', serif" },
       { label: 'Amiri', value: "'Amiri', serif" },
+      { label: 'Harmattan', value: "'Harmattan', serif" },
+    ],
+  },
+  {
+    label: 'Minimal Sans',
+    options: [
+      { label: 'Inter', value: "'Inter', sans-serif" },
+      { label: 'Lato', value: "'Lato', sans-serif" },
+      { label: 'Source Sans 3', value: "'Source Sans 3', sans-serif" },
+      { label: 'Josefin Sans', value: "'Josefin Sans', sans-serif" },
     ],
   },
 ];
@@ -34,8 +47,9 @@ const headingFontGroups = [
 const bodyFontOptions = [
   { label: 'Inter', value: "'Inter', sans-serif" },
   { label: 'Lato', value: "'Lato', sans-serif" },
-  { label: 'Josefin Sans', value: "'Josefin Sans', sans-serif" },
   { label: 'Source Sans 3', value: "'Source Sans 3', sans-serif" },
+  { label: 'Josefin Sans', value: "'Josefin Sans', sans-serif" },
+  { label: 'Nunito', value: "'Nunito', sans-serif" },
 ];
 
 const tabs = [
@@ -51,6 +65,19 @@ const animationOptions = [
   { label: 'Gentle', value: 'gentle' },
   { label: 'Medium', value: 'medium' },
   { label: 'Grand', value: 'grand' },
+];
+
+const waxShapeOptions = [
+  { value: 'round', label: 'Round' },
+  { value: 'oval', label: 'Oval' },
+  { value: 'floral', label: 'Floral' },
+];
+
+const cardEdgeOptions = [
+  { value: 'rounded', label: 'Rounded' },
+  { value: 'soft-bevel', label: 'Soft Bevel' },
+  { value: 'bevel', label: 'Beveled Corners' },
+  { value: 'deckled', label: 'Deckled Edge' },
 ];
 
 const ThemeStudioPage = () => {
@@ -87,8 +114,7 @@ const ThemeStudioPage = () => {
 
   const availableSeals = useMemo(() => {
     const current = theme?.assets?.waxSeals ?? {};
-    const merged = { ...waxSeals, ...current };
-    return Object.keys(merged);
+    return Object.keys({ ...waxSeals, ...current });
   }, [theme?.assets]);
 
   const palette = theme?.palette ?? {};
@@ -161,6 +187,12 @@ const ThemeStudioPage = () => {
     setStatus('Draft saved locally.');
   };
 
+  const handleSaveAndPreview = () => {
+    saveDraft(theme);
+    window.open('/invite', '_blank', 'noopener,noreferrer');
+    setStatus('Draft saved. Preview opened in a new tab.');
+  };
+
   const handlePublish = async () => {
     setStatus('Publishing theme…');
     await publishTheme(theme);
@@ -187,6 +219,26 @@ const ThemeStudioPage = () => {
   const handleSparkleAmount = (value) => {
     if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
     updateTheme({ toggles: { sparkleAmount: Number(value) } });
+  };
+
+  const handleVignetteStrength = (value) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { vignetteStrength: Number(value) } });
+  };
+
+  const handleFoilIntensity = (value) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { goldFoilIntensity: Number(value) } });
+  };
+
+  const handleCardEdgeStyle = (value) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { cardEdgeStyle: value } });
+  };
+
+  const handleWaxShape = (value) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { waxSealShape: value } });
   };
 
   const renderColorTab = () => (
@@ -302,28 +354,10 @@ const ThemeStudioPage = () => {
 
   const renderMediaTab = () => (
     <section className="studio-panel">
-      <h2>Media uploads</h2>
+      <h2>Media & wax seals</h2>
       <div className="upload-grid">
         <label className="upload-field">
-          <span>Left curtain</span>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleAssetUpload('curtainLeft', event.target.files?.[0])}
-            disabled={launchMode}
-          />
-        </label>
-        <label className="upload-field">
-          <span>Right curtain</span>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleAssetUpload('curtainRight', event.target.files?.[0])}
-            disabled={launchMode}
-          />
-        </label>
-        <label className="upload-field">
-          <span>Envelope texture</span>
+          <span>Envelope artwork</span>
           <input
             type="file"
             accept="image/*"
@@ -387,6 +421,38 @@ const ThemeStudioPage = () => {
               disabled={launchMode}
             />
           </label>
+        </div>
+        <div className="wax-shape-field">
+          <span>Wax seal shape</span>
+          <div className="pill-select">
+            {waxShapeOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={`pill-option${toggles.waxSealShape === option.value ? ' is-active' : ''}`}
+                onClick={() => handleWaxShape(option.value)}
+                disabled={launchMode}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="wax-shape-field">
+          <span>Card edge style</span>
+          <div className="pill-select">
+            {cardEdgeOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={`pill-option${toggles.cardEdgeStyle === option.value ? ' is-active' : ''}`}
+                onClick={() => handleCardEdgeStyle(option.value)}
+                disabled={launchMode}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -474,6 +540,39 @@ const ThemeStudioPage = () => {
           />
           <span>Floating petals</span>
         </label>
+        <label className="studio-field">
+          <span>Vignette strength</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={toggles.vignetteStrength ?? 0.35}
+            onChange={(event) => handleVignetteStrength(event.target.value)}
+            disabled={launchMode}
+          />
+        </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.paperTexture !== false}
+            onChange={(event) => handleToggleChange('paperTexture', event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Paper texture</span>
+        </label>
+        <label className="studio-field">
+          <span>Gold foil intensity</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={toggles.goldFoilIntensity ?? 0.6}
+            onChange={(event) => handleFoilIntensity(event.target.value)}
+            disabled={launchMode}
+          />
+        </label>
       </div>
     </section>
   );
@@ -509,14 +608,17 @@ const ThemeStudioPage = () => {
           {launchMode && <p className="launch-mode-alert">Launch Mode is enabled. Disable it to continue editing.</p>}
         </div>
         <div className="theme-studio__actions">
-          <a className="studio-link" href="/invite" target="_blank" rel="noopener noreferrer">
+          <Link className="studio-link" to="/invite" target="_blank" rel="noopener noreferrer">
             Back to Invitation
-          </a>
+          </Link>
           <Button variant="ghost" size="md" onClick={handleReset} disabled={loading || isPublishing}>
             Reset to Default
           </Button>
           <Button variant="ghost" size="md" onClick={handleSaveDraft} disabled={loading || isPublishing}>
             Save Draft
+          </Button>
+          <Button variant="ghost" size="md" onClick={handleSaveAndPreview} disabled={loading || isPublishing}>
+            Save &amp; Preview Invitation
           </Button>
           <Button variant="primary" size="md" onClick={handlePublish} loading={isPublishing}>
             Publish Theme
@@ -565,26 +667,27 @@ const ThemeStudioPage = () => {
         <section className="studio-panel preview-panel">
           <h2>Live preview</h2>
           <div className="preview-frame">
-            <div className="preview-curtains">
-              <img src={assets.curtainLeft ?? defaultAssets.curtainLeft} alt="Left curtain" />
-              <img src={assets.curtainRight ?? assets.curtainLeft ?? defaultAssets.curtainRight} alt="Right curtain" />
-            </div>
-            <div className="preview-bismillah-text">
-              <span className="preview-bismillah-arabic">{text.bismillahArabic ?? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم'}</span>
-              <span className="preview-bismillah-translation">
-                {text.bismillahTranslation ?? 'In the name of Allah, the Most Merciful, the Most Kind'}
-              </span>
-            </div>
-            <div className="preview-envelope">
-              <img src={assets.envelope ?? defaultAssets.envelope} alt="Envelope" className="preview-envelope__paper" />
-              <img
-                src={(theme?.assets?.waxSeals ?? waxSeals)[theme?.assets?.waxSealVariant ?? selectedWax]}
-                alt="Wax seal"
-                className="preview-envelope__seal"
-              />
-            </div>
-            <div className="preview-card">
-              <img src={assets.inviteCard ?? defaultAssets.inviteCard} alt="Invite card" />
+            <div className="preview-card-shell" data-shape={toggles.cardEdgeStyle ?? 'rounded'}>
+              <div className="preview-bismillah">
+                <span className="preview-bismillah-arabic">
+                  {text.bismillahArabic ?? 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ'}
+                </span>
+                <span className="preview-bismillah-translation">
+                  {text.bismillahTranslation ?? 'In the name of Allah, The Most Merciful, The Most Compassionate'}
+                </span>
+              </div>
+              <div className="preview-envelope">
+                <img src={assets.envelope ?? defaultAssets.envelope} alt="Envelope" className="preview-envelope__paper" />
+                <img
+                  src={(theme?.assets?.waxSeals ?? waxSeals)[theme?.assets?.waxSealVariant ?? selectedWax]}
+                  alt="Wax seal"
+                  className="preview-envelope__seal"
+                  data-shape={toggles.waxSealShape ?? 'round'}
+                />
+              </div>
+              <div className="preview-invite-card">
+                <img src={assets.inviteCard ?? defaultAssets.inviteCard} alt="Invite card" />
+              </div>
             </div>
           </div>
         </section>

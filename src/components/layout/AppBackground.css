@@ -5,6 +5,22 @@
   overflow: hidden;
 }
 
+.app-background::after {
+  content: '';
+  position: absolute;
+  inset: -4%;
+  pointer-events: none;
+  background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0) calc(55% + var(--theme-vignette-strength, 0.35) * 20%),
+      rgba(23, 18, 12, 0.25) calc(75% + var(--theme-vignette-strength, 0.35) * 18%),
+      rgba(18, 12, 8, 0.4)
+    );
+  mix-blend-mode: multiply;
+  opacity: calc(var(--theme-vignette-strength, 0.35) + 0.12);
+  transition: opacity 0.4s ease;
+}
+
 .sparkle-video {
   position: absolute;
   top: 50%;

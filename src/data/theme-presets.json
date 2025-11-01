@@ -2,7 +2,7 @@
   {
     "id": "classic-gold",
     "label": "Classic Gold & Marble",
-    "description": "Traditional white marble with rich gold accents and gentle shimmer.",
+    "description": "White marble base with luminous gold foiling and gentle sparkles.",
     "palette": {
       "background": "#f8f6f2",
       "accent": "#d4af37",
@@ -22,80 +22,27 @@
       "animationIntensity": "medium",
       "sparkleAmount": 0.55,
       "lightBokeh": false,
-      "petals": false
+      "petals": false,
+      "vignetteStrength": 0.35,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.62,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "rounded"
     },
     "assets": {
       "waxSealVariant": "gold"
     }
   },
   {
-    "id": "ivory-blush-gold",
-    "label": "Ivory • Blush • Gold",
-    "description": "Soft blush undertones with ivory marble and luminous golden highlights.",
-    "palette": {
-      "background": "#fdf7f8",
-      "accent": "#d7a07f",
-      "accentSoft": "#fbe1dd",
-      "text": "#2b201c",
-      "textMuted": "rgba(43, 32, 28, 0.68)",
-      "glass": "rgba(255, 248, 246, 0.82)",
-      "border": "rgba(215, 160, 127, 0.34)"
-    },
-    "fonts": {
-      "heading": "'Great Vibes', cursive",
-      "body": "'Josefin Sans', sans-serif"
-    },
-    "toggles": {
-      "sparkles": true,
-      "glow": true,
-      "animationIntensity": "gentle",
-      "sparkleAmount": 0.65,
-      "lightBokeh": true,
-      "petals": true
-    },
-    "assets": {
-      "waxSealVariant": "rosegold"
-    }
-  },
-  {
-    "id": "emerald-gold",
-    "label": "Emerald & Gold",
-    "description": "Deep emerald stone with luxe gold lighting and serene motion.",
-    "palette": {
-      "background": "#f7f5f0",
-      "accent": "#0f766e",
-      "accentSoft": "#9fe8d8",
-      "text": "#1e1b16",
-      "textMuted": "rgba(30, 27, 22, 0.68)",
-      "glass": "rgba(247, 250, 249, 0.74)",
-      "border": "rgba(33, 133, 120, 0.35)"
-    },
-    "fonts": {
-      "heading": "'Cinzel', serif",
-      "body": "'Inter', sans-serif"
-    },
-    "toggles": {
-      "sparkles": true,
-      "glow": true,
-      "animationIntensity": "gentle",
-      "sparkleAmount": 0.5,
-      "lightBokeh": false,
-      "petals": false
-    },
-    "assets": {
-      "waxSealVariant": "emerald"
-    }
-  },
-  {
-    "id": "champagne-pearl",
-    "label": "Champagne Pearl",
-    "description": "Champagne ivory with luminous pearl sheen for evening celebrations.",
+    "id": "champagne-garden",
+    "label": "Champagne Garden",
+    "description": "Champagne ivory glass with garden evening glow and refined sparkles.",
     "palette": {
       "background": "#fbf6ee",
       "accent": "#c9b28b",
       "accentSoft": "#f4e8d4",
       "text": "#2a241d",
-      "textMuted": "rgba(42, 36, 29, 0.66)",
+      "textMuted": "rgba(42, 36, 29, 0.68)",
       "glass": "rgba(255, 252, 246, 0.78)",
       "border": "rgba(201, 178, 139, 0.36)"
     },
@@ -107,20 +54,59 @@
       "sparkles": true,
       "glow": true,
       "animationIntensity": "medium",
-      "sparkleAmount": 0.58,
+      "sparkleAmount": 0.6,
       "lightBokeh": true,
-      "petals": false
+      "petals": false,
+      "vignetteStrength": 0.42,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.68,
+      "waxSealShape": "oval",
+      "cardEdgeStyle": "soft-bevel"
     },
     "assets": {
       "waxSealVariant": "gold"
     }
   },
   {
-    "id": "dusty-rose-gold",
-    "label": "Dusty Rose & Gold",
-    "description": "Dusky rose quartz paired with glowing gold edges for romantic warmth.",
+    "id": "pearl-sage",
+    "label": "Pearl & Sage",
+    "description": "Pearled whites with sage greenery and calm emerald accents.",
     "palette": {
-      "background": "#f9f3f4",
+      "background": "#f7f9f4",
+      "accent": "#4b8063",
+      "accentSoft": "#cfe3d6",
+      "text": "#253028",
+      "textMuted": "rgba(37, 48, 40, 0.7)",
+      "glass": "rgba(250, 255, 250, 0.74)",
+      "border": "rgba(75, 128, 99, 0.28)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.48,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.28,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.5,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "rounded"
+    },
+    "assets": {
+      "waxSealVariant": "emerald"
+    }
+  },
+  {
+    "id": "ivory-dusty-pink",
+    "label": "Ivory & Dusty Pink",
+    "description": "Ivory silk with romantic dusty rose, perfect for blush engagements.",
+    "palette": {
+      "background": "#fdf7f8",
       "accent": "#c77a8a",
       "accentSoft": "#f5c6d2",
       "text": "#2b1e24",
@@ -138,24 +124,29 @@
       "animationIntensity": "gentle",
       "sparkleAmount": 0.68,
       "lightBokeh": true,
-      "petals": true
+      "petals": true,
+      "vignetteStrength": 0.4,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.64,
+      "waxSealShape": "floral",
+      "cardEdgeStyle": "deckled"
     },
     "assets": {
       "waxSealVariant": "rosegold"
     }
   },
   {
-    "id": "black-gold-evening",
-    "label": "Black & Gold Evening",
-    "description": "Opulent noir marble with molten gold detailing for evening receptions.",
+    "id": "royal-emerald-gold",
+    "label": "Royal Emerald & Gold",
+    "description": "Deep emerald stone with opulent gold foiling and evening glow.",
     "palette": {
-      "background": "#1a1714",
-      "accent": "#d4af37",
-      "accentSoft": "#8f7b47",
-      "text": "#f8f5ef",
-      "textMuted": "rgba(248, 245, 239, 0.7)",
-      "glass": "rgba(28, 24, 22, 0.72)",
-      "border": "rgba(212, 175, 55, 0.38)"
+      "background": "#f6f4ee",
+      "accent": "#0f766e",
+      "accentSoft": "#9fe8d8",
+      "text": "#1e1b16",
+      "textMuted": "rgba(30, 27, 22, 0.68)",
+      "glass": "rgba(247, 250, 249, 0.74)",
+      "border": "rgba(33, 133, 120, 0.35)"
     },
     "fonts": {
       "heading": "'Cinzel', serif",
@@ -165,26 +156,31 @@
       "sparkles": true,
       "glow": true,
       "animationIntensity": "grand",
-      "sparkleAmount": 0.45,
+      "sparkleAmount": 0.54,
       "lightBokeh": true,
-      "petals": false
+      "petals": false,
+      "vignetteStrength": 0.48,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.72,
+      "waxSealShape": "oval",
+      "cardEdgeStyle": "soft-bevel"
     },
     "assets": {
-      "waxSealVariant": "gold"
+      "waxSealVariant": "emerald"
     }
   },
   {
-    "id": "peach-olive-garden",
-    "label": "Peach & Olive Garden",
-    "description": "Sunset peach with olive greenery for fresh garden gatherings.",
+    "id": "midnight-garden",
+    "label": "Midnight Garden",
+    "description": "Midnight noir with rose gold foiling for a black-tie garden reception.",
     "palette": {
-      "background": "#fef7f1",
-      "accent": "#d9865f",
-      "accentSoft": "#ffe0c8",
-      "text": "#2e251c",
-      "textMuted": "rgba(46, 37, 28, 0.68)",
-      "glass": "rgba(255, 248, 240, 0.8)",
-      "border": "rgba(217, 134, 95, 0.34)"
+      "background": "#1a1714",
+      "accent": "#d4af8c",
+      "accentSoft": "#8f6b4d",
+      "text": "#f8f5ef",
+      "textMuted": "rgba(248, 245, 239, 0.7)",
+      "glass": "rgba(28, 24, 22, 0.72)",
+      "border": "rgba(212, 175, 140, 0.38)"
     },
     "fonts": {
       "heading": "'Great Vibes', cursive",
@@ -193,42 +189,120 @@
     "toggles": {
       "sparkles": true,
       "glow": true,
-      "animationIntensity": "gentle",
-      "sparkleAmount": 0.6,
-      "lightBokeh": false,
-      "petals": true
+      "animationIntensity": "grand",
+      "sparkleAmount": 0.7,
+      "lightBokeh": true,
+      "petals": true,
+      "vignetteStrength": 0.58,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.8,
+      "waxSealShape": "floral",
+      "cardEdgeStyle": "bevel"
     },
     "assets": {
-      "waxSealVariant": "flower"
+      "waxSealVariant": "rosegold"
     }
   },
   {
-    "id": "lavender-champagne",
-    "label": "Lavender & Champagne",
-    "description": "Lavender haze with champagne gold shimmer and soft floating petals.",
+    "id": "blush-marble",
+    "label": "Blush Marble",
+    "description": "Soft blush marble with satin highlights and delicate shimmer.",
     "palette": {
-      "background": "#f6f4fb",
-      "accent": "#9a87c9",
-      "accentSoft": "#e6dcfb",
-      "text": "#2c2635",
-      "textMuted": "rgba(44, 38, 53, 0.7)",
-      "glass": "rgba(252, 248, 255, 0.78)",
-      "border": "rgba(154, 135, 201, 0.34)"
+      "background": "#f9f1f2",
+      "accent": "#d9a5b2",
+      "accentSoft": "#f7dce2",
+      "text": "#3a2a30",
+      "textMuted": "rgba(58, 42, 48, 0.68)",
+      "glass": "rgba(255, 246, 248, 0.8)",
+      "border": "rgba(217, 165, 178, 0.32)"
     },
     "fonts": {
-      "heading": "'Scheherazade New', serif",
+      "heading": "'Alex Brush', cursive",
       "body": "'Lato', sans-serif"
     },
     "toggles": {
       "sparkles": true,
       "glow": true,
       "animationIntensity": "gentle",
-      "sparkleAmount": 0.62,
+      "sparkleAmount": 0.64,
       "lightBokeh": true,
-      "petals": true
+      "petals": true,
+      "vignetteStrength": 0.38,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.66,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "deckled"
     },
     "assets": {
       "waxSealVariant": "rosegold"
+    }
+  },
+  {
+    "id": "pearl-minimal",
+    "label": "Pearl Islamic Minimal",
+    "description": "Pure white pearl with subtle gold and refined serif typography.",
+    "palette": {
+      "background": "#fdfcf8",
+      "accent": "#d0b176",
+      "accentSoft": "#f2e3c7",
+      "text": "#2a2520",
+      "textMuted": "rgba(42, 37, 32, 0.6)",
+      "glass": "rgba(255, 255, 255, 0.76)",
+      "border": "rgba(208, 177, 118, 0.32)"
+    },
+    "fonts": {
+      "heading": "'Scheherazade New', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": false,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.25,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.3,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.48,
+      "waxSealShape": "oval",
+      "cardEdgeStyle": "rounded"
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "modern-arabic",
+    "label": "Modern Arabic Script",
+    "description": "Neutral stone with Arabic typography accents and modern sans body.",
+    "palette": {
+      "background": "#f5f2ed",
+      "accent": "#b69a73",
+      "accentSoft": "#e7d8c2",
+      "text": "#302923",
+      "textMuted": "rgba(48, 41, 35, 0.7)",
+      "glass": "rgba(249, 246, 240, 0.78)",
+      "border": "rgba(182, 154, 115, 0.32)"
+    },
+    "fonts": {
+      "heading": "'Amiri', serif",
+      "body": "'Nunito', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.44,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.34,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.58,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "soft-bevel"
+    },
+    "assets": {
+      "waxSealVariant": "gold"
     }
   }
 ]

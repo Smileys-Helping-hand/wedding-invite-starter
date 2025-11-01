@@ -47,7 +47,7 @@ const TopBar = () => {
           <span className="brand-emblem__ring">
             <span
               className="brand-emblem__names"
-              style={{ fontSize: emblemFontSize }}
+              style={{ '--emblem-font-size': emblemFontSize }}
               data-length={coupleNames.length}
             >
               {coupleNames}
@@ -58,24 +58,19 @@ const TopBar = () => {
           <button
             type="button"
             className="audio-toggle"
-            onClick={toggleAudio}
+            onClick={isPlaying ? toggleAudio : undefined}
             aria-pressed={isPlaying}
             aria-label="Toggle Nasheed"
             title="Toggle Nasheed"
+            data-state={isPlaying ? 'on' : 'off'}
+            disabled={!isPlaying}
+            aria-disabled={!isPlaying}
           >
             <span className="sr-only">Toggle Nasheed</span>
-            <svg
-              className="audio-toggle__icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+            <svg className="audio-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
               <path
-                d="M9 5v14l8-5.5V10.5L9 5zm-3 4h2v6H6a2 2 0 0 1 0-4h2"
-                fill={isPlaying ? 'currentColor' : 'none'}
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d="M12.5 4.5v8.02a3.5 3.5 0 1 1-1.5-2.88V4.5a.75.75 0 0 1 1.5 0Zm4.5-.4a.75.75 0 0 1 .75.75v9.12a3.5 3.5 0 1 1-1.5-2.88V4.85a.75.75 0 0 1 .75-.75Z"
+                fill="currentColor"
               />
             </svg>
           </button>

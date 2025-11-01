@@ -15,6 +15,10 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
   const [inviteSrc, setInviteSrc] = useState(theme?.assets?.inviteCard ?? defaultInvite);
   const resolvedVariant = sealVariant ?? theme?.assets?.waxSealVariant ?? 'default';
   const [waxSrc, setWaxSrc] = useState(() => getWaxSeal(resolvedVariant, theme?.assets?.waxSeals ?? theme?.assets));
+  const waxShape = theme?.toggles?.waxSealShape ?? 'round';
+  const cardEdgeStyle = theme?.toggles?.cardEdgeStyle ?? 'rounded';
+  const paperTextureEnabled = theme?.toggles?.paperTexture !== false;
+  const foilIntensity = Math.min(Math.max(theme?.toggles?.goldFoilIntensity ?? 0.6, 0), 1);
 
   useEffect(() => {
     if (!isMelting) return undefined;
@@ -62,7 +66,14 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
   );
 
   return (
-    <div className="envelope-stage" data-intensity={theme?.toggles?.animationIntensity ?? 'medium'}>
+    <div
+      className="envelope-stage"
+      data-intensity={theme?.toggles?.animationIntensity ?? 'medium'}
+      data-wax-shape={waxShape}
+      data-card-edge={cardEdgeStyle}
+      data-texture={paperTextureEnabled ? 'on' : 'off'}
+      style={{ '--foil-intensity': foilIntensity }}
+    >
       <div className="envelope-stage__halo" aria-hidden="true" />
       <div className="envelope-stage__sparkles" aria-hidden="true" />
       <motion.div
@@ -75,7 +86,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
         }
         transition={{ duration: 1.1, ease: [0.25, 0.8, 0.5, 1] }}
       >
-        <div className="envelope-texture" />
+        <div className="envelope-texture" aria-hidden="true" />
         <img
           src={envelopeSrc}
           alt="Golden envelope"
@@ -94,6 +105,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
         whileTap={{ scale: 0.95 }}
         transition={{ delay: 0.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         data-melting={isMelting}
+        data-shape={waxShape}
       >
         <span className="wax-button__glow" aria-hidden="true" />
         <motion.img

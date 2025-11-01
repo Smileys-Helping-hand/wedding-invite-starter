@@ -26,9 +26,10 @@ const InviteDetails = ({ onRSVP, loading }) => {
   const greeting = theme?.text?.greeting ?? 'Assalamu Alaikum';
   const greetingSuffix = theme?.text?.greetingSuffix ?? ' wa Rahmatullah';
   const salaam = guest.partnerName ? `${greeting}${greetingSuffix}` : greeting;
-  const bismillahArabic = theme?.text?.bismillahArabic ?? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم';
+  const bismillahArabic = theme?.text?.bismillahArabic ?? 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ';
   const bismillahTranslation =
-    theme?.text?.bismillahTranslation ?? 'In the name of Allah, the Most Merciful, the Most Kind';
+    theme?.text?.bismillahTranslation ??
+    'In the name of Allah, The Most Merciful, The Most Compassionate';
 
   return (
     <section className="invite-details">

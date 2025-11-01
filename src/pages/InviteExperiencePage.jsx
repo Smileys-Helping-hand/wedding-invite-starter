@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigate } from 'react-router-dom';
-import CurtainReveal from '../components/experience/CurtainReveal.jsx';
 import EnvelopeStage from '../components/experience/EnvelopeStage.jsx';
 import InviteDetails from '../components/experience/InviteDetails.jsx';
 import MemoryWallPlaceholder from '../components/experience/MemoryWallPlaceholder.jsx';
@@ -16,7 +15,7 @@ import './InviteExperiencePage.css';
 const InviteExperiencePage = () => {
   const { guest, updateRSVP, loading: guestLoading } = useGuest();
   const { theme } = useTheme();
-  const [phase, setPhase] = useState(EXPERIENCE_PHASES.curtains);
+  const [phase, setPhase] = useState(EXPERIENCE_PHASES.envelope);
   const [message, setMessage] = useState(guest?.notes ?? '');
   const [additionalGuests, setAdditionalGuests] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
@@ -62,16 +61,6 @@ const InviteExperiencePage = () => {
   return (
     <div className="page-panel invite-experience" ref={experienceRef}>
       <AnimatePresence mode="wait">
-        {phase === EXPERIENCE_PHASES.curtains && (
-          <motion.div
-            key="curtains"
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <CurtainReveal onComplete={() => setPhase(EXPERIENCE_PHASES.envelope)} />
-          </motion.div>
-        )}
-
         {phase === EXPERIENCE_PHASES.envelope && (
           <motion.div
             key="envelope"

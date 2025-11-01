@@ -19,7 +19,6 @@ export const STORAGE_KEYS = {
 };
 
 export const EXPERIENCE_PHASES = {
-  curtains: 'curtains',
   envelope: 'envelope',
   invitation: 'invitation',
   memories: 'memories',

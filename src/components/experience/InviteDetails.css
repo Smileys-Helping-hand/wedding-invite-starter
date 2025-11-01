@@ -11,8 +11,10 @@
   text-align: center;
   backdrop-filter: blur(16px);
   display: grid;
-  gap: clamp(18px, 2.4vw, 28px);
+  gap: clamp(20px, 2.6vw, 32px);
   justify-items: center;
+  align-content: center;
+  min-height: clamp(520px, 62vw, 660px);
 }
 
 .bismillah-text {
@@ -24,16 +26,16 @@
 
 .bismillah-text__arabic {
   font-family: 'Scheherazade New', 'Amiri', var(--font-display);
-  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
-  letter-spacing: 0.06em;
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  letter-spacing: 0.04em;
   text-shadow: 0 0 18px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 58%, rgba(255, 255, 255, 0));
 }
 
 .bismillah-text__translation {
-  font-size: 0.88rem;
-  letter-spacing: 0.32em;
+  font-size: 0.92rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 64%, rgba(60, 51, 41, 0.42));
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 68%, rgba(60, 51, 41, 0.4));
 }
 
 .invite-salaam {
