@@ -5,9 +5,19 @@
   margin: 0 auto;
   overflow: hidden;
   border-radius: var(--radius-xl);
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3), rgba(4, 8, 7, 0.7));
-  border: 1px solid rgba(217, 180, 92, 0.35);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(250, 244, 231, 0.8));
+  border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-soft);
+}
+
+.curtain-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 231, 189, 0.25), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: curtainGlow 8s ease-in-out infinite;
 }
 
 .curtain {
@@ -16,7 +26,7 @@
   width: 60%;
   height: 110%;
   object-fit: cover;
-  filter: saturate(1.1);
+  filter: saturate(1.05) brightness(1.08);
 }
 
 .curtain--left {
@@ -25,4 +35,14 @@
 
 .curtain--right {
   right: 0;
+}
+
+@keyframes curtainGlow {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }

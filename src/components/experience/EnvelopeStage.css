@@ -1,34 +1,169 @@
 .envelope-stage {
   position: relative;
-  width: min(800px, 86vw);
-  height: clamp(320px, 56vw, 520px);
-  margin: 0 auto;
+  width: min(820px, 90vw);
+  margin: clamp(32px, 6vw, 72px) auto 0;
+  padding: clamp(48px, 7vw, 72px) clamp(18px, 4vw, 36px);
+  display: grid;
+  place-items: center;
+  border-radius: 36px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(212, 177, 98, 0.4);
+  box-shadow: 0 30px 60px rgba(31, 26, 20, 0.12);
+  backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+
+.envelope-stage__halo,
+.envelope-stage__sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.envelope-stage__halo {
+  background: radial-gradient(circle at center, rgba(255, 240, 210, 0.55), rgba(255, 255, 255, 0));
+  filter: blur(40px);
+  opacity: 0.65;
+  mix-blend-mode: screen;
+}
+
+.envelope-stage__sparkles {
+  background-image: radial-gradient(rgba(212, 177, 98, 0.55) 0.8px, transparent 0.8px);
+  background-size: 120px 120px;
+  opacity: 0.32;
+  animation: twinkle 12s linear infinite;
+}
+
+.envelope-shell {
+  position: relative;
+  width: min(620px, 86vw);
+  filter: drop-shadow(0 40px 60px rgba(31, 26, 20, 0.28));
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.envelope-shell.is-open {
+  transform: translateY(48px) scale(0.98);
+  opacity: 0.35;
+}
+
+.envelope-texture {
+  position: absolute;
+  inset: 4% 8%;
+  border-radius: 28px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.65), rgba(234, 220, 190, 0.38)),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2"/></filter><rect width="120" height="120" filter="url(%23n)" opacity="0.12"/></svg>');
+  background-size: cover, 180px;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.envelope {
+  width: 100%;
+  display: block;
+  border-radius: 32px;
+  border: 1px solid rgba(212, 177, 98, 0.25);
+  background: rgba(255, 255, 255, 0.8);
+  mix-blend-mode: multiply;
+}
+
+.wax-button {
+  position: relative;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin-top: clamp(0px, -8vw, -40px);
+  transition: filter 0.3s ease;
+}
+
+.wax-button[data-melting='true'] {
+  pointer-events: none;
+}
+
+.wax-button__glow {
+  position: absolute;
+  inset: 12% 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240, 210, 140, 0.8), rgba(255, 255, 255, 0));
+  filter: blur(18px);
+  opacity: 0.8;
+  animation: waxGlow 2.6s ease-in-out infinite;
+}
+
+.waxseal {
+  position: relative;
+  width: clamp(150px, 22vw, 220px);
+  filter: drop-shadow(0 25px 45px rgba(140, 105, 54, 0.55));
+}
+
+.invite-card-wrapper {
+  position: absolute;
+  bottom: clamp(-220px, -22vw, -160px);
   display: grid;
   place-items: center;
 }
 
-.envelope {
-  position: absolute;
-  width: min(90%, 620px);
-  filter: drop-shadow(0 40px 60px rgba(15, 24, 22, 0.45));
-}
-
-.wax-button {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-}
-
-.waxseal {
-  width: clamp(160px, 22vw, 220px);
-  filter: drop-shadow(0 20px 30px rgba(63, 29, 12, 0.6));
-}
-
 .invite-card {
+  width: min(520px, 78vw);
+  border-radius: 28px;
+  box-shadow: 0 45px 70px rgba(31, 26, 20, 0.25);
+}
+
+.invite-card__shimmer {
   position: absolute;
-  width: min(80%, 500px);
-  z-index: 1;
-  filter: drop-shadow(0 40px 70px rgba(0, 0, 0, 0.35));
+  inset: 0;
+  border-radius: 28px;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 20%, rgba(255, 223, 173, 0.65) 50%, rgba(255, 255, 255, 0) 80%);
+  opacity: 0;
+  animation: cardSweep 2.4s ease-in-out 0.8s forwards;
+}
+
+@keyframes waxGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes cardSweep {
+  from {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  to {
+    opacity: 0.85;
+    transform: translateX(120%);
+  }
+}
+
+@keyframes twinkle {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(12px, -8px, 0) scale(1.05);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.25;
+  }
+}
+
+@media (max-width: 640px) {
+  .envelope-stage {
+    padding: 38px 18px 96px;
+  }
+
+  .invite-card-wrapper {
+    bottom: clamp(-160px, -20vw, -120px);
+  }
 }

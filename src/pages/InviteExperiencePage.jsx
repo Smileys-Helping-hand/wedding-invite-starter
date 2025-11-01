@@ -64,7 +64,10 @@ const InviteExperiencePage = () => {
 
         {phase === EXPERIENCE_PHASES.envelope && (
           <motion.div key="envelope" exit={{ opacity: 0 }}>
-            <EnvelopeStage onOpened={() => setPhase(EXPERIENCE_PHASES.invitation)} />
+            <EnvelopeStage
+              onOpened={() => setPhase(EXPERIENCE_PHASES.invitation)}
+              sealVariant={guest?.sealVariant ?? guest?.waxSealVariant ?? 'default'}
+            />
           </motion.div>
         )}
       </AnimatePresence>

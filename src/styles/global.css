@@ -1,23 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 :root {
   color-scheme: light;
-  font-family: 'Montserrat', system-ui, sans-serif;
-  background-color: #0d1d1a;
-  color: #1f2d2a;
-  --emerald: #1f7a5b;
-  --emerald-deep: #0f3f30;
-  --gold-soft: #d9b45c;
-  --gold-deep: #b38b2a;
-  --cream: #f5f1e6;
-  --sand: #ede5d5;
-  --marble: rgba(247, 244, 237, 0.7);
-  --overlay-dark: rgba(7, 14, 13, 0.65);
-  --radius-xl: 32px;
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --shadow-soft: 0 30px 80px rgba(15, 32, 28, 0.25);
-  --shadow-gold: 0 10px 30px rgba(217, 180, 92, 0.45);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #f8f6f2;
+  color: #2f2721;
+  --font-display: 'Playfair Display', serif;
+  --ink: #2f2721;
+  --ink-soft: rgba(47, 39, 33, 0.72);
+  --ink-subtle: rgba(47, 39, 33, 0.56);
+  --gold-soft: #d2b16a;
+  --gold-rich: #b9923d;
+  --gold-pale: #f4e3c3;
+  --cream: #f8f3ea;
+  --marble: #f8f6f2;
+  --marble-vein: rgba(196, 172, 136, 0.28);
+  --glass-border: rgba(210, 177, 107, 0.38);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --shadow-soft: 0 35px 70px rgba(41, 31, 23, 0.18);
+  --shadow-gold: 0 18px 34px rgba(210, 177, 107, 0.45);
+  --radius-xl: 40px;
+  --radius-lg: 28px;
+  --radius-md: 18px;
 }
 
 *,
@@ -29,8 +33,26 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(18, 37, 33, 0.9), #040908);
-  color: var(--cream);
+  background-color: var(--marble);
+  background-image:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(255, 219, 178, 0.2), transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(210, 177, 107, 0.18), transparent 65%);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160"><filter id="n" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11"/></filter><rect width="160" height="160" filter="url(%23n)" opacity="0.05"/></svg>');
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: -2;
 }
 
 a {
@@ -57,36 +79,40 @@ video {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--gold-soft), var(--gold-deep));
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold-rich));
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .fade-glow {
-  box-shadow: 0 0 30px rgba(217, 180, 92, 0.45), inset 0 0 60px rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 30px rgba(210, 177, 107, 0.38), inset 0 0 60px rgba(255, 255, 255, 0.45);
 }
 
 .text-script {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   letter-spacing: 0.05em;
 }
 
-.text-emerald {
-  color: var(--emerald);
-}
-
 .text-gold {
-  color: var(--gold-soft);
+  color: var(--gold-rich);
 }
 
 .text-muted {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--ink-subtle);
 }
 
 .container {
-  width: min(1200px, 94vw);
+  width: min(1200px, 92vw);
   margin: 0 auto;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
 }
