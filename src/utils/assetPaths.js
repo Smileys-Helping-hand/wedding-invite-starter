@@ -1,4 +1,4 @@
-export const ASSET_PATHS = {
+export const defaultAssets = {
   bismillah: '/assets/bismillah-gold.png',
   curtainLeft: '/assets/silk-curtain-left.png',
   curtainRight: '/assets/silk-curtain-right.png',
@@ -8,7 +8,7 @@ export const ASSET_PATHS = {
   nasheed: '/assets/nasheed.mp3',
 };
 
-export const WAX_SEALS = {
+export const waxSeals = {
   default: '/assets/waxseal.png',
   gold: '/assets/waxseal_gold.png',
   rosegold: '/assets/waxseal_rosegold.png',
@@ -16,6 +16,13 @@ export const WAX_SEALS = {
   flower: '/assets/waxseal_flower.png',
 };
 
-export const getAssetPath = (key) => ASSET_PATHS[key];
+export const getAssetPath = (key, overrides) => overrides?.[key] ?? defaultAssets[key];
 
-export const getWaxSeal = (variant = 'default') => WAX_SEALS[variant] ?? WAX_SEALS.default;
+export const getWaxSeal = (variant = 'default', overrides) => {
+  if (overrides) {
+    const map = overrides.waxSeals ?? overrides;
+    return map?.[variant] ?? map?.default ?? waxSeals[variant] ?? waxSeals.default;
+  }
+
+  return waxSeals[variant] ?? waxSeals.default;
+};

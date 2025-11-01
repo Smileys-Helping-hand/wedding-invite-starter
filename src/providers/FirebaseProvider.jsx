@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const FirebaseContext = createContext();
 export const useFirebase = () => useContext(FirebaseContext);
@@ -16,19 +17,23 @@ const firebaseConfig = {
 
 let app;
 let db;
+let storage;
 
 try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
+  storage = getStorage(app);
 } catch (e) {
   console.warn('Firebase already initialized or missing config', e);
 }
 
 export const FirebaseProvider = ({ children }) => {
   const [firestore, setFirestore] = useState(null);
+  const [bucket, setBucket] = useState(null);
 
   useEffect(() => {
     if (db) setFirestore(db);
+    if (storage) setBucket(storage);
   }, []);
 
   const getGuest = async (code) => {
@@ -60,8 +65,53 @@ export const FirebaseProvider = ({ children }) => {
     await setDoc(ref, data);
   };
 
+  const fetchThemeConfig = async () => {
+    if (!firestore) return null;
+    try {
+      const ref = doc(firestore, 'config', 'currentTheme');
+      const snapshot = await getDoc(ref);
+      if (!snapshot.exists()) return null;
+      const data = snapshot.data();
+      return data?.theme ?? data;
+    } catch (err) {
+      console.warn('Failed to fetch theme config', err);
+      return null;
+    }
+  };
+
+  const saveThemeConfig = async (theme) => {
+    if (!firestore) throw new Error('Firestore unavailable');
+    try {
+      const ref = doc(firestore, 'config', 'currentTheme');
+      await setDoc(ref, { theme }, { merge: true });
+    } catch (err) {
+      console.error('Failed to save theme config', err);
+      throw err;
+    }
+  };
+
+  const uploadMedia = async (file, { directory = 'themes', fileName } = {}) => {
+    if (!bucket) throw new Error('Firebase Storage unavailable');
+    const safeName = fileName ?? `${Date.now()}-${file.name}`.replace(/\s+/g, '-');
+    const objectPath = `${directory}/${safeName}`;
+    const fileRef = storageRef(bucket, objectPath);
+    await uploadBytes(fileRef, file);
+    const url = await getDownloadURL(fileRef);
+    return { url, path: objectPath };
+  };
+
   return (
-    <FirebaseContext.Provider value={{ firestore, getGuest, saveRSVP, addGuest }}>
+    <FirebaseContext.Provider
+      value={{
+        firestore,
+        getGuest,
+        saveRSVP,
+        addGuest,
+        fetchThemeConfig,
+        saveThemeConfig,
+        uploadMedia,
+      }}
+    >
       {children}
     </FirebaseContext.Provider>
   );

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { getAssetPath } from '../../utils/assetPaths.js';
+import { useTheme } from '../../providers/ThemeProvider.jsx';
 import './BismillahReveal.css';
 
 const containerVariants = {
@@ -20,24 +21,33 @@ const glowVariants = {
   },
 };
 
-const BismillahReveal = ({ onComplete }) => (
-  <motion.div
-    className="bismillah-stage"
-    variants={containerVariants}
-    initial="hidden"
-    animate="visible"
-    onAnimationComplete={onComplete}
-  >
-    <motion.div className="bismillah-glow" variants={glowVariants} />
-    <img
-      src={getAssetPath('bismillah')}
-      alt="Bismillah in golden calligraphy"
-      className="bismillah-art"
-    />
-    <motion.p className="bismillah-caption" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 1.1 }}>
-      In the name of Allah, the Most Gracious, the Most Merciful
-    </motion.p>
-  </motion.div>
-);
+const BismillahReveal = ({ onComplete }) => {
+  const { theme } = useTheme();
+  const glowEnabled = theme?.toggles?.glow !== false;
+  const asset = theme?.assets?.bismillah ?? getAssetPath('bismillah');
+
+  return (
+    <motion.div
+      className="bismillah-stage"
+      data-glow={glowEnabled}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      onAnimationComplete={onComplete}
+    >
+      {glowEnabled && <motion.div className="bismillah-glow" variants={glowVariants} />}
+      <span className="bismillah-light" aria-hidden="true" />
+      <img src={asset} alt="Bismillah in golden calligraphy" className="bismillah-art" />
+      <motion.p
+        className="bismillah-caption"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
+        In the name of Allah, the Most Gracious, the Most Merciful
+      </motion.p>
+    </motion.div>
+  );
+};
 
 export default BismillahReveal;

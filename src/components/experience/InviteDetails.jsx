@@ -4,6 +4,7 @@ import { EVENT_DATE_GREGORIAN, EVENT_VENUE, RSVP_STATUSES } from '../../utils/co
 import { useHijriDate } from '../../hooks/useHijriDate.js';
 import CountdownDisplay from './CountdownDisplay.jsx';
 import Button from '../common/Button.jsx';
+import { useTheme } from '../../providers/ThemeProvider.jsx';
 import './InviteDetails.css';
 
 const statusCopy = {
@@ -15,11 +16,13 @@ const statusCopy = {
 const InviteDetails = ({ onRSVP, loading }) => {
   const { guest } = useGuest();
   const { gregorian, hijri } = useHijriDate(EVENT_DATE_GREGORIAN);
+  const { theme } = useTheme();
 
   if (!guest) return null;
 
   const partner = guest.partnerName ? ` & ${guest.partnerName}` : '';
   const copy = statusCopy[guest.rsvpStatus] ?? statusCopy[RSVP_STATUSES.pending];
+  const coupleNames = `${theme?.brideName ?? 'Razia'} & ${theme?.groomName ?? 'Abduraziq'}`;
 
   return (
     <section className="invite-details">
@@ -35,7 +38,7 @@ const InviteDetails = ({ onRSVP, loading }) => {
           {partner}
         </h1>
         <p className="invite-body">You are warmly invited to the engagement of</p>
-        <p className="celebrants">Razia &amp; Abduraziq</p>
+        <p className="celebrants">{coupleNames}</p>
         <div className="date-block">
           <span className="date-label">Gregorian</span>
           <span className="date-text">{gregorian}</span>

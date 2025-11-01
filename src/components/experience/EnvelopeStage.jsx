@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getAssetPath, getWaxSeal } from '../../utils/assetPaths.js';
+import { useTheme } from '../../providers/ThemeProvider.jsx';
 import './EnvelopeStage.css';
 
 const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
+  const { theme } = useTheme();
   const [isMelting, setIsMelting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -22,6 +24,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
     setIsMelting(true);
   };
 
+  const themeEnvelope = theme?.assets?.envelope ?? getAssetPath('envelope');
+  const themeInviteCard = theme?.assets?.inviteCard ?? getAssetPath('inviteCard');
+  const variant = sealVariant ?? theme?.assets?.waxSealVariant ?? 'default';
+  const waxMap = theme?.assets?.waxSeals ?? theme?.assets;
+  const waxSource = getWaxSeal(variant, waxMap);
+
   const waxAnimate = useMemo(
     () =>
       isMelting
@@ -35,7 +43,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
   );
 
   return (
-    <div className="envelope-stage">
+    <div className="envelope-stage" data-intensity={theme?.toggles?.animationIntensity ?? 'medium'}>
       <div className="envelope-stage__halo" aria-hidden="true" />
       <div className="envelope-stage__sparkles" aria-hidden="true" />
       <motion.div
@@ -45,7 +53,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
         transition={{ duration: 1, ease: [0.25, 0.8, 0.5, 1] }}
       >
         <div className="envelope-texture" />
-        <img src={getAssetPath('envelope')} alt="Golden envelope" className="envelope" />
+        <img src={themeEnvelope} alt="Golden envelope" className="envelope" />
       </motion.div>
       <motion.button
         type="button"
@@ -61,7 +69,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
       >
         <span className="wax-button__glow" aria-hidden="true" />
         <motion.img
-          src={getWaxSeal(sealVariant)}
+          src={waxSource}
           alt="Wax seal"
           className="waxseal"
           animate={waxAnimate}
@@ -75,7 +83,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
           animate={{ opacity: 1, y: -40 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <img src={getAssetPath('inviteCard')} alt="Invitation card" className="invite-card" />
+          <img src={themeInviteCard} alt="Invitation card" className="invite-card" />
           <span className="invite-card__shimmer" aria-hidden="true" />
         </motion.div>
       )}

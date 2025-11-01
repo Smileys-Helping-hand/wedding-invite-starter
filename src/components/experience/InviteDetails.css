@@ -6,7 +6,7 @@
   padding: clamp(48px, 6vw, 72px);
   border-radius: var(--radius-xl);
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.82);
+  background: color-mix(in srgb, var(--glass-bg) 94%, transparent);
   box-shadow: var(--shadow-soft);
   text-align: center;
   backdrop-filter: blur(16px);
@@ -38,7 +38,7 @@
   margin-top: 12px;
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-family: var(--font-display);
-  color: var(--gold-rich);
+  color: var(--theme-color-accent, var(--gold-rich));
   letter-spacing: 0.2em;
 }
 

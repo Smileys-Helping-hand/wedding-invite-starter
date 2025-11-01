@@ -1,0 +1,80 @@
+[
+  {
+    "id": "classic-gold",
+    "label": "Classic Gold & Marble",
+    "description": "Traditional white marble with rich gold accents and gentle shimmer.",
+    "palette": {
+      "background": "#f8f6f2",
+      "accent": "#d4af37",
+      "accentSoft": "#f4e3c3",
+      "text": "#2f2721",
+      "textMuted": "rgba(47, 39, 33, 0.72)",
+      "glass": "rgba(255, 255, 255, 0.72)",
+      "border": "rgba(210, 177, 107, 0.42)"
+    },
+    "fonts": {
+      "heading": "'Playfair Display', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium"
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "emerald-evening",
+    "label": "Emerald Evening",
+    "description": "Deep emerald stones with luminous gold light trails.",
+    "palette": {
+      "background": "#f7f5f0",
+      "accent": "#0f766e",
+      "accentSoft": "#9ef0e5",
+      "text": "#1e1b16",
+      "textMuted": "rgba(30, 27, 22, 0.68)",
+      "glass": "rgba(247, 250, 249, 0.74)",
+      "border": "rgba(33, 133, 120, 0.35)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle"
+    },
+    "assets": {
+      "waxSealVariant": "emerald"
+    }
+  },
+  {
+    "id": "rose-dawn",
+    "label": "Rose Dawn",
+    "description": "Soft rose quartz with blush gold shimmer and airy motion.",
+    "palette": {
+      "background": "#fdf7f8",
+      "accent": "#d58590",
+      "accentSoft": "#f8c9d3",
+      "text": "#2b1e22",
+      "textMuted": "rgba(43, 30, 34, 0.68)",
+      "glass": "rgba(255, 245, 250, 0.78)",
+      "border": "rgba(213, 133, 144, 0.38)"
+    },
+    "fonts": {
+      "heading": "'Cormorant Garamond', serif",
+      "body": "'Lato', sans-serif"
+    },
+    "toggles": {
+      "sparkles": false,
+      "glow": true,
+      "animationIntensity": "gentle"
+    },
+    "assets": {
+      "waxSealVariant": "rosegold"
+    }
+  }
+]

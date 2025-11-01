@@ -1,58 +1,91 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { getAssetPath } from '../utils/assetPaths.js';
+import { STORAGE_KEYS } from '../utils/constants.js';
+import { useTheme } from './ThemeProvider.jsx';
 
 const AudioContext = createContext();
 
 export const useAudio = () => useContext(AudioContext);
 
-const STORAGE_KEY = 'lumina-invite-audio';
-
 export const AudioProvider = ({ children }) => {
   const audioRef = useRef(null);
+  const resumeOnSourceChangeRef = useRef(false);
+  const volumeRef = useRef(0.4);
+  const { theme } = useTheme();
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.4);
+  const [audioSource, setAudioSource] = useState(() => getAssetPath('nasheed'));
 
   useEffect(() => {
-    const audio = new Audio(getAssetPath('nasheed'));
-    audio.loop = true;
-    audio.preload = 'auto';
-    audio.volume = volume;
-    audioRef.current = audio;
+    const nextSource = theme?.assets?.nasheed ?? getAssetPath('nasheed');
+    setAudioSource(nextSource);
+  }, [theme]);
 
-    audio.addEventListener('canplaythrough', () => setIsReady(true), { once: true });
-
+  useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = localStorage.getItem(STORAGE_KEYS.audio);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (typeof parsed?.volume === 'number') {
-          audio.volume = parsed.volume;
           setVolume(parsed.volume);
+          volumeRef.current = parsed.volume;
         }
         if (parsed?.isPlaying) {
-          audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+          setIsPlaying(true);
+          resumeOnSourceChangeRef.current = true;
         }
       }
     } catch (err) {
       console.warn('Failed to restore audio preferences', err);
     }
+  }, []);
+
+  useEffect(() => {
+    const audio = new Audio(audioSource ?? getAssetPath('nasheed'));
+    audio.loop = true;
+    audio.preload = 'auto';
+    audio.volume = volumeRef.current;
+    audioRef.current = audio;
+
+    const handleReady = () => setIsReady(true);
+    audio.addEventListener('canplaythrough', handleReady, { once: true });
+
+    if (resumeOnSourceChangeRef.current) {
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {
+          setIsPlaying(false);
+          resumeOnSourceChangeRef.current = false;
+        });
+    }
 
     return () => {
       audio.pause();
+      audio.removeEventListener('canplaythrough', handleReady);
       audioRef.current = null;
+      setIsReady(false);
     };
-  }, []);
+  }, [audioSource]);
 
   useEffect(() => {
     if (!audioRef.current) return;
     audioRef.current.volume = volume;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ isPlaying, volume }));
+      localStorage.setItem(STORAGE_KEYS.audio, JSON.stringify({ isPlaying, volume }));
     } catch (err) {
       console.warn('Failed to store audio preferences', err);
     }
   }, [volume, isPlaying]);
+
+  useEffect(() => {
+    volumeRef.current = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    resumeOnSourceChangeRef.current = isPlaying;
+  }, [isPlaying]);
 
   const toggleAudio = async () => {
     if (!audioRef.current) return;
@@ -77,8 +110,9 @@ export const AudioProvider = ({ children }) => {
       volume,
       setVolume,
       toggleAudio,
+      source: audioSource,
     }),
-    [isReady, isPlaying, volume]
+    [isReady, isPlaying, volume, audioSource, toggleAudio]
   );
 
   return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;

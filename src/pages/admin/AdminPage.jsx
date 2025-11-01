@@ -6,6 +6,7 @@ import Button from '../../components/common/Button.jsx';
 import localGuests from '../../data/local-guests.json';
 import { RSVP_STATUSES, STORAGE_KEYS } from '../../utils/constants.js';
 import GuestSpreadsheetImporter from '../../tools/GuestSpreadsheetImporter.jsx';
+import ThemeStudioPage from './ThemeStudioPage.jsx';
 import './AdminPage.css';
 
 const normaliseGuest = (guest) => {
@@ -145,7 +146,7 @@ const AdminPage = () => {
 
   const authenticate = (event) => {
     event.preventDefault();
-    const expected = import.meta.env.VITE_ADMIN_PASSCODE || 'emerald-veil';
+    const expected = (import.meta.env.VITE_ADMIN_CODE || import.meta.env.VITE_ADMIN_PASSCODE || 'emerald-veil').toString();
     if (passcode.trim() === expected) {
       setIsAuthenticated(true);
       setError('');
@@ -210,6 +211,12 @@ const AdminPage = () => {
           >
             Bulk Import Guests
           </NavLink>
+          <NavLink
+            to="/admin/studio"
+            className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}
+          >
+            Theme Studio
+          </NavLink>
         </nav>
       </aside>
 
@@ -220,6 +227,7 @@ const AdminPage = () => {
             element={<DashboardOverview entries={entries} stats={stats} updateGuestStatus={updateGuestStatus} />}
           />
           <Route path="import" element={<GuestSpreadsheetImporter existingGuests={entries} />} />
+          <Route path="studio" element={<ThemeStudioPage />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </section>

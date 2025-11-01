@@ -10,11 +10,13 @@ import TextInput from '../components/common/TextInput.jsx';
 import Button from '../components/common/Button.jsx';
 import Loader from '../components/common/Loader.jsx';
 import { useGuest } from '../providers/GuestProvider.jsx';
+import { useTheme } from '../providers/ThemeProvider.jsx';
 import { EXPERIENCE_PHASES, RSVP_STATUSES } from '../utils/constants.js';
 import './InviteExperiencePage.css';
 
 const InviteExperiencePage = () => {
   const { guest, updateRSVP, loading: guestLoading } = useGuest();
+  const { theme } = useTheme();
   const [phase, setPhase] = useState(EXPERIENCE_PHASES.curtains);
   const [message, setMessage] = useState(guest?.notes ?? '');
   const [additionalGuests, setAdditionalGuests] = useState(0);
@@ -66,7 +68,12 @@ const InviteExperiencePage = () => {
           <motion.div key="envelope" exit={{ opacity: 0 }}>
             <EnvelopeStage
               onOpened={() => setPhase(EXPERIENCE_PHASES.invitation)}
-              sealVariant={guest?.sealVariant ?? guest?.waxSealVariant ?? 'default'}
+              sealVariant={
+                guest?.sealVariant ??
+                guest?.waxSealVariant ??
+                theme?.assets?.waxSealVariant ??
+                'default'
+              }
             />
           </motion.div>
         )}

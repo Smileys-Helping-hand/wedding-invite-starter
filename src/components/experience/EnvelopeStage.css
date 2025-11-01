@@ -6,9 +6,9 @@
   display: grid;
   place-items: center;
   border-radius: 36px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(212, 177, 98, 0.4);
-  box-shadow: 0 30px 60px rgba(31, 26, 20, 0.12);
+  background: color-mix(in srgb, var(--glass-bg) 95%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 36%, transparent);
+  box-shadow: 0 30px 60px color-mix(in srgb, var(--theme-color-text, #2f2721) 12%, transparent);
   backdrop-filter: blur(18px);
   overflow: hidden;
 }
@@ -28,7 +28,7 @@
 }
 
 .envelope-stage__sparkles {
-  background-image: radial-gradient(rgba(212, 177, 98, 0.55) 0.8px, transparent 0.8px);
+  background-image: radial-gradient(color-mix(in srgb, var(--theme-color-accent, #d2b16a) 55%, transparent) 0.8px, transparent 0.8px);
   background-size: 120px 120px;
   opacity: 0.32;
   animation: twinkle 12s linear infinite;
@@ -51,7 +51,7 @@
   inset: 4% 8%;
   border-radius: 28px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.65), rgba(234, 220, 190, 0.38)),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.75), color-mix(in srgb, var(--theme-color-accent, #d2b16a) 28%, transparent)),
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2"/></filter><rect width="120" height="120" filter="url(%23n)" opacity="0.12"/></svg>');
   background-size: cover, 180px;
   mix-blend-mode: screen;
@@ -62,9 +62,9 @@
   width: 100%;
   display: block;
   border-radius: 32px;
-  border: 1px solid rgba(212, 177, 98, 0.25);
-  background: rgba(255, 255, 255, 0.8);
-  mix-blend-mode: multiply;
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 28%, transparent);
+  background: color-mix(in srgb, var(--theme-color-background, #f8f6f2) 92%, white 8%);
+  box-shadow: inset 0 0 0.5px rgba(255, 255, 255, 0.45);
 }
 
 .wax-button {
@@ -86,7 +86,7 @@
   position: absolute;
   inset: 12% 18%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(240, 210, 140, 0.8), rgba(255, 255, 255, 0));
+  background: radial-gradient(circle, color-mix(in srgb, var(--theme-color-accent, #d2b16a) 78%, rgba(255, 255, 255, 0.1)), rgba(255, 255, 255, 0));
   filter: blur(18px);
   opacity: 0.8;
   animation: waxGlow 2.6s ease-in-out infinite;
@@ -95,7 +95,14 @@
 .waxseal {
   position: relative;
   width: clamp(150px, 22vw, 220px);
-  filter: drop-shadow(0 25px 45px rgba(140, 105, 54, 0.55));
+  border-radius: 50%;
+  filter: drop-shadow(0 25px 45px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 55%, rgba(0, 0, 0, 0)));
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.wax-button:hover .waxseal {
+  transform: scale(1.06);
+  filter: drop-shadow(0 28px 55px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 68%, rgba(0, 0, 0, 0)));
 }
 
 .invite-card-wrapper {
@@ -108,16 +115,37 @@
 .invite-card {
   width: min(520px, 78vw);
   border-radius: 28px;
-  box-shadow: 0 45px 70px rgba(31, 26, 20, 0.25);
+  box-shadow: 0 45px 70px color-mix(in srgb, var(--theme-color-text, #2f2721) 22%, transparent);
 }
 
 .invite-card__shimmer {
   position: absolute;
   inset: 0;
   border-radius: 28px;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 20%, rgba(255, 223, 173, 0.65) 50%, rgba(255, 255, 255, 0) 80%);
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 20%,
+    color-mix(in srgb, var(--theme-color-accent, #d2b16a) 65%, rgba(255, 255, 255, 0.8)) 50%,
+    rgba(255, 255, 255, 0) 80%
+  );
   opacity: 0;
   animation: cardSweep 2.4s ease-in-out 0.8s forwards;
+}
+
+.envelope-stage[data-intensity='gentle'] .envelope-shell {
+  transition-duration: 1.8s;
+}
+
+.envelope-stage[data-intensity='gentle'] .invite-card__shimmer {
+  animation-duration: 3s;
+}
+
+.envelope-stage[data-intensity='grand'] .envelope-shell {
+  transition-duration: 1s;
+}
+
+.envelope-stage[data-intensity='grand'] .invite-card__shimmer {
+  animation-duration: 1.6s;
 }
 
 @keyframes waxGlow {

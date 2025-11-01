@@ -10,7 +10,8 @@ A Vite + React single-page experience celebrating the engagement of Razia &amp; 
 - Nasheed audio playback with persistent preferences
 - RSVP submission, additional guest tracking, and personalised messages
 - Memory wall placeholder unlocking after the celebration
-- Admin portal for RSVP overview, statistics, and manual status updates
+- Admin portal for RSVP overview, statistics, manual status updates, and bulk guest import
+- Canva-style theme studio with live preview, Firebase Storage uploads, and preset palettes/fonts
 
 ## Getting started
 
@@ -25,8 +26,8 @@ Create a local environment file using the provided template:
 cp .env.example .env
 ```
 
-Fill in `VITE_FIREBASE_*` values from your Firebase console and adjust `VITE_ADMIN_PASSCODE` if needed. The `.env` file is
-ignored by Git to prevent accidental secrets commits.
+Fill in `VITE_FIREBASE_*` values from your Firebase console and update `VITE_ADMIN_CODE` with your private dashboard passcode. The `.env`
+file is ignored by Git to prevent accidental secrets commits.
 
 ## Tech stack
 
@@ -51,3 +52,14 @@ Use the admin importer to generate JSON entries from a spreadsheet when seeding 
 4. Review the generated list, download the JSON file, and append the entries to `src/data/local-guests.json` (do not overwrite existing households).
 
 The importer never touches media assets or existing records; it only prepares new guest objects ready for manual merge into version control.
+
+## Theme studio instructions
+
+1. Sign in to `/admin` and open **Theme Studio** (or visit `/admin/studio`).
+2. Choose a preset to establish a baseline palette, typography, and wax seal variant.
+3. Adjust fonts, couple names, colour palette, and animation intensity. Toggles control sparkles and Bismillah glow.
+4. Upload replacement media (curtains, Bismillah art, envelope, invite card, sparkle video, nasheed audio) to Firebase Storage. Each upload immediately updates the live preview.
+5. Replace individual wax seal variants by selecting the target style and uploading a new PNG.
+6. Click **Save Draft** to persist locally (for offline work) or **Publish Theme** to sync the configuration to Firestore at `config/currentTheme`.
+
+> ⚠️ Media files are referenced from `public/assets/` at runtime. After publishing, upload the optimised assets to your hosting provider or CDN so the configured URLs remain valid.

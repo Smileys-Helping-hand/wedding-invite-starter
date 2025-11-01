@@ -15,6 +15,7 @@ export const STORAGE_KEYS = {
   guest: 'lumina-invite-guest',
   audio: 'lumina-invite-audio',
   adminSession: 'lumina-admin-session',
+  themeDraft: 'lumina-theme-draft',
 };
 
 export const EXPERIENCE_PHASES = {

@@ -4,8 +4,8 @@
   width: 100%;
   z-index: 20;
   backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.78);
-  border-bottom: 1px solid rgba(210, 177, 107, 0.35);
+  background: color-mix(in srgb, var(--glass-bg) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 35%, transparent);
 }
 
 .top-bar__inner {
@@ -31,6 +31,7 @@
   border-radius: 50%;
   text-decoration: none;
   transform: translateY(6px);
+  color: inherit;
 }
 
 .brand-emblem__ring {
@@ -41,11 +42,15 @@
   height: 100%;
   border-radius: 50%;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(244, 232, 209, 0.9)),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.9),
+      color-mix(in srgb, var(--theme-color-accent, #d2b16a) 18%, transparent)
+    ),
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><filter id="n" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4"/></filter><rect width="120" height="120" filter="url(%23n)" opacity="0.12"/></svg>');
   background-size: cover;
-  border: 2px solid rgba(210, 177, 107, 0.65);
-  box-shadow: 0 18px 34px rgba(41, 31, 23, 0.18);
+  border: 2px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 65%, transparent);
+  box-shadow: 0 18px 34px color-mix(in srgb, var(--theme-color-text, #2f2721) 18%, transparent);
   overflow: hidden;
 }
 
@@ -54,8 +59,8 @@
   position: absolute;
   inset: 12px;
   border-radius: 50%;
-  border: 1px solid rgba(210, 177, 107, 0.5);
-  box-shadow: inset 0 0 18px rgba(210, 177, 107, 0.28);
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 42%, transparent);
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 28%, transparent);
 }
 
 .brand-emblem__names {
@@ -84,9 +89,9 @@
   gap: 2px;
   padding: 12px 22px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(210, 177, 107, 0.4);
-  box-shadow: 0 16px 28px rgba(41, 31, 23, 0.12);
+  background: color-mix(in srgb, var(--glass-bg) 96%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 32%, transparent);
+  box-shadow: 0 16px 28px color-mix(in srgb, var(--theme-color-text, #2f2721) 12%, transparent);
 }
 
 .guest-label {
@@ -108,9 +113,13 @@
   gap: 10px;
   padding: 12px 26px;
   border-radius: 999px;
-  border: 1px solid rgba(210, 177, 107, 0.55);
-  background: linear-gradient(135deg, rgba(236, 210, 160, 0.95), rgba(210, 177, 107, 0.85));
-  color: #2f2314;
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 48%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--theme-color-accent, #d2b16a) 65%, white 35%),
+    color-mix(in srgb, var(--theme-color-accent, #d2b16a) 88%, #7d5b19 12%)
+  );
+  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 78%, #4a3314 22%);
   font-size: 0.85rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -121,19 +130,19 @@
 
 .audio-toggle:hover {
   transform: translateY(-2px);
-  box-shadow: 0 24px 36px rgba(210, 177, 107, 0.4);
+  box-shadow: 0 24px 36px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 42%, transparent);
 }
 
 .audio-toggle__dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: rgba(47, 39, 33, 0.35);
+  background: color-mix(in srgb, var(--theme-color-text, #2f2721) 35%, transparent);
   transition: background 0.25s ease;
 }
 
 .audio-toggle__dot[data-active='true'] {
-  background: #fef3d4;
+  background: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 75%, #fff8e6 25%);
 }
 
 @media (max-width: 720px) {
