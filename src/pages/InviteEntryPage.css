@@ -1,0 +1,29 @@
+.invite-entry {
+  position: relative;
+  overflow: hidden;
+}
+
+.invite-entry__content {
+  display: grid;
+  gap: clamp(24px, 5vw, 36px);
+  text-align: center;
+}
+
+.invite-form {
+  display: grid;
+  gap: 20px;
+  justify-items: center;
+}
+
+.invite-form .text-input {
+  width: min(420px, 100%);
+}
+
+.invite-entry__preview {
+  margin-top: 16px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 24px 40px rgba(41, 31, 23, 0.12);
+}
