@@ -40,3 +40,14 @@ ignored by Git to prevent accidental secrets commits.
 - `npm run dev` – start development server
 - `npm run build` – build production bundle
 - `npm run preview` – preview production build
+
+## Bulk import guests instructions
+
+Use the admin importer to generate JSON entries from a spreadsheet when seeding new households:
+
+1. Sign in to `/admin` with the configured passcode, then open the **Bulk Import Guests** link in the sidebar (or visit `/admin/import`).
+2. Prepare a CSV file with the following columns in this exact order: `guestName`, `partnerName`, `contact`, `notes`, `householdCount`.
+3. Upload the CSV. The tool validates email addresses, auto-fills household counts when the column is blank, and generates invite codes plus sequential household IDs.
+4. Review the generated list, download the JSON file, and append the entries to `src/data/local-guests.json` (do not overwrite existing households).
+
+The importer never touches media assets or existing records; it only prepares new guest objects ready for manual merge into version control.
