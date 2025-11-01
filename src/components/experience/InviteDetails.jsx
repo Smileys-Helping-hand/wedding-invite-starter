@@ -20,9 +20,10 @@ const InviteDetails = ({ onRSVP, loading }) => {
 
   if (!guest) return null;
 
-  const partner = guest.partnerName ? ` & ${guest.partnerName}` : '';
+  const guestNames = Array.isArray(guest.guestNames)
+    ? guest.guestNames.filter(Boolean).join(' & ')
+    : [guest.guestName, guest.partnerName].filter(Boolean).join(' & ');
   const copy = statusCopy[guest.rsvpStatus] ?? statusCopy[RSVP_STATUSES.pending];
-  const coupleNames = `${theme?.brideName ?? 'Razia'} & ${theme?.groomName ?? 'Abduraziq'}`;
   const greeting = theme?.text?.greeting ?? 'Assalamu Alaikum';
   const greetingSuffix = theme?.text?.greetingSuffix ?? ' wa Rahmatullah';
   const salaam = guest.partnerName ? `${greeting}${greetingSuffix}` : greeting;
@@ -30,6 +31,18 @@ const InviteDetails = ({ onRSVP, loading }) => {
   const bismillahTranslation =
     theme?.text?.bismillahTranslation ??
     'In the name of Allah, The Most Merciful, The Most Compassionate';
+  const englishIntro =
+    theme?.text?.englishIntro ?? 'In the name of Allah, The Most Merciful, The Most Compassionate';
+  const englishInviteLine = theme?.text?.englishInviteLine ?? 'You are warmly invited to the';
+  const englishEventTitle = theme?.text?.englishEventTitle ?? 'Engagement Soirée of';
+  const brideFormal = theme?.text?.brideFullName ?? 'Razia bint Sabri';
+  const groomFormal = theme?.text?.groomFullName ?? 'Abduraziq ibn Abdusataar';
+  const englishBlessing =
+    theme?.text?.englishBlessing ?? 'May Allah fill this union with love and barakah.';
+  const arabicIntro = theme?.text?.arabicIntro ?? 'حضوركم يشرفنا في';
+  const arabicBrideLine = theme?.text?.arabicBrideLine ?? 'أمسية خطوبة رزيـا بنت صبري';
+  const arabicConnector = theme?.text?.arabicConnector ?? 'و';
+  const arabicGroomLine = theme?.text?.arabicGroomLine ?? 'عبدالرزاق بن عبدالستار';
 
   return (
     <section className="invite-details">
@@ -48,13 +61,27 @@ const InviteDetails = ({ onRSVP, loading }) => {
           <span className="bismillah-text__arabic">{bismillahArabic}</span>
           <span className="bismillah-text__translation">{bismillahTranslation}</span>
         </motion.div>
-        <p className="invite-salaam">{salaam},</p>
-        <h1 className="invite-names text-script">
-          {guest.guestName}
-          {partner}
-        </h1>
-        <p className="invite-body">You are warmly invited to the engagement of</p>
-        <p className="celebrants">{coupleNames}</p>
+        <div className="invite-address">
+          <p className="invite-salaam">{salaam}</p>
+          {guestNames && <p className="invite-guest">{guestNames}</p>}
+        </div>
+        <div className="invite-english">
+          <p className="invite-english__intro">{englishIntro}</p>
+          <p className="invite-english__line">{englishInviteLine}</p>
+          <p className="invite-english__event">{englishEventTitle}</p>
+          <p className="invite-english__names">
+            <span>{brideFormal}</span>
+            <span className="invite-english__ampersand">&amp;</span>
+            <span>{groomFormal}</span>
+          </p>
+          <p className="invite-english__blessing">{englishBlessing}</p>
+        </div>
+        <div className="invite-arabic" lang="ar" dir="rtl">
+          <p>{arabicIntro}</p>
+          <p>{arabicBrideLine}</p>
+          <p className="invite-arabic__ampersand">{arabicConnector}</p>
+          <p>{arabicGroomLine}</p>
+        </div>
         <div className="date-block">
           <span className="date-label">Gregorian</span>
           <span className="date-text">{gregorian}</span>

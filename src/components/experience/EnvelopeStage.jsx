@@ -2,10 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getAssetPath, getWaxSeal } from '../../utils/assetPaths.js';
 import { useTheme } from '../../providers/ThemeProvider.jsx';
+import { useAudio } from '../../providers/AudioProvider.jsx';
 import './EnvelopeStage.css';
 
 const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
   const { theme } = useTheme();
+  const { startAudio } = useAudio();
   const [isMelting, setIsMelting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const openedRef = useRef(false);
@@ -50,6 +52,7 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
 
   const handleClick = () => {
     if (isOpen || isMelting) return;
+    startAudio?.();
     setIsMelting(true);
   };
 

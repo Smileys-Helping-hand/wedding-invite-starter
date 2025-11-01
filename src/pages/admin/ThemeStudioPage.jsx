@@ -31,6 +31,7 @@ const headingFontGroups = [
       { label: 'Scheherazade New', value: "'Scheherazade New', serif" },
       { label: 'Amiri', value: "'Amiri', serif" },
       { label: 'Harmattan', value: "'Harmattan', serif" },
+      { label: 'Reem Kufi', value: "'Reem Kufi Fun', 'Scheherazade New', serif" },
     ],
   },
   {
@@ -346,6 +347,66 @@ const ThemeStudioPage = () => {
           label="Bismillah translation"
           value={text.bismillahTranslation ?? ''}
           onChange={(event) => handleTextChange('bismillahTranslation', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="English introduction"
+          value={text.englishIntro ?? ''}
+          onChange={(event) => handleTextChange('englishIntro', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Invitation line"
+          value={text.englishInviteLine ?? ''}
+          onChange={(event) => handleTextChange('englishInviteLine', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Event title"
+          value={text.englishEventTitle ?? ''}
+          onChange={(event) => handleTextChange('englishEventTitle', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Bride formal name"
+          value={text.brideFullName ?? ''}
+          onChange={(event) => handleTextChange('brideFullName', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Groom formal name"
+          value={text.groomFullName ?? ''}
+          onChange={(event) => handleTextChange('groomFullName', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Blessing line"
+          value={text.englishBlessing ?? ''}
+          onChange={(event) => handleTextChange('englishBlessing', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Arabic introduction"
+          value={text.arabicIntro ?? ''}
+          onChange={(event) => handleTextChange('arabicIntro', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Arabic bride line"
+          value={text.arabicBrideLine ?? ''}
+          onChange={(event) => handleTextChange('arabicBrideLine', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Arabic connector"
+          value={text.arabicConnector ?? ''}
+          onChange={(event) => handleTextChange('arabicConnector', event.target.value)}
+          disabled={launchMode}
+        />
+        <TextInput
+          label="Arabic groom line"
+          value={text.arabicGroomLine ?? ''}
+          onChange={(event) => handleTextChange('arabicGroomLine', event.target.value)}
           disabled={launchMode}
         />
       </div>

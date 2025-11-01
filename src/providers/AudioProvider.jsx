@@ -21,6 +21,7 @@ export const AudioProvider = ({ children }) => {
   const volumeRef = useRef(0.4);
   const fadeFrameRef = useRef(null);
   const hasAutoplayedRef = useRef(false);
+  const pendingStartRef = useRef(false);
   const { theme } = useTheme();
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -101,6 +102,23 @@ export const AudioProvider = ({ children }) => {
     [clearFade]
   );
 
+  const playWithFade = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return false;
+
+    try {
+      audio.volume = 0;
+      await audio.play();
+      hasAutoplayedRef.current = true;
+      setIsPlaying(true);
+      fadeVolume(volumeRef.current, { duration: 1200 });
+      return true;
+    } catch (err) {
+      setIsPlaying(false);
+      return false;
+    }
+  }, [fadeVolume]);
+
   useEffect(() => {
     const audio = new Audio(audioSource ?? getAssetPath('nasheed'));
     audio.loop = true;
@@ -108,7 +126,13 @@ export const AudioProvider = ({ children }) => {
     audio.volume = volumeRef.current;
     audioRef.current = audio;
 
-    const handleReady = () => setIsReady(true);
+    const handleReady = () => {
+      setIsReady(true);
+      if (pendingStartRef.current && !hasAutoplayedRef.current) {
+        pendingStartRef.current = false;
+        playWithFade();
+      }
+    };
     audio.addEventListener('canplaythrough', handleReady, { once: true });
 
     if (resumeOnSourceChangeRef.current) {
@@ -132,7 +156,7 @@ export const AudioProvider = ({ children }) => {
       setIsReady(false);
       clearFade();
     };
-  }, [audioSource, fadeVolume, clearFade, volumeRef]);
+  }, [audioSource, fadeVolume, clearFade, volumeRef, playWithFade]);
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -152,50 +176,25 @@ export const AudioProvider = ({ children }) => {
     resumeOnSourceChangeRef.current = isPlaying;
   }, [isPlaying]);
 
-  useEffect(() => {
-    if (!isReady || hasAutoplayedRef.current) return;
+  const startAudio = useCallback(async () => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || hasAutoplayedRef.current || isPlaying) {
+      return;
+    }
 
-    const attemptAutoplay = async () => {
+    if (!isReady) {
+      pendingStartRef.current = true;
       try {
-        audio.volume = 0;
-        await audio.play();
-        hasAutoplayedRef.current = true;
-        setIsPlaying(true);
-        fadeVolume(volumeRef.current, { duration: 1200 });
+        audio.load();
       } catch (err) {
-        setIsPlaying(false);
+        /* ignore load failures */
       }
-    };
+      return;
+    }
 
-    attemptAutoplay();
-  }, [isReady, fadeVolume]);
-
-  useEffect(() => {
-    if (!isReady || isPlaying || hasAutoplayedRef.current) return;
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleInteraction = async () => {
-      if (!audioRef.current || isPlaying) return;
-      try {
-        audioRef.current.volume = 0;
-        await audioRef.current.play();
-        hasAutoplayedRef.current = true;
-        setIsPlaying(true);
-        fadeVolume(volumeRef.current, { duration: 1200 });
-      } catch (err) {
-        /* autoplay blocked */
-      }
-    };
-
-    document.addEventListener('pointerdown', handleInteraction, { once: true });
-
-    return () => {
-      document.removeEventListener('pointerdown', handleInteraction);
-    };
-  }, [isReady, isPlaying, fadeVolume]);
+    pendingStartRef.current = false;
+    await playWithFade();
+  }, [isReady, isPlaying, playWithFade]);
 
   const toggleAudio = async () => {
     if (!audioRef.current) return;
@@ -221,9 +220,10 @@ export const AudioProvider = ({ children }) => {
       volume,
       setVolume,
       toggleAudio,
+      startAudio,
       source: audioSource,
     }),
-    [isReady, isPlaying, volume, audioSource, toggleAudio]
+    [isReady, isPlaying, volume, audioSource, toggleAudio, startAudio]
   );
 
   return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;
