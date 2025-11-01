@@ -1,0 +1,28 @@
+.loader {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--gold-soft);
+}
+
+.loader__ring {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid rgba(217, 180, 92, 0.35);
+  border-top-color: var(--gold-soft);
+  animation: loader-spin 0.9s linear infinite;
+}
+
+.loader__label {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
