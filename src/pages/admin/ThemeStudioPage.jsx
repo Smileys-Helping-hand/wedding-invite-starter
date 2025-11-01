@@ -34,16 +34,26 @@ const ThemeStudioPage = () => {
   } = useTheme();
   const [status, setStatus] = useState('');
   const [selectedWax, setSelectedWax] = useState(theme?.assets?.waxSealVariant ?? 'gold');
+  const launchMode = theme?.toggles?.launchMode === true;
 
   useEffect(() => {
     setSelectedWax(theme?.assets?.waxSealVariant ?? 'gold');
   }, [theme?.assets?.waxSealVariant]);
 
+  useEffect(() => {
+    setStatus((previous) => {
+      if (launchMode) {
+        return 'Launch Mode enabled. Preview only.';
+      }
+      return previous === 'Launch Mode enabled. Preview only.' ? 'Editing unlocked.' : previous;
+    });
+  }, [launchMode]);
+
   const availableSeals = useMemo(() => {
     const current = theme?.assets?.waxSeals ?? {};
     const merged = { ...waxSeals, ...current };
     return Object.keys(merged);
-  }, [theme]);
+  }, [theme?.assets]);
 
   const palette = theme?.palette ?? {};
   const fonts = theme?.fonts ?? {};
@@ -51,23 +61,43 @@ const ThemeStudioPage = () => {
   const assets = theme?.assets ?? defaultAssets;
 
   const handleColorChange = (key, value) => {
+    if (launchMode) {
+      setStatus('Launch Mode is active. Disable it to edit.');
+      return;
+    }
     updateTheme({ palette: { [key]: value } });
   };
 
   const handleFontChange = (key, value) => {
+    if (launchMode) {
+      setStatus('Launch Mode is active. Disable it to edit.');
+      return;
+    }
     updateTheme({ fonts: { [key]: value } });
   };
 
   const handleToggleChange = (key, value) => {
+    if (launchMode && key !== 'launchMode') {
+      setStatus('Launch Mode is active. Disable it to edit.');
+      return;
+    }
     updateTheme({ toggles: { [key]: value } });
   };
 
   const handleNameChange = (key, value) => {
+    if (launchMode) {
+      setStatus('Launch Mode is active. Disable it to edit.');
+      return;
+    }
     updateTheme({ [key]: value });
   };
 
   const handleAssetUpload = async (field, file) => {
     if (!file) return;
+    if (launchMode) {
+      setStatus('Launch Mode is active. Disable it to replace media.');
+      return;
+    }
     if (!uploadAsset) {
       setStatus('Firebase Storage unavailable. Asset not uploaded.');
       return;
@@ -86,7 +116,6 @@ const ThemeStudioPage = () => {
       }
       setStatus('Asset uploaded successfully.');
     } catch (err) {
-      console.error('Asset upload failed', err);
       setStatus('Asset upload failed. Please try again.');
     }
   };
@@ -111,6 +140,7 @@ const ThemeStudioPage = () => {
           <p className="page-subtitle">
             Adjust palettes, typography, media, and animation in real time. Save drafts locally or publish to share with guests.
           </p>
+          {launchMode && <p className="launch-mode-alert">Launch Mode is enabled. Disable it to continue editing.</p>}
         </div>
         <div className="theme-studio__actions">
           <Button variant="ghost" size="md" onClick={handleSaveDraft} disabled={loading || isPublishing}>
@@ -136,10 +166,15 @@ const ThemeStudioPage = () => {
                 type="button"
                 className={`preset-card${theme?.id === preset.id ? ' is-active' : ''}`}
                 onClick={() => {
+                  if (launchMode) {
+                    setStatus('Launch Mode is active. Disable it to edit.');
+                    return;
+                  }
                   applyPreset(preset.id);
                   setSelectedWax(preset.assets?.waxSealVariant ?? 'gold');
                   setStatus(`Preset "${preset.label}" applied.`);
                 }}
+                disabled={loading || isPublishing || launchMode}
               >
                 <span className="preset-card__label">{preset.label}</span>
                 <span className="preset-card__description">{preset.description}</span>
@@ -153,7 +188,11 @@ const ThemeStudioPage = () => {
           <div className="studio-field-grid">
             <label className="studio-field">
               <span>Heading font</span>
-              <select value={fonts.heading ?? fontOptions[0].value} onChange={(event) => handleFontChange('heading', event.target.value)}>
+              <select
+                value={fonts.heading ?? fontOptions[0].value}
+                onChange={(event) => handleFontChange('heading', event.target.value)}
+                disabled={launchMode}
+              >
                 {fontOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -163,7 +202,11 @@ const ThemeStudioPage = () => {
             </label>
             <label className="studio-field">
               <span>Body font</span>
-              <select value={fonts.body ?? "'Inter', sans-serif"} onChange={(event) => handleFontChange('body', event.target.value)}>
+              <select
+                value={fonts.body ?? "'Inter', sans-serif"}
+                onChange={(event) => handleFontChange('body', event.target.value)}
+                disabled={launchMode}
+              >
                 {fontOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -175,11 +218,13 @@ const ThemeStudioPage = () => {
               label="Bride name"
               value={theme?.brideName ?? ''}
               onChange={(event) => handleNameChange('brideName', event.target.value)}
+              disabled={launchMode}
             />
             <TextInput
               label="Groom name"
               value={theme?.groomName ?? ''}
               onChange={(event) => handleNameChange('groomName', event.target.value)}
+              disabled={launchMode}
             />
           </div>
         </section>
@@ -198,7 +243,12 @@ const ThemeStudioPage = () => {
             }).map(([key, label]) => (
               <label key={key} className="color-field">
                 <span>{label}</span>
-                <input type="color" value={palette[key] ?? '#ffffff'} onChange={(event) => handleColorChange(key, event.target.value)} />
+                <input
+                  type="color"
+                  value={palette[key] ?? '#ffffff'}
+                  onChange={(event) => handleColorChange(key, event.target.value)}
+                  disabled={launchMode}
+                />
               </label>
             ))}
           </div>
@@ -212,6 +262,7 @@ const ThemeStudioPage = () => {
               <select
                 value={toggles.animationIntensity ?? 'medium'}
                 onChange={(event) => handleToggleChange('animationIntensity', event.target.value)}
+                disabled={launchMode}
               >
                 {animationOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -225,6 +276,7 @@ const ThemeStudioPage = () => {
                 type="checkbox"
                 checked={toggles.sparkles !== false}
                 onChange={(event) => handleToggleChange('sparkles', event.target.checked)}
+                disabled={launchMode}
               />
               <span>Sparkle overlay</span>
             </label>
@@ -233,8 +285,17 @@ const ThemeStudioPage = () => {
                 type="checkbox"
                 checked={toggles.glow !== false}
                 onChange={(event) => handleToggleChange('glow', event.target.checked)}
+                disabled={launchMode}
               />
               <span>Bismillah glow</span>
+            </label>
+            <label className="switch-field launch-mode-switch">
+              <input
+                type="checkbox"
+                checked={launchMode}
+                onChange={(event) => handleToggleChange('launchMode', event.target.checked)}
+              />
+              <span>Launch Mode ON</span>
             </label>
           </div>
         </section>
@@ -244,28 +305,63 @@ const ThemeStudioPage = () => {
           <div className="upload-grid">
             <label className="upload-field">
               <span>Marble background curtains</span>
-              <input type="file" accept="image/*" onChange={(event) => handleAssetUpload('curtainLeft', event.target.files?.[0])} />
-              <input type="file" accept="image/*" onChange={(event) => handleAssetUpload('curtainRight', event.target.files?.[0])} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleAssetUpload('curtainLeft', event.target.files?.[0])}
+                disabled={launchMode}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleAssetUpload('curtainRight', event.target.files?.[0])}
+                disabled={launchMode}
+              />
             </label>
             <label className="upload-field">
               <span>Bismillah artwork</span>
-              <input type="file" accept="image/*" onChange={(event) => handleAssetUpload('bismillah', event.target.files?.[0])} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleAssetUpload('bismillah', event.target.files?.[0])}
+                disabled={launchMode}
+              />
             </label>
             <label className="upload-field">
               <span>Envelope texture</span>
-              <input type="file" accept="image/*" onChange={(event) => handleAssetUpload('envelope', event.target.files?.[0])} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleAssetUpload('envelope', event.target.files?.[0])}
+                disabled={launchMode}
+              />
             </label>
             <label className="upload-field">
               <span>Invitation card</span>
-              <input type="file" accept="image/*" onChange={(event) => handleAssetUpload('inviteCard', event.target.files?.[0])} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleAssetUpload('inviteCard', event.target.files?.[0])}
+                disabled={launchMode}
+              />
             </label>
             <label className="upload-field">
               <span>Nasheed (audio)</span>
-              <input type="file" accept="audio/*" onChange={(event) => handleAssetUpload('nasheed', event.target.files?.[0])} />
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={(event) => handleAssetUpload('nasheed', event.target.files?.[0])}
+                disabled={launchMode}
+              />
             </label>
             <label className="upload-field">
               <span>Sparkle video</span>
-              <input type="file" accept="video/mp4,video/webm" onChange={(event) => handleAssetUpload('sparklesVideo', event.target.files?.[0])} />
+              <input
+                type="file"
+                accept="video/mp4,video/webm"
+                onChange={(event) => handleAssetUpload('sparklesVideo', event.target.files?.[0])}
+                disabled={launchMode}
+              />
             </label>
             <div className="wax-grid">
               <div className="wax-select">
@@ -274,9 +370,14 @@ const ThemeStudioPage = () => {
                   value={theme?.assets?.waxSealVariant ?? selectedWax}
                   onChange={(event) => {
                     const value = event.target.value;
+                    if (launchMode) {
+                      setStatus('Launch Mode is active. Disable it to edit.');
+                      return;
+                    }
                     setSelectedWax(value);
                     updateTheme({ assets: { waxSealVariant: value } });
                   }}
+                  disabled={launchMode}
                 >
                   {availableSeals.map((key) => (
                     <option key={key} value={key}>
@@ -287,7 +388,12 @@ const ThemeStudioPage = () => {
               </div>
               <label className="upload-field">
                 <span>Replace selected wax seal</span>
-                <input type="file" accept="image/*" onChange={(event) => handleAssetUpload('waxSeals', event.target.files?.[0])} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => handleAssetUpload('waxSeals', event.target.files?.[0])}
+                  disabled={launchMode}
+                />
               </label>
             </div>
           </div>

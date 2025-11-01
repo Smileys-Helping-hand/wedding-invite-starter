@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getAssetPath } from '../../utils/assetPaths.js';
 import { useTheme } from '../../providers/ThemeProvider.jsx';
@@ -24,7 +25,19 @@ const glowVariants = {
 const BismillahReveal = ({ onComplete }) => {
   const { theme } = useTheme();
   const glowEnabled = theme?.toggles?.glow !== false;
-  const asset = theme?.assets?.bismillah ?? getAssetPath('bismillah');
+  const defaultAsset = getAssetPath('bismillah');
+  const [assetSrc, setAssetSrc] = useState(theme?.assets?.bismillah ?? defaultAsset);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    setAssetSrc(theme?.assets?.bismillah ?? defaultAsset);
+  }, [theme?.assets?.bismillah, defaultAsset]);
+
+  const handleComplete = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onComplete?.();
+  };
 
   return (
     <motion.div
@@ -33,11 +46,16 @@ const BismillahReveal = ({ onComplete }) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      onAnimationComplete={onComplete}
+      onAnimationComplete={handleComplete}
     >
       {glowEnabled && <motion.div className="bismillah-glow" variants={glowVariants} />}
       <span className="bismillah-light" aria-hidden="true" />
-      <img src={asset} alt="Bismillah in golden calligraphy" className="bismillah-art" />
+      <img
+        src={assetSrc}
+        alt="Bismillah in golden calligraphy"
+        className="bismillah-art"
+        onError={() => setAssetSrc(defaultAsset)}
+      />
       <motion.p
         className="bismillah-caption"
         initial={{ opacity: 0, y: 20 }}

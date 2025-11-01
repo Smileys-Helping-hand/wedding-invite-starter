@@ -31,13 +31,9 @@ export const AudioProvider = ({ children }) => {
           setVolume(parsed.volume);
           volumeRef.current = parsed.volume;
         }
-        if (parsed?.isPlaying) {
-          setIsPlaying(true);
-          resumeOnSourceChangeRef.current = true;
-        }
       }
     } catch (err) {
-      console.warn('Failed to restore audio preferences', err);
+      /* storage unavailable; continue with defaults */
     }
   }, []);
 
@@ -75,7 +71,7 @@ export const AudioProvider = ({ children }) => {
     try {
       localStorage.setItem(STORAGE_KEYS.audio, JSON.stringify({ isPlaying, volume }));
     } catch (err) {
-      console.warn('Failed to store audio preferences', err);
+      /* storage unavailable; skip persistence */
     }
   }, [volume, isPlaying]);
 
@@ -95,7 +91,7 @@ export const AudioProvider = ({ children }) => {
         await audioRef.current.play();
         setIsPlaying(true);
       } catch (err) {
-        console.warn('Unable to start playback', err);
+        setIsPlaying(false);
       }
     } else {
       audioRef.current.pause();

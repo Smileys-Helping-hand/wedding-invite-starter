@@ -27,7 +27,7 @@ export const GuestProvider = ({ children }) => {
         }
       }
     } catch (err) {
-      console.warn('Failed to load guest from storage', err);
+      /* storage unavailable; continue without persisted session */
     }
   }, []);
 
@@ -43,7 +43,7 @@ export const GuestProvider = ({ children }) => {
         JSON.stringify({ inviteCode: code, guest: guestData })
       );
     } catch (err) {
-      console.warn('Failed to persist guest locally', err);
+      /* storage unavailable; proceed without persistence */
     }
   };
 
@@ -99,7 +99,6 @@ export const GuestProvider = ({ children }) => {
       setError('We could not find that invite code.');
       return null;
     } catch (err) {
-      console.error('Failed to lookup guest', err);
       setError('Something went wrong. Please try again.');
       return null;
     } finally {

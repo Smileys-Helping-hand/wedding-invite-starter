@@ -104,7 +104,6 @@ const AdminPage = () => {
     try {
       return Boolean(localStorage.getItem(STORAGE_KEYS.adminSession));
     } catch (err) {
-      console.warn('Unable to load admin session', err);
       return false;
     }
   });
@@ -117,7 +116,6 @@ const AdminPage = () => {
         const parsed = JSON.parse(stored);
         return parsed?.guest ? { ...parsed.guest, code: parsed.inviteCode } : null;
       } catch (err) {
-        console.warn('Failed to parse stored guest', err);
         return null;
       }
     })();
@@ -153,7 +151,7 @@ const AdminPage = () => {
       try {
         localStorage.setItem(STORAGE_KEYS.adminSession, 'true');
       } catch (err) {
-        console.warn('Unable to persist admin session', err);
+        /* storage unavailable; session won't persist */
       }
     } else {
       setError('Incorrect passcode');

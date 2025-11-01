@@ -35,6 +35,7 @@ const DEFAULT_THEME = {
     sparkles: true,
     glow: true,
     animationIntensity: 'medium',
+    launchMode: false,
   },
   assets: {
     bismillah: defaultAssets.bismillah,
@@ -94,7 +95,6 @@ const readDraft = () => {
     if (!stored) return null;
     return JSON.parse(stored);
   } catch (err) {
-    console.warn('Unable to parse stored theme draft', err);
     return null;
   }
 };
@@ -103,7 +103,7 @@ const writeDraft = (data) => {
   try {
     localStorage.setItem(STORAGE_KEYS.themeDraft, JSON.stringify(data));
   } catch (err) {
-    console.warn('Unable to persist theme draft', err);
+    /* storage unavailable; draft persistence skipped */
   }
 };
 
@@ -135,7 +135,6 @@ export const ThemeProvider = ({ children }) => {
             writeDraft(resolved);
           }
         } catch (err) {
-          console.warn('Unable to fetch remote theme', err);
           setError('Unable to load theme from Firestore. Using saved draft.');
         }
       }
@@ -181,7 +180,6 @@ export const ThemeProvider = ({ children }) => {
   const publishTheme = useCallback(
     async (nextTheme) => {
       if (!saveThemeConfig) {
-        console.warn('Firestore unavailable; cannot publish theme.');
         setError('Firestore unavailable; saved locally.');
         saveDraft(nextTheme);
         return;
@@ -195,7 +193,6 @@ export const ThemeProvider = ({ children }) => {
         setTheme(payload);
         setError(null);
       } catch (err) {
-        console.error('Failed to publish theme', err);
         setError('Failed to publish theme to Firestore. Saved locally.');
         saveDraft(nextTheme);
       } finally {

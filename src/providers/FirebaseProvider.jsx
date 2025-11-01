@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { initializeApp } from 'firebase/app';
+import { getApps, initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -15,16 +15,18 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
+const firebaseValues = Object.values(firebaseConfig);
+const hasFirebaseConfig = firebaseValues.every((value) => value && value !== '');
+
 let app;
 let db;
 let storage;
 
-try {
-  app = initializeApp(firebaseConfig);
+if (hasFirebaseConfig) {
+  const existingApps = getApps();
+  app = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
   db = getFirestore(app);
   storage = getStorage(app);
-} catch (e) {
-  console.warn('Firebase already initialized or missing config', e);
 }
 
 export const FirebaseProvider = ({ children }) => {
@@ -44,7 +46,6 @@ export const FirebaseProvider = ({ children }) => {
       if (snap.exists()) return snap.data();
       return null;
     } catch (err) {
-      console.warn('Firestore lookup failed, falling back to local…', err);
       return null;
     }
   };
@@ -55,7 +56,7 @@ export const FirebaseProvider = ({ children }) => {
       const ref = doc(collection(firestore, 'guests'), code.toLowerCase());
       await updateDoc(ref, updates);
     } catch (e) {
-      console.warn('Failed to save RSVP to Firestore', e);
+      /* no-op: offline fallback will retain local state */
     }
   };
 
@@ -74,7 +75,6 @@ export const FirebaseProvider = ({ children }) => {
       const data = snapshot.data();
       return data?.theme ?? data;
     } catch (err) {
-      console.warn('Failed to fetch theme config', err);
       return null;
     }
   };
@@ -85,7 +85,6 @@ export const FirebaseProvider = ({ children }) => {
       const ref = doc(firestore, 'config', 'currentTheme');
       await setDoc(ref, { theme }, { merge: true });
     } catch (err) {
-      console.error('Failed to save theme config', err);
       throw err;
     }
   };

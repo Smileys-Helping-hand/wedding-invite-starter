@@ -8,6 +8,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
   const { theme } = useTheme();
   const [isMelting, setIsMelting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const defaultEnvelope = getAssetPath('envelope');
+  const defaultInvite = getAssetPath('inviteCard');
+  const [envelopeSrc, setEnvelopeSrc] = useState(theme?.assets?.envelope ?? defaultEnvelope);
+  const [inviteSrc, setInviteSrc] = useState(theme?.assets?.inviteCard ?? defaultInvite);
+  const resolvedVariant = sealVariant ?? theme?.assets?.waxSealVariant ?? 'default';
+  const [waxSrc, setWaxSrc] = useState(() => getWaxSeal(resolvedVariant, theme?.assets?.waxSeals ?? theme?.assets));
 
   useEffect(() => {
     if (!isMelting) return undefined;
@@ -19,16 +25,23 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
     return () => window.clearTimeout(timer);
   }, [isMelting, onOpened]);
 
+  useEffect(() => {
+    setEnvelopeSrc(theme?.assets?.envelope ?? defaultEnvelope);
+  }, [theme?.assets?.envelope, defaultEnvelope]);
+
+  useEffect(() => {
+    setInviteSrc(theme?.assets?.inviteCard ?? defaultInvite);
+  }, [theme?.assets?.inviteCard, defaultInvite]);
+
+  useEffect(() => {
+    const map = theme?.assets?.waxSeals ?? theme?.assets;
+    setWaxSrc(getWaxSeal(resolvedVariant, map));
+  }, [resolvedVariant, theme?.assets?.waxSeals, theme?.assets]);
+
   const handleClick = () => {
     if (isOpen || isMelting) return;
     setIsMelting(true);
   };
-
-  const themeEnvelope = theme?.assets?.envelope ?? getAssetPath('envelope');
-  const themeInviteCard = theme?.assets?.inviteCard ?? getAssetPath('inviteCard');
-  const variant = sealVariant ?? theme?.assets?.waxSealVariant ?? 'default';
-  const waxMap = theme?.assets?.waxSeals ?? theme?.assets;
-  const waxSource = getWaxSeal(variant, waxMap);
 
   const waxAnimate = useMemo(
     () =>
@@ -53,7 +66,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
         transition={{ duration: 1, ease: [0.25, 0.8, 0.5, 1] }}
       >
         <div className="envelope-texture" />
-        <img src={themeEnvelope} alt="Golden envelope" className="envelope" />
+        <img
+          src={envelopeSrc}
+          alt="Golden envelope"
+          className="envelope"
+          onError={() => setEnvelopeSrc(defaultEnvelope)}
+        />
       </motion.div>
       <motion.button
         type="button"
@@ -69,11 +87,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
       >
         <span className="wax-button__glow" aria-hidden="true" />
         <motion.img
-          src={waxSource}
+          src={waxSrc ?? getWaxSeal('default')}
           alt="Wax seal"
           className="waxseal"
           animate={waxAnimate}
           transition={{ duration: 1.4, ease: [0.42, 0, 0.58, 1] }}
+          onError={() => setWaxSrc(getWaxSeal('default'))}
         />
       </motion.button>
       {isOpen && (
@@ -83,7 +102,12 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
           animate={{ opacity: 1, y: -40 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <img src={themeInviteCard} alt="Invitation card" className="invite-card" />
+          <img
+            src={inviteSrc}
+            alt="Invitation card"
+            className="invite-card"
+            onError={() => setInviteSrc(defaultInvite)}
+          />
           <span className="invite-card__shimmer" aria-hidden="true" />
         </motion.div>
       )}
