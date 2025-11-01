@@ -1,0 +1,195 @@
+
+.invite-details {
+  margin-top: clamp(52px, 6vw, 96px);
+}
+
+.invite-card-panel {
+  padding: clamp(48px, 6vw, 72px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background: color-mix(in srgb, var(--glass-bg) 94%, transparent);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  backdrop-filter: blur(16px);
+  display: grid;
+  gap: clamp(22px, 3vw, 36px);
+  justify-items: center;
+  align-content: center;
+  min-height: clamp(540px, 64vw, 720px);
+}
+
+.bismillah-text {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 86%, rgba(255, 255, 255, 0.2));
+}
+
+.bismillah-text__arabic {
+  font-family: 'Scheherazade New', 'Amiri', var(--font-display);
+  font-size: clamp(2.2rem, 3.8vw, 3rem);
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 58%, rgba(255, 255, 255, 0));
+}
+
+.bismillah-text__translation {
+  font-size: 0.92rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 68%, rgba(60, 51, 41, 0.4));
+}
+
+.invite-address {
+  display: grid;
+  gap: 6px;
+}
+
+.invite-salaam {
+  font-size: 0.9rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-subtle);
+}
+
+.invite-guest {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.2vw, 2.1rem);
+  letter-spacing: 0.16em;
+  color: var(--ink);
+}
+
+.invite-english {
+  display: grid;
+  gap: 10px;
+  max-width: min(560px, 92%);
+}
+
+.invite-english__intro {
+  font-size: 0.92rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 72%, rgba(47, 39, 33, 0.55));
+}
+
+.invite-english__line {
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.invite-english__event {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.2vw, 2rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 88%, rgba(47, 39, 33, 0.1));
+}
+
+.invite-english__names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 2vw, 18px);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.invite-english__names span {
+  display: block;
+  text-transform: uppercase;
+}
+
+.invite-english__ampersand {
+  font-size: 1.2em;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 82%, rgba(47, 39, 33, 0.18));
+}
+
+.invite-english__blessing {
+  margin-top: 4px;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.invite-arabic {
+  display: grid;
+  gap: 6px;
+  font-family: 'Scheherazade New', 'Amiri', 'Reem Kufi Fun', serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 85%, rgba(47, 39, 33, 0.1));
+  text-align: center;
+  line-height: 1.5;
+}
+
+.invite-arabic__ampersand {
+  font-size: 1.2em;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 92%, rgba(47, 39, 33, 0.16));
+}
+
+.date-block {
+  margin-top: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.date-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  color: var(--ink-subtle);
+  text-transform: uppercase;
+}
+
+.date-text {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+
+.venue {
+  margin-top: 32px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.venue-name {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--ink);
+}
+
+
+.invite-copy {
+  margin-top: 18px;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+
+.rsvp-actions {
+  margin-top: clamp(24px, 4vw, 42px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .invite-card-panel {
+    padding: 36px 22px 52px;
+    gap: 20px;
+  }
+
+  .rsvp-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}

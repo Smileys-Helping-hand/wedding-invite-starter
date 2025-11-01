@@ -1,0 +1,53 @@
+[
+  {
+    "code": "lumina001",
+    "guestName": "Aaliyah Rahman",
+    "partnerName": "Imran Rahman",
+    "household": 2,
+    "contact": "aaliyah@example.com",
+    "rsvpStatus": "pending",
+    "notes": "Prefers vegetarian menu"
+  },
+  {
+    "code": "lumina002",
+    "guestName": "Maryam Idris",
+    "partnerName": null,
+    "household": 1,
+    "contact": "maryam@example.com",
+    "rsvpStatus": "pending",
+    "notes": "Allergic to peanuts"
+  },
+  {
+    "code": "lumina003",
+    "guestName": "Yusuf Khan",
+    "partnerName": "Hafsa Khan",
+    "household": 4,
+    "contact": "yusuf@example.com",
+    "rsvpStatus": "confirmed",
+    "notes": "Bringing two children"
+  },
+  {
+    "code": "Ami123",
+    "guestNames": ["Aminah"],
+    "householdId": "H001",
+    "contact": "",
+    "rsvpStatus": "pending",
+    "notes": ""
+  },
+  {
+    "code": "Nur123",
+    "guestNames": ["Nuriyah", "Shuaib"],
+    "householdId": "H002",
+    "contact": "",
+    "rsvpStatus": "pending",
+    "notes": ""
+  },
+  {
+    "code": "Aaqilah321",
+    "guestNames": ["Aaqilah", "Man"],
+    "householdId": "H003",
+    "contact": "",
+    "rsvpStatus": "pending",
+    "notes": ""
+  }
+]
