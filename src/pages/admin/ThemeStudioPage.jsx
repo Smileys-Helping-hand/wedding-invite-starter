@@ -81,7 +81,7 @@ const cardEdgeOptions = [
   { value: 'deckled', label: 'Deckled Edge' },
 ];
 
-const ThemeStudioPage = () => {
+const ThemeStudioPage = ({ entries = [] }) => {
   const {
     theme,
     presets,
@@ -737,7 +737,8 @@ const ThemeStudioPage = () => {
           <span className="badge">Design studio</span>
           <h1 className="page-title">Craft the invitation aesthetic</h1>
           <p className="page-subtitle">
-            Adjust palettes, typography, media, and motion. Save drafts locally or publish for every guest.
+            Adjust palettes, typography, media, and motion for {entries.length} household{entries.length === 1 ? '' : 's'} currently invited.
+            Save drafts locally or publish for every guest.
           </p>
           {launchMode && <p className="launch-mode-alert">Launch Mode is enabled. Disable it to continue editing.</p>}
         </div>

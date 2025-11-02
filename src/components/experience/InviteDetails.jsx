@@ -50,9 +50,14 @@ const InviteDetails = ({ onRSVP, loading }) => {
   const arabicGroomLine =
     theme?.text?.arabicGroomLine ?? 'عبدالرزاق بن عبدالستار';
   const showArabic = theme?.toggles?.showArabicText !== false;
-  const scheduleGregorian = theme?.text?.scheduleGregorian ?? gregorian ?? 'Tuesday, 16 December 2025';
+  const scheduleGregorian =
+    theme?.text?.scheduleGregorian ?? gregorian ?? 'Tuesday, 16 December 2025';
   const scheduleHijri =
     theme?.text?.scheduleHijri ?? hijri ?? 'Tuesday, Jumada II 26, 1447 AH';
+  const scheduleVenue =
+    theme?.text?.scheduleVenue ?? EVENT_VENUE.addressLine1 ?? 'Legacy Events, Schaapkraal Road, Ottery, Cape Town';
+  const scheduleTime =
+    theme?.text?.scheduleTime ?? EVENT_VENUE.gatheringTime ?? '4:30 PM for 5:00 PM';
 
   return (
     <section className="invite-details">
@@ -112,18 +117,19 @@ const InviteDetails = ({ onRSVP, loading }) => {
           <span className="invite-schedule__flourish" aria-hidden="true" />
           <div className="invite-schedule__section invite-schedule__section--venue">
             <span className="invite-schedule__label">𝗩𝗘𝗡𝗨𝗘</span>
-            <span className="invite-schedule__venue">{EVENT_VENUE.name}</span>
-            <span className="invite-schedule__address">{EVENT_VENUE.addressLine1}</span>
-            <span className="invite-schedule__address">{EVENT_VENUE.addressLine2}</span>
+            <span className="invite-schedule__venue">{scheduleVenue}</span>
+            {Boolean(EVENT_VENUE.addressLine2) && (
+              <span className="invite-schedule__address">{EVENT_VENUE.addressLine2}</span>
+            )}
           </div>
           <div className="invite-schedule__section invite-schedule__section--time">
             <span className="invite-schedule__label">𝗧𝗜𝗠𝗘</span>
-            <span className="invite-schedule__value invite-schedule__value--italic">
-              {EVENT_VENUE.gatheringTime}
-            </span>
-            <span className="invite-schedule__value invite-schedule__value--italic">
-              {EVENT_VENUE.programTime}
-            </span>
+            <span className="invite-schedule__value invite-schedule__value--italic">{scheduleTime}</span>
+            {Boolean(EVENT_VENUE.programTime) && (
+              <span className="invite-schedule__value invite-schedule__value--italic">
+                {EVENT_VENUE.programTime}
+              </span>
+            )}
           </div>
         </div>
         <p className="invite-copy">{copy}</p>

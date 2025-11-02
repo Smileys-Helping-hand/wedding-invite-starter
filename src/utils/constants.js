@@ -1,10 +1,10 @@
 export const EVENT_DATE_GREGORIAN = new Date('2025-12-16T18:00:00+04:00');
 export const EVENT_VENUE = {
   name: 'Legacy Events',
-  addressLine1: 'Schaapkraal Road, Ottery',
-  addressLine2: 'Cape Town, South Africa',
-  gatheringTime: 'Gathering from 4:30 PM',
-  programTime: 'Formal program at 5:00 PM, Insha’Allah',
+  addressLine1: 'Legacy Events, Schaapkraal Road, Ottery, Cape Town',
+  addressLine2: '',
+  gatheringTime: '4:30 PM for 5:00 PM',
+  programTime: '',
 };
 
 export const RSVP_STATUSES = {

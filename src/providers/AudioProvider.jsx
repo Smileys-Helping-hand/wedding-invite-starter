@@ -103,7 +103,7 @@ export const AudioProvider = ({ children }) => {
     [clearFade]
   );
 
-  const playWithFade = useCallback(async (fadeDuration = 1200) => {
+  const playWithFade = useCallback(async (fadeDuration = 800) => {
     const audio = audioRef.current;
     if (!audio) return false;
 
@@ -131,10 +131,10 @@ export const AudioProvider = ({ children }) => {
       setIsReady(true);
       if (pendingStartRef.current) {
         const shouldForce = pendingStartRef.current === 'force';
-        if (!hasAutoplayedRef.current || shouldForce) {
-          pendingStartRef.current = false;
-          playWithFade(1200);
-        }
+          if (!hasAutoplayedRef.current || shouldForce) {
+            pendingStartRef.current = false;
+            playWithFade(800);
+          }
       }
     };
     audio.addEventListener('canplaythrough', handleReady, { once: true });
@@ -143,10 +143,10 @@ export const AudioProvider = ({ children }) => {
       audio.volume = 0;
       audio
         .play()
-        .then(() => {
-          setIsPlaying(true);
-          fadeVolume(volumeRef.current, { duration: 1200 });
-        })
+          .then(() => {
+            setIsPlaying(true);
+            fadeVolume(volumeRef.current, { duration: 800 });
+          })
         .catch(() => {
           setIsPlaying(false);
           resumeOnSourceChangeRef.current = false;
@@ -202,7 +202,7 @@ export const AudioProvider = ({ children }) => {
       }
 
       pendingStartRef.current = false;
-      await playWithFade(1200);
+      await playWithFade(800);
     },
     [autoplayEnabled, isReady, isPlaying, playWithFade]
   );
@@ -214,7 +214,7 @@ export const AudioProvider = ({ children }) => {
     if (isPlaying && !audio.paused) {
       hasAutoplayedRef.current = true;
       fadeVolume(0, {
-        duration: 1100,
+        duration: 800,
         pauseAfter: true,
         onComplete: () => {
           setIsPlaying(false);

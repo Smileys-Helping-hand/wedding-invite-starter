@@ -1,26 +1,26 @@
 .invite-details {
-  margin-top: clamp(-18px, -2vw, 8px);
+  margin-top: clamp(-28px, -3vw, -4px);
 }
 
 .invite-card-panel {
   position: relative;
   overflow: hidden;
-  padding: clamp(18px, 3vw, 28px) clamp(18px, 3.2vw, 30px) clamp(20px, 3.2vw, 30px);
+  padding: clamp(16px, 2.6vw, 26px) clamp(18px, 3vw, 28px) clamp(18px, 3vw, 26px);
   border-radius: clamp(28px, 4.6vw, 36px);
   border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 46%, transparent);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 244, 225, 0.64)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 244, 225, 0.58)),
     var(--card-bg-image, var(--theme-card-background, url('/assets/card-bg.png')));
   background-size: cover;
   background-position: center top;
   background-blend-mode: soft-light;
   box-shadow:
-    0 52px 108px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 28%, rgba(41, 32, 24, 0.08)),
-    0 0 0 1px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 12%, transparent);
+    0 48px 90px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 30%, rgba(41, 32, 24, 0.08)),
+    0 0 0 1px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 14%, transparent);
   text-align: center;
   backdrop-filter: blur(14px);
   display: grid;
-  gap: clamp(4px, 1.2vw, 12px);
+  gap: clamp(2px, 1vw, 10px);
   justify-items: center;
   align-content: start;
   grid-auto-rows: minmax(min-content, max-content);
@@ -31,7 +31,7 @@
 
 .bismillah-text {
   display: grid;
-  gap: 4px;
+  gap: 2px;
   text-align: center;
   color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 94%, rgba(255, 255, 255, 0.12));
   max-width: min(520px, 90%);
@@ -39,8 +39,8 @@
 
 .bismillah-text__arabic {
   font-family: 'Scheherazade New', 'Amiri', var(--font-display);
-  font-size: clamp(2rem, 3.2vw, 2.6rem);
-  letter-spacing: 0.002em;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  letter-spacing: 0.001em;
   font-weight: 680;
   text-shadow:
     0 0 14px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 26%, rgba(255, 255, 255, 0)),
@@ -56,7 +56,7 @@
 
 .invite-address {
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .invite-salaam {
@@ -75,7 +75,7 @@
 
 .invite-english {
   display: grid;
-  gap: clamp(4px, 0.8vw, 9px);
+  gap: clamp(2px, 0.6vw, 8px);
   max-width: min(600px, 92%);
 }
 
@@ -96,7 +96,7 @@
 .invite-english__event {
   font-family: var(--font-display);
   font-size: clamp(1.14rem, 2.2vw, 1.58rem);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 86%, rgba(47, 39, 33, 0.12));
   font-weight: 600;
@@ -110,7 +110,7 @@
   gap: clamp(6px, 1.2vw, 14px);
   font-family: var(--font-display);
   font-size: clamp(1.38rem, 2.4vw, 1.96rem);
-  letter-spacing: clamp(0.02em, 0.5vw, 0.06em);
+  letter-spacing: clamp(0.02em, 0.5vw, 0.05em);
   color: var(--ink);
 }
 
@@ -128,7 +128,7 @@
 }
 
 .invite-english__blessing {
-  margin-top: 0;
+  margin-top: 2px;
   font-size: 0.9rem;
   letter-spacing: -0.2px;
   color: var(--ink-soft);
@@ -136,12 +136,12 @@
 
 .invite-arabic {
   display: grid;
-  gap: 4px;
+  gap: 2px;
   font-family: 'Scheherazade New', 'Amiri', 'Reem Kufi Fun', serif;
   font-size: clamp(1.2rem, 2vw, 1.64rem);
   color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 90%, rgba(47, 39, 33, 0.12));
   text-align: center;
-  line-height: 1.7;
+  line-height: 1.6;
   padding-top: 0;
   letter-spacing: -0.2px;
 }
@@ -153,12 +153,12 @@
 
 .invite-schedule {
   position: relative;
-  margin-top: clamp(6px, 1.2vw, 12px);
-  padding: clamp(14px, 2.2vw, 20px) clamp(16px, 2.6vw, 22px);
+  margin-top: clamp(6px, 1vw, 10px);
+  padding: clamp(12px, 2vw, 18px) clamp(16px, 2.4vw, 22px);
   border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 46%, transparent);
   border-radius: clamp(20px, 3.2vw, 26px);
   display: grid;
-  gap: clamp(6px, 1.2vw, 12px);
+  gap: clamp(6px, 1vw, 10px);
   width: min(520px, 100%);
   background: color-mix(in srgb, rgba(255, 255, 255, 0.9) 78%, transparent);
 }
@@ -210,8 +210,8 @@
 
 .invite-schedule__value {
   font-family: var(--font-display);
-  font-size: 1.12rem;
-  color: color-mix(in srgb, var(--ink) 92%, var(--theme-color-accent, #d2b16a) 8%);
+  font-size: 1.06rem;
+  color: color-mix(in srgb, var(--ink) 90%, var(--theme-color-accent, #d2b16a) 10%);
   letter-spacing: -0.15px;
 }
 
@@ -236,14 +236,14 @@
 
 .invite-schedule__venue {
   font-family: var(--font-display);
-  font-size: 1.14rem;
+  font-size: 1.12rem;
   font-weight: 600;
-  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 88%, rgba(47, 39, 33, 0.1));
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 90%, rgba(47, 39, 33, 0.12));
 }
 
 .invite-schedule__address {
-  font-size: 0.74rem;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
   font-variant: small-caps;
   text-transform: none;
   color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 52%, rgba(47, 39, 33, 0.52));
@@ -266,7 +266,7 @@
 }
 
 .invite-copy {
-  margin-top: 4px;
+  margin-top: 2px;
   font-size: 0.92rem;
   line-height: 1.52;
   letter-spacing: -0.2px;
@@ -274,7 +274,7 @@
 }
 
 .rsvp-actions {
-  margin: clamp(6px, 1.4vw, 12px) auto 0;
+  margin: clamp(6px, 1vw, 12px) auto 0;
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
@@ -307,9 +307,9 @@
 
 @media (max-width: 720px) {
   .invite-card-panel {
-    padding: 22px 16px 24px;
+    padding: 20px 16px 22px;
     border-radius: 30px;
-    max-width: 96%;
+    max-width: 94%;
   }
 
   .invite-english__names {
@@ -328,11 +328,11 @@
 
 @media (max-width: 520px) {
   .invite-card-panel {
-    padding: 20px 14px 24px;
-    max-width: 96%;
+    padding: 18px 12px 22px;
+    max-width: 94%;
   }
 
   .invite-schedule {
-    gap: 10px;
+    gap: 8px;
   }
 }

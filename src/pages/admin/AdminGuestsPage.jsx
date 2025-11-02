@@ -26,6 +26,7 @@ const emptyFormState = {
   notes: '',
   rsvpStatus: RSVP_STATUSES.pending,
   householdId: '',
+  role: 'guest',
 };
 
 const toastCopy = {
@@ -33,8 +34,11 @@ const toastCopy = {
   updated: 'Guest updated ✅',
   removed: 'Guest removed ✅',
   copied: 'Invite link copied',
+  whatsapp: 'WhatsApp text copied',
   status: 'RSVP updated',
 };
+
+const CONTACT_REGEX = /^(\+?[0-9\s-]{7,}|[^\s@]+@[^\s@]+\.[^\s@]{2,})$/i;
 
 const AdminGuestsPage = ({
   entries = [],
@@ -45,6 +49,7 @@ const AdminGuestsPage = ({
   onExportCsv,
   generateInviteCode,
   getNextHouseholdId,
+  onCopyShare,
 }) => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -53,6 +58,7 @@ const AdminGuestsPage = ({
   const [editingCode, setEditingCode] = useState(null);
   const [error, setError] = useState('');
   const [toast, setToast] = useState('');
+  const [quickForm, setQuickForm] = useState({ name: '', partner: '', contact: '', notes: '' });
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -108,6 +114,7 @@ const AdminGuestsPage = ({
       notes: guest.notes ?? '',
       rsvpStatus: guest.rsvpStatus ?? RSVP_STATUSES.pending,
       householdId: guest.householdId ?? '',
+      role: guest.role ?? 'guest',
     });
     setError('');
     setIsModalOpen(true);
@@ -124,12 +131,7 @@ const AdminGuestsPage = ({
 
   const handleGenerateCode = () => {
     if (!generateInviteCode) return;
-    const code = generateInviteCode(
-      form.primaryGuest,
-      form.plusOneName,
-      form.code,
-      editingCode ?? undefined
-    );
+    const code = generateInviteCode(form.primaryGuest, form.plusOneName, form.code, editingCode ?? undefined);
     if (code) {
       setForm((prev) => ({ ...prev, code }));
     }
@@ -143,6 +145,11 @@ const AdminGuestsPage = ({
     }
   };
 
+  const validateContact = (value) => {
+    if (!value) return true;
+    return CONTACT_REGEX.test(value.trim());
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const names = [form.primaryGuest, form.plusOneName]
@@ -151,6 +158,11 @@ const AdminGuestsPage = ({
 
     if (names.length === 0) {
       setError('Please provide at least one guest name.');
+      return;
+    }
+
+    if (!validateContact(form.contact)) {
+      setError('Please provide a valid email or phone number.');
       return;
     }
 
@@ -167,6 +179,7 @@ const AdminGuestsPage = ({
       householdCount: Math.max(Number(form.householdCount) || names.length || 1, names.length || 1),
       notes: form.notes.trim(),
       rsvpStatus: form.rsvpStatus,
+      role: form.role,
     };
 
     if (editingCode) {
@@ -202,10 +215,44 @@ const AdminGuestsPage = ({
     }
   };
 
+  const handleShare = async (guest) => {
+    if (!onCopyShare) {
+      await handleCopyLink(guest);
+      return;
+    }
+    await onCopyShare(guest);
+    setToast(toastCopy.whatsapp);
+  };
+
   const handleStatusUpdate = (guest, status) => {
     if (guest.rsvpStatus === status) return;
     onStatusChange?.(guest.code, status);
     setToast(toastCopy.status);
+  };
+
+  const handleQuickAdd = (event) => {
+    event.preventDefault();
+    const name = quickForm.name.trim();
+    if (!name) {
+      setToast('Guest name required');
+      return;
+    }
+    if (!validateContact(quickForm.contact)) {
+      setToast('Check contact details');
+      return;
+    }
+    const names = [name, quickForm.partner.trim()].filter(Boolean);
+    const payload = {
+      guestNames: names,
+      contact: quickForm.contact.trim(),
+      notes: quickForm.notes.trim(),
+      householdCount: names.length || 1,
+      rsvpStatus: RSVP_STATUSES.pending,
+      role: 'guest',
+    };
+    onAddGuest?.(payload);
+    setQuickForm({ name: '', partner: '', contact: '', notes: '' });
+    setToast(toastCopy.added);
   };
 
   return (
@@ -221,7 +268,7 @@ const AdminGuestsPage = ({
           <p className="page-subtitle">Gracefully manage each household, update RSVPs, and share invite links in moments.</p>
         </div>
         <div className="admin-guests__header-actions">
-          <Button variant="ghost" size="md" onClick={onExportCsv}>
+          <Button variant="ghost" size="md" onClick={() => onExportCsv?.(filteredEntries)}>
             Export CSV
           </Button>
           <Button variant="primary" size="md" onClick={openAddModal}>
@@ -230,21 +277,31 @@ const AdminGuestsPage = ({
         </div>
       </header>
 
-      <div className="admin-guests__toolbar">
+      <form className="admin-guests__quick" onSubmit={handleQuickAdd}>
+        <TextInput label="Guest name" value={quickForm.name} onChange={(event) => setQuickForm((prev) => ({ ...prev, name: event.target.value }))} required />
+        <TextInput label="Partner name" value={quickForm.partner} onChange={(event) => setQuickForm((prev) => ({ ...prev, partner: event.target.value }))} />
         <TextInput
-          label="Search guests"
-          placeholder="Search by name, code, or notes"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          label="Email or phone"
+          value={quickForm.contact}
+          onChange={(event) => setQuickForm((prev) => ({ ...prev, contact: event.target.value }))}
+          hint="Optional — used for invite link sharing"
         />
+        <TextInput
+          label="Notes"
+          value={quickForm.notes}
+          onChange={(event) => setQuickForm((prev) => ({ ...prev, notes: event.target.value }))}
+          hint="Special seating or greetings"
+        />
+        <Button type="submit" variant="ghost" size="md">
+          Add household
+        </Button>
+      </form>
+
+      <div className="admin-guests__toolbar">
+        <TextInput label="Search guests" placeholder="Search by name, code, or notes" value={search} onChange={(event) => setSearch(event.target.value)} />
         <div className="admin-guests__filters" role="tablist" aria-label="RSVP status filter">
           {STATUS_FILTERS.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              className={option.id === statusFilter ? 'status-chip status-chip--active' : 'status-chip'}
-              onClick={() => setStatusFilter(option.id)}
-            >
+            <button key={option.id} type="button" className={option.id === statusFilter ? 'status-chip status-chip--active' : 'status-chip'} onClick={() => setStatusFilter(option.id)}>
               {option.label}
             </button>
           ))}
@@ -256,6 +313,7 @@ const AdminGuestsPage = ({
           <span role="columnheader">Guest household</span>
           <span role="columnheader">Status</span>
           <span role="columnheader">Invite code</span>
+          <span role="columnheader">Share</span>
           <span role="columnheader">Edit</span>
           <span role="columnheader">Delete</span>
         </div>
@@ -264,11 +322,10 @@ const AdminGuestsPage = ({
             <span role="cell">
               <strong>{guest.primaryGuest || '—'}</strong>
               {guest.partnerName && <small>{guest.partnerName}</small>}
-              {guest.additionalGuests > 0 && (
-                <small className="muted">+{guest.additionalGuests} guest{guest.additionalGuests > 1 ? 's' : ''}</small>
-              )}
+              {guest.additionalGuests > 0 && <small className="muted">+{guest.additionalGuests} guest{guest.additionalGuests > 1 ? 's' : ''}</small>}
               {guest.notes && <small className="muted note">{guest.notes}</small>}
               <small className="muted">Household {guest.householdId ?? '—'} • {guest.householdCount ?? 1} invited</small>
+              <small className="muted">Role: {guest.role ?? 'guest'}</small>
             </span>
             <span role="cell">
               <span className={`status-pill status-pill--${guest.rsvpStatus}`}>{STATUS_LABELS[guest.rsvpStatus]}</span>
@@ -287,7 +344,12 @@ const AdminGuestsPage = ({
             <span role="cell" className="code-cell">
               <code>{guest.code}</code>
               <button type="button" onClick={() => handleCopyLink(guest)} className="link-button">
-                Send Invite Link
+                Copy invite link
+              </button>
+            </span>
+            <span role="cell" className="code-cell">
+              <button type="button" onClick={() => handleShare(guest)} className="link-button">
+                WhatsApp share text
               </button>
             </span>
             <span role="cell" className="admin-guests__actions">
@@ -303,11 +365,7 @@ const AdminGuestsPage = ({
           </div>
         ))}
 
-        {filteredEntries.length === 0 && (
-          <div className="admin-guests__empty" role="row">
-            No guests match your search yet.
-          </div>
-        )}
+        {filteredEntries.length === 0 && <div className="admin-guests__empty" role="row">No guests match your search yet.</div>}
       </div>
 
       {isModalOpen && (
@@ -321,24 +379,9 @@ const AdminGuestsPage = ({
             </header>
             <form className="admin-guests__form" onSubmit={handleSubmit}>
               <div className="form-grid">
-                <TextInput
-                  label="Primary guest name"
-                  value={form.primaryGuest}
-                  onChange={(event) => handleChange('primaryGuest', event.target.value)}
-                  required
-                />
-                <TextInput
-                  label="Partner name (optional)"
-                  value={form.plusOneName}
-                  onChange={(event) => handleChange('plusOneName', event.target.value)}
-                  hint="Leave blank for single guest"
-                />
-                <TextInput
-                  label="Invite code"
-                  value={form.code}
-                  onChange={(event) => handleChange('code', event.target.value.toUpperCase())}
-                  hint="Auto-generate if left blank"
-                />
+                <TextInput label="Primary guest name" value={form.primaryGuest} onChange={(event) => handleChange('primaryGuest', event.target.value)} required />
+                <TextInput label="Guest +1 name" value={form.plusOneName} onChange={(event) => handleChange('plusOneName', event.target.value)} hint="Leave blank for single guest" />
+                <TextInput label="Invite code" value={form.code} onChange={(event) => handleChange('code', event.target.value.toUpperCase())} hint="Auto-generate if left blank" />
                 <div className="inline-actions">
                   <Button type="button" variant="ghost" size="sm" onClick={handleGenerateCode}>
                     Auto-generate code
@@ -347,29 +390,12 @@ const AdminGuestsPage = ({
                     Next household ID
                   </Button>
                 </div>
-                <TextInput
-                  label="Household ID"
-                  value={form.householdId}
-                  onChange={(event) => handleChange('householdId', event.target.value.toUpperCase())}
-                />
-                <TextInput
-                  label="Household size"
-                  type="number"
-                  min="1"
-                  value={form.householdCount}
-                  onChange={(event) => handleChange('householdCount', event.target.value)}
-                />
-                <TextInput
-                  label="Email or phone"
-                  value={form.contact}
-                  onChange={(event) => handleChange('contact', event.target.value)}
-                />
+                <TextInput label="Household ID" value={form.householdId} onChange={(event) => handleChange('householdId', event.target.value.toUpperCase())} />
+                <TextInput label="Household size" type="number" min="1" value={form.householdCount} onChange={(event) => handleChange('householdCount', event.target.value)} />
+                <TextInput label="Email or phone" value={form.contact} onChange={(event) => handleChange('contact', event.target.value)} />
                 <label className="select-label">
                   RSVP status
-                  <select
-                    value={form.rsvpStatus}
-                    onChange={(event) => handleChange('rsvpStatus', event.target.value)}
-                  >
+                  <select value={form.rsvpStatus} onChange={(event) => handleChange('rsvpStatus', event.target.value)}>
                     {Object.entries(STATUS_LABELS).map(([value, label]) => (
                       <option key={value} value={value}>
                         {label}
@@ -377,13 +403,16 @@ const AdminGuestsPage = ({
                     ))}
                   </select>
                 </label>
+                <label className="select-label">
+                  Role
+                  <select value={form.role} onChange={(event) => handleChange('role', event.target.value)}>
+                    <option value="guest">Guest</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </label>
                 <label className="textarea-label">
                   Notes
-                  <textarea
-                    rows={3}
-                    value={form.notes}
-                    onChange={(event) => handleChange('notes', event.target.value)}
-                  />
+                  <textarea rows={3} value={form.notes} onChange={(event) => handleChange('notes', event.target.value)} />
                 </label>
               </div>
 

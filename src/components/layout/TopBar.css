@@ -130,6 +130,7 @@
 }
 
 .audio-toggle {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -145,6 +146,17 @@
   opacity: 0.8;
 }
 
+.audio-toggle::after {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(210, 177, 107, 0.28), rgba(210, 177, 107, 0));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
 .audio-toggle:hover,
 .audio-toggle:focus-visible,
 .audio-toggle[aria-pressed='true'] {
@@ -155,6 +167,11 @@
     0 0 32px rgba(210, 177, 107, 0.28);
   filter: drop-shadow(0 0 18px rgba(210, 177, 107, 0.22));
   opacity: 1;
+}
+
+.audio-toggle:hover::after,
+.audio-toggle:focus-visible::after {
+  opacity: 0.55;
 }
 
 .audio-toggle[data-state='off'] {
@@ -169,6 +186,12 @@
 
 .audio-toggle[data-state='on'] .audio-toggle__icon path[data-fill='solid'] {
   fill: currentColor;
+}
+
+.audio-toggle[data-state='on']::after {
+  opacity: 0.45;
+  filter: blur(0.8px);
+  animation: audioGlow 3.2s ease-in-out infinite;
 }
 
 .audio-toggle:disabled {
@@ -192,6 +215,18 @@
 .audio-toggle[data-state='off'] svg[data-variant='off'] {
   display: block;
   opacity: 0.78;
+}
+
+@keyframes audioGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.36;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.6;
+  }
 }
 
 @media (max-width: 720px) {

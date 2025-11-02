@@ -1,6 +1,18 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { getApps, initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const FirebaseContext = createContext();
@@ -33,13 +45,15 @@ export const FirebaseProvider = ({ children }) => {
   const [firestore, setFirestore] = useState(null);
   const [bucket, setBucket] = useState(null);
 
+  const isReady = useMemo(() => Boolean(firestore), [firestore]);
+
   useEffect(() => {
     if (db) setFirestore(db);
     if (storage) setBucket(storage);
   }, []);
 
   const getGuest = async (code) => {
-    if (!firestore) return null;
+    if (!firestore || !code) return null;
     try {
       const ref = doc(collection(firestore, 'guests'), code.toLowerCase());
       const snap = await getDoc(ref);
@@ -51,7 +65,7 @@ export const FirebaseProvider = ({ children }) => {
   };
 
   const saveRSVP = async (code, updates) => {
-    if (!firestore) return;
+    if (!firestore || !code) return;
     try {
       const ref = doc(collection(firestore, 'guests'), code.toLowerCase());
       await updateDoc(ref, updates);
@@ -61,13 +75,13 @@ export const FirebaseProvider = ({ children }) => {
   };
 
   const addGuest = async (code, data) => {
-    if (!firestore) return;
+    if (!firestore || !code) return;
     const ref = doc(collection(firestore, 'guests'), code.toLowerCase());
-    await setDoc(ref, data);
+    await setDoc(ref, data, { merge: true });
   };
 
   const deleteGuest = async (code) => {
-    if (!firestore) return;
+    if (!firestore || !code) return;
     try {
       const ref = doc(collection(firestore, 'guests'), code.toLowerCase());
       await deleteDoc(ref);
@@ -109,10 +123,40 @@ export const FirebaseProvider = ({ children }) => {
     return { url, path: objectPath };
   };
 
+  const subscribeToGuests = (callback) => {
+    if (!firestore || typeof callback !== 'function') {
+      return () => {};
+    }
+
+    const guestsQuery = query(collection(firestore, 'guests'), orderBy('primaryGuest', 'asc'));
+    const unsubscribe = onSnapshot(
+      guestsQuery,
+      (snapshot) => {
+        const data = snapshot.docs.map((docItem) => ({ code: docItem.id.toUpperCase(), ...docItem.data() }));
+        callback(data);
+      },
+      () => {
+        callback(null);
+      }
+    );
+
+    return unsubscribe;
+  };
+
+  const appendAdminLog = async (payload) => {
+    if (!firestore) return;
+    const ref = doc(collection(firestore, 'adminLogs'));
+    await setDoc(ref, {
+      ...payload,
+      createdAt: serverTimestamp(),
+    });
+  };
+
   return (
     <FirebaseContext.Provider
       value={{
         firestore,
+        isReady,
         getGuest,
         saveRSVP,
         addGuest,
@@ -120,6 +164,8 @@ export const FirebaseProvider = ({ children }) => {
         fetchThemeConfig,
         saveThemeConfig,
         uploadMedia,
+        subscribeToGuests,
+        appendAdminLog,
       }}
     >
       {children}

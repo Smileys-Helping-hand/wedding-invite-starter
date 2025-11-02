@@ -1,14 +1,15 @@
 export const defaultAssets = {
-  envelope: '/assets/envelope.png',
-  inviteCard: '/assets/invitecard.png',
-  cardBackground: '/assets/card-bg.png',
+  envelope: '/assets/marble-envelope.png',
+  inviteCard: '/assets/floral-panel.png',
+  cardBackground: '/assets/floral-panel.png',
   sparklesVideo: '/assets/sparkles.mp4',
-  nasheed: '/assets/nasheed.mp3',
+  nasheed: '/assets/golden-hour-piano.mp3',
+  emblem: '/assets/emblem-gold.png',
 };
 
 export const waxSeals = {
-  default: '/assets/waxseal.png',
-  gold: '/assets/waxseal_gold.png',
+  default: '/assets/wax-seal-gold.png',
+  gold: '/assets/wax-seal-gold.png',
   rosegold: '/assets/waxseal_rosegold.png',
   emerald: '/assets/waxseal_emerald.png',
   flower: '/assets/waxseal_flower.png',
