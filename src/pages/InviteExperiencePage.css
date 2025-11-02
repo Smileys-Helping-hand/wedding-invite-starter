@@ -1,0 +1,45 @@
+.invite-experience {
+  overflow: hidden;
+}
+
+.experience-content {
+  display: grid;
+  gap: clamp(10px, 2.2vw, 20px);
+}
+
+.rsvp-form {
+  margin-top: clamp(2px, 1vw, 10px);
+  padding: clamp(28px, 4.2vw, 48px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(16px);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-align: center;
+}
+
+.rsvp-feedback {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--gold-rich);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rsvp-form .grid-two {
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .rsvp-form {
+    padding: 22px 18px 32px;
+  }
+}
