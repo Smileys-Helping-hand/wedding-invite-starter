@@ -18,18 +18,27 @@ const resolveGuestName = (guest) => {
 const TopBar = () => {
   const location = useLocation();
   const { guest } = useGuest();
-  const { isPlaying, toggleAudio } = useAudio();
+  const { isPlaying, toggleAudio, startAudio } = useAudio();
   const { theme } = useTheme();
 
   const isAdminRoute = location.pathname.startsWith('/admin');
   const guestName = resolveGuestName(guest);
   const coupleNames = `${theme?.brideName ?? 'Razia'} & ${theme?.groomName ?? 'Abduraziq'}`;
-  const emblemFontSize = useMemo(() => {
+  const { emblemFontSize, emblemLetterSpacing } = useMemo(() => {
     const length = coupleNames.replace(/\s+/g, '').length;
-    if (length <= 16) return '1.08rem';
-    if (length <= 22) return '0.98rem';
-    if (length <= 30) return '0.9rem';
-    return '0.82rem';
+    if (length <= 16) {
+      return { emblemFontSize: 'clamp(0.92rem, 2.8vw, 1.16rem)', emblemLetterSpacing: '0.2em' };
+    }
+    if (length <= 24) {
+      return { emblemFontSize: 'clamp(0.88rem, 2.6vw, 1.06rem)', emblemLetterSpacing: '0.18em' };
+    }
+    if (length <= 32) {
+      return { emblemFontSize: 'clamp(0.84rem, 2.4vw, 0.98rem)', emblemLetterSpacing: '0.16em' };
+    }
+    if (length <= 40) {
+      return { emblemFontSize: 'clamp(0.8rem, 2.2vw, 0.94rem)', emblemLetterSpacing: '0.14em' };
+    }
+    return { emblemFontSize: 'clamp(0.76rem, 2vw, 0.9rem)', emblemLetterSpacing: '0.12em' };
   }, [coupleNames]);
 
   return (
@@ -47,8 +56,10 @@ const TopBar = () => {
           <span className="brand-emblem__ring">
             <span
               className="brand-emblem__names"
-              style={{ '--emblem-font-size': emblemFontSize }}
-              data-length={coupleNames.length}
+              style={{
+                '--emblem-font-size': emblemFontSize,
+                '--emblem-letter-spacing': emblemLetterSpacing,
+              }}
             >
               {coupleNames}
             </span>
@@ -58,19 +69,33 @@ const TopBar = () => {
           <button
             type="button"
             className="audio-toggle"
-            onClick={isPlaying ? toggleAudio : undefined}
+            onClick={() => {
+              if (isPlaying) {
+                toggleAudio();
+              } else {
+                startAudio?.({ force: true });
+              }
+            }}
             aria-pressed={isPlaying}
-            aria-label="Toggle Nasheed"
+            aria-label="Toggle nasheed playback"
             title="Toggle Nasheed"
             data-state={isPlaying ? 'on' : 'off'}
-            disabled={!isPlaying}
-            aria-disabled={!isPlaying}
           >
             <span className="sr-only">Toggle Nasheed</span>
-            <svg className="audio-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="audio-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" data-variant="on">
               <path
-                d="M12.5 4.5v8.02a3.5 3.5 0 1 1-1.5-2.88V4.5a.75.75 0 0 1 1.5 0Zm4.5-.4a.75.75 0 0 1 .75.75v9.12a3.5 3.5 0 1 1-1.5-2.88V4.85a.75.75 0 0 1 .75-.75Z"
-                fill="currentColor"
+                d="M12 4a1 1 0 0 1 1-1c2.27 0 4.11.74 5.86 1.37.62.22 1.14.41 1.64.53A.75.75 0 0 1 21 5.64v4.14l-4 1V16a4.25 4.25 0 1 1-1.5-3.24V4Z"
+                data-fill="solid"
+              />
+            </svg>
+            <svg className="audio-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" data-variant="off">
+              <path
+                d="M11.5 4.2c2.18 0 3.93-.7 6.5-1.2v4.8l-5 1.1V17a3.25 3.25 0 1 1-1.5-2.75V4.2Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>

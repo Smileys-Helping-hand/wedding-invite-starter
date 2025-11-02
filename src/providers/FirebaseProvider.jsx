@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getApps, initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const FirebaseContext = createContext();
@@ -66,6 +66,16 @@ export const FirebaseProvider = ({ children }) => {
     await setDoc(ref, data);
   };
 
+  const deleteGuest = async (code) => {
+    if (!firestore) return;
+    try {
+      const ref = doc(collection(firestore, 'guests'), code.toLowerCase());
+      await deleteDoc(ref);
+    } catch (err) {
+      /* ignore removal errors for offline mode */
+    }
+  };
+
   const fetchThemeConfig = async () => {
     if (!firestore) return null;
     try {
@@ -106,6 +116,7 @@ export const FirebaseProvider = ({ children }) => {
         getGuest,
         saveRSVP,
         addGuest,
+        deleteGuest,
         fetchThemeConfig,
         saveThemeConfig,
         uploadMedia,

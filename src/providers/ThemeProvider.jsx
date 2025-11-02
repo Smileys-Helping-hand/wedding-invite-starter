@@ -22,8 +22,8 @@ const DEFAULT_THEME = {
     greeting: 'Assalamu Alaikum',
     greetingSuffix: ' wa Rahmatullah',
     bismillahArabic: 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ',
-    bismillahTranslation: 'In the name of Allah, The Most Merciful, The Most Compassionate',
-    englishIntro: 'In the name of Allah, The Most Merciful, The Most Compassionate',
+    bismillahTranslation: 'In the name of Allah, the Most Merciful, the Most Compassionate',
+    englishIntro: 'In the name of Allah, the Most Merciful, the Most Compassionate',
     englishInviteLine: 'You are warmly invited to the',
     englishEventTitle: 'Engagement Soirée of',
     brideFullName: 'Razia bint Sabri',
@@ -57,13 +57,19 @@ const DEFAULT_THEME = {
     petals: false,
     vignetteStrength: 0.35,
     paperTexture: true,
+    vignetteEnabled: true,
+    dripShimmer: false,
     goldFoilIntensity: 0.6,
+    foilSheenIntensity: 0.6,
     waxSealShape: 'round',
     cardEdgeStyle: 'rounded',
+    showArabicText: true,
+    nasheedAutoplay: true,
   },
   assets: {
     envelope: defaultAssets.envelope,
     inviteCard: defaultAssets.inviteCard,
+    cardBackground: defaultAssets.cardBackground,
     sparklesVideo: defaultAssets.sparklesVideo,
     nasheed: defaultAssets.nasheed,
     waxSealVariant: 'gold',
@@ -110,10 +116,17 @@ const applyThemeToDocument = (theme) => {
   root.style.setProperty('--theme-animation-intensity', theme.toggles.animationIntensity ?? 'medium');
   root.style.setProperty('--theme-sparkle-opacity', String(theme.toggles.sparkleAmount ?? 0.5));
   root.style.setProperty('--theme-vignette-strength', String(theme.toggles.vignetteStrength ?? 0.35));
+  root.style.setProperty('--theme-vignette-enabled', theme.toggles.vignetteEnabled === false ? '0' : '1');
   root.style.setProperty('--theme-paper-texture', theme.toggles.paperTexture === false ? '0' : '1');
-  root.style.setProperty('--theme-gold-foil-intensity', String(theme.toggles.goldFoilIntensity ?? 0.6));
+  const foilSheen =
+    theme.toggles.foilSheenIntensity ?? theme.toggles.goldFoilIntensity ?? DEFAULT_THEME.toggles.goldFoilIntensity;
+  root.style.setProperty('--theme-gold-foil-intensity', String(foilSheen));
+  root.style.setProperty('--theme-drip-shimmer', theme.toggles.dripShimmer ? '1' : '0');
   root.style.setProperty('--theme-wax-shape', theme.toggles.waxSealShape ?? 'round');
   root.style.setProperty('--theme-card-edge-style', theme.toggles.cardEdgeStyle ?? 'rounded');
+  root.style.setProperty('--theme-show-arabic', theme.toggles.showArabicText === false ? '0' : '1');
+  const cardBackground = theme.assets?.cardBackground ?? defaultAssets.cardBackground;
+  root.style.setProperty('--theme-card-background', `url(${cardBackground})`);
 };
 
 const readDraft = () => {

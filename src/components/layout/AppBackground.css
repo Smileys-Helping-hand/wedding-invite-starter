@@ -17,7 +17,7 @@
       rgba(18, 12, 8, 0.4)
     );
   mix-blend-mode: multiply;
-  opacity: calc(var(--theme-vignette-strength, 0.35) + 0.12);
+  opacity: calc((var(--theme-vignette-strength, 0.35) + 0.12) * var(--theme-vignette-enabled, 1));
   transition: opacity 0.4s ease;
 }
 

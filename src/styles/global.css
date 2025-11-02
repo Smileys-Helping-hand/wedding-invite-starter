@@ -22,6 +22,9 @@
   --radius-xl: 40px;
   --radius-lg: 28px;
   --radius-md: 18px;
+  --theme-vignette-enabled: 1;
+  --theme-drip-shimmer: 0;
+  --theme-gold-foil-intensity: 0.6;
 }
 
 *,

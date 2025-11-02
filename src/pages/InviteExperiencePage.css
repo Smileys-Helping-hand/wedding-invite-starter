@@ -4,11 +4,12 @@
 
 .experience-content {
   display: grid;
-  gap: clamp(36px, 6vw, 60px);
+  gap: clamp(12px, 2.6vw, 24px);
 }
 
 .rsvp-form {
-  padding: clamp(32px, 5vw, 54px);
+  margin-top: clamp(4px, 1.2vw, 12px);
+  padding: clamp(28px, 4.2vw, 48px);
   border-radius: var(--radius-xl);
   border: 1px solid var(--glass-border);
   background: rgba(255, 255, 255, 0.82);
@@ -39,6 +40,6 @@
 
 @media (max-width: 768px) {
   .rsvp-form {
-    padding: 28px 20px 40px;
+    padding: 24px 18px 34px;
   }
 }

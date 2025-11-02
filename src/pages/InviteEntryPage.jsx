@@ -30,14 +30,22 @@ const InviteEntryPage = () => {
 
   return (
     <div className="page-panel invite-entry">
-      <motion.div className="invite-entry__content" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+      <motion.div
+        className="invite-entry__content"
+        initial={{ opacity: 0, y: 36 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
         <span className="badge">Luxury engagement soirée</span>
-        <h1 className="page-title">Bismillah, Welcome</h1>
+        <h1 className="page-title">Bismillah, welcome to the soirée</h1>
+        <div className="invite-entry__divider" aria-hidden="true" />
         <p className="page-subtitle">
-          Step through silken curtains into an evening of devotion, elegance, and celebration for Razia &amp; Abduraziq.
+          Enter your personal code to unlock the invitation designed with love for Razia &amp; Abduraziq. We look forward to
+          celebrating with you.
         </p>
 
         <form className="invite-form" onSubmit={handleSubmit}>
+          <span className="invite-form__divider" aria-hidden="true" />
           <TextInput
             label="Invite Code"
             placeholder="Enter your personal code"

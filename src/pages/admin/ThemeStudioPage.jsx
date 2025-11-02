@@ -98,6 +98,8 @@ const ThemeStudioPage = () => {
   const [status, setStatus] = useState('');
   const [selectedWax, setSelectedWax] = useState(theme?.assets?.waxSealVariant ?? 'gold');
   const [activeTab, setActiveTab] = useState('colors');
+  const [toast, setToast] = useState('');
+  const [previewDevice, setPreviewDevice] = useState('desktop');
   const launchMode = theme?.toggles?.launchMode === true;
 
   useEffect(() => {
@@ -112,6 +114,12 @@ const ThemeStudioPage = () => {
       return previous === 'Launch Mode enabled. Preview only.' ? 'Editing unlocked.' : previous;
     });
   }, [launchMode]);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const timer = window.setTimeout(() => setToast(''), 3200);
+    return () => window.clearTimeout(timer);
+  }, [toast]);
 
   const availableSeals = useMemo(() => {
     const current = theme?.assets?.waxSeals ?? {};
@@ -186,18 +194,21 @@ const ThemeStudioPage = () => {
   const handleSaveDraft = () => {
     saveDraft(theme);
     setStatus('Draft saved locally.');
+    setToast('✅ Draft saved locally');
   };
 
   const handleSaveAndPreview = () => {
     saveDraft(theme);
     window.open('/invite', '_blank', 'noopener,noreferrer');
     setStatus('Draft saved. Preview opened in a new tab.');
+    setToast('✅ Draft saved & preview opened');
   };
 
   const handlePublish = async () => {
     setStatus('Publishing theme…');
     await publishTheme(theme);
-    setStatus('Theme published.');
+    setStatus('✨ Theme Published');
+    setToast('✨ Theme Published');
   };
 
   const handlePreset = (presetId, label) => {
@@ -208,13 +219,17 @@ const ThemeStudioPage = () => {
       setSelectedWax(preset.assets.waxSealVariant);
     }
     setStatus(`Preset "${label}" applied.`);
+    setToast(`Preset "${label}" applied`);
   };
 
   const handleReset = () => {
     if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    const confirmReset = window.confirm('Reset theme to the default look? This cannot be undone.');
+    if (!confirmReset) return;
     resetTheme();
     setSelectedWax('gold');
     setStatus('Theme reset to default.');
+    setToast('Theme reset to default');
   };
 
   const handleSparkleAmount = (value) => {
@@ -229,7 +244,8 @@ const ThemeStudioPage = () => {
 
   const handleFoilIntensity = (value) => {
     if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
-    updateTheme({ toggles: { goldFoilIntensity: Number(value) } });
+    const intensity = Number(value);
+    updateTheme({ toggles: { goldFoilIntensity: intensity, foilSheenIntensity: intensity } });
   };
 
   const handleCardEdgeStyle = (value) => {
@@ -240,6 +256,25 @@ const ThemeStudioPage = () => {
   const handleWaxShape = (value) => {
     if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
     updateTheme({ toggles: { waxSealShape: value } });
+  };
+
+  const handleDripShimmer = (checked) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { dripShimmer: checked } });
+  };
+
+  const handleVignetteToggle = (checked) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { vignetteEnabled: checked } });
+  };
+
+  const handleShowArabicToggle = (checked) => {
+    if (guardLaunchMode('Launch Mode is active. Disable it to edit.')) return;
+    updateTheme({ toggles: { showArabicText: checked } });
+  };
+
+  const handlePreviewDevice = (device) => {
+    setPreviewDevice(device);
   };
 
   const renderColorTab = () => (
@@ -409,6 +444,15 @@ const ThemeStudioPage = () => {
           onChange={(event) => handleTextChange('arabicGroomLine', event.target.value)}
           disabled={launchMode}
         />
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.showArabicText !== false}
+            onChange={(event) => handleShowArabicToggle(event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Show Arabic text panel</span>
+        </label>
       </div>
     </section>
   );
@@ -416,6 +460,7 @@ const ThemeStudioPage = () => {
   const renderMediaTab = () => (
     <section className="studio-panel">
       <h2>Media & wax seals</h2>
+      <p className="studio-hint">Drag &amp; replace media or upload above. Larger files will take a moment to shimmer in.</p>
       <div className="upload-grid">
         <label className="upload-field">
           <span>Envelope artwork</span>
@@ -515,6 +560,7 @@ const ThemeStudioPage = () => {
             ))}
           </div>
         </div>
+        <p className="upload-tip" role="note">Drag &amp; replace media or upload above.</p>
       </div>
     </section>
   );
@@ -546,6 +592,15 @@ const ThemeStudioPage = () => {
           />
           <span>Glow accents</span>
         </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.nasheedAutoplay !== false}
+            onChange={(event) => handleToggleChange('nasheedAutoplay', event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Nasheed auto-play</span>
+        </label>
         <label className="switch-field launch-mode-switch">
           <input
             type="checkbox"
@@ -570,6 +625,15 @@ const ThemeStudioPage = () => {
             disabled={launchMode}
           />
           <span>Gold sparkle overlay</span>
+        </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.dripShimmer === true}
+            onChange={(event) => handleDripShimmer(event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Drip gold shimmer</span>
         </label>
         <label className="studio-field">
           <span>Sparkle intensity</span>
@@ -601,6 +665,15 @@ const ThemeStudioPage = () => {
           />
           <span>Floating petals</span>
         </label>
+        <label className="switch-field">
+          <input
+            type="checkbox"
+            checked={toggles.vignetteEnabled !== false}
+            onChange={(event) => handleVignetteToggle(event.target.checked)}
+            disabled={launchMode}
+          />
+          <span>Soft vignette</span>
+        </label>
         <label className="studio-field">
           <span>Vignette strength</span>
           <input
@@ -610,7 +683,7 @@ const ThemeStudioPage = () => {
             step="0.05"
             value={toggles.vignetteStrength ?? 0.35}
             onChange={(event) => handleVignetteStrength(event.target.value)}
-            disabled={launchMode}
+            disabled={launchMode || toggles.vignetteEnabled === false}
           />
         </label>
         <label className="switch-field">
@@ -623,13 +696,13 @@ const ThemeStudioPage = () => {
           <span>Paper texture</span>
         </label>
         <label className="studio-field">
-          <span>Gold foil intensity</span>
+          <span>Foil sheen overlay</span>
           <input
             type="range"
             min="0"
             max="1"
             step="0.05"
-            value={toggles.goldFoilIntensity ?? 0.6}
+            value={toggles.foilSheenIntensity ?? toggles.goldFoilIntensity ?? 0.6}
             onChange={(event) => handleFoilIntensity(event.target.value)}
             disabled={launchMode}
           />
@@ -669,7 +742,7 @@ const ThemeStudioPage = () => {
           {launchMode && <p className="launch-mode-alert">Launch Mode is enabled. Disable it to continue editing.</p>}
         </div>
         <div className="theme-studio__actions">
-          <Link className="studio-link" to="/invite" target="_blank" rel="noopener noreferrer">
+          <Link className="studio-link" to="/invite">
             Back to Invitation
           </Link>
           <Button variant="ghost" size="md" onClick={handleReset} disabled={loading || isPublishing}>
@@ -679,7 +752,7 @@ const ThemeStudioPage = () => {
             Save Draft
           </Button>
           <Button variant="ghost" size="md" onClick={handleSaveAndPreview} disabled={loading || isPublishing}>
-            Save &amp; Preview Invitation
+            Save &amp; Preview
           </Button>
           <Button variant="primary" size="md" onClick={handlePublish} loading={isPublishing}>
             Publish Theme
@@ -690,6 +763,11 @@ const ThemeStudioPage = () => {
       {loading && <div className="theme-studio__loading">Loading theme…</div>}
       {error && <div className="theme-studio__alert">{error}</div>}
       {status && <div className="theme-studio__status">{status}</div>}
+      {toast && (
+        <div className="theme-studio__toast" role="status" aria-live="polite">
+          {toast}
+        </div>
+      )}
 
       <div className="theme-studio__tabs">
         {tabs.map((tab) => (
@@ -715,9 +793,19 @@ const ThemeStudioPage = () => {
                 key={preset.id}
                 type="button"
                 className={`preset-card${theme?.id === preset.id ? ' is-active' : ''}`}
+                style={{
+                  '--preset-primary': preset.palette?.background ?? '#fefaf5',
+                  '--preset-secondary': preset.palette?.accentSoft ?? '#f2e3cf',
+                  '--preset-accent': preset.palette?.accent ?? '#d2b16a',
+                }}
                 onClick={() => handlePreset(preset.id, preset.label)}
                 disabled={loading || isPublishing || launchMode}
+                title={`Apply ${preset.label}`}
               >
+                <span className="preset-card__preview" aria-hidden="true">
+                  <span className="preset-card__preview-foil" />
+                  <span className="preset-card__preview-detail" />
+                </span>
                 <span className="preset-card__label">{preset.label}</span>
                 <span className="preset-card__description">{preset.description}</span>
               </button>
@@ -727,7 +815,28 @@ const ThemeStudioPage = () => {
 
         <section className="studio-panel preview-panel">
           <h2>Live preview</h2>
-          <div className="preview-frame">
+          <div className="preview-toolbar">
+            <span>Preview</span>
+            <div className="preview-toggle">
+              <button
+                type="button"
+                className={`preview-toggle__button${previewDevice === 'desktop' ? ' is-active' : ''}`}
+                onClick={() => handlePreviewDevice('desktop')}
+                aria-pressed={previewDevice === 'desktop'}
+              >
+                Desktop
+              </button>
+              <button
+                type="button"
+                className={`preview-toggle__button${previewDevice === 'mobile' ? ' is-active' : ''}`}
+                onClick={() => handlePreviewDevice('mobile')}
+                aria-pressed={previewDevice === 'mobile'}
+              >
+                Mobile
+              </button>
+            </div>
+          </div>
+          <div className="preview-frame" data-device={previewDevice}>
             <div className="preview-card-shell" data-shape={toggles.cardEdgeStyle ?? 'rounded'}>
               <div className="preview-bismillah">
                 <span className="preview-bismillah-arabic">

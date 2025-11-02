@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import { useCallback, useMemo, useState } from 'react';
+import { Link, NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import TextInput from '../../components/common/TextInput.jsx';
 import Button from '../../components/common/Button.jsx';
@@ -7,6 +7,8 @@ import localGuests from '../../data/local-guests.json';
 import { RSVP_STATUSES, STORAGE_KEYS } from '../../utils/constants.js';
 import GuestSpreadsheetImporter from '../../tools/GuestSpreadsheetImporter.jsx';
 import ThemeStudioPage from './ThemeStudioPage.jsx';
+import AdminGuestsPage from './AdminGuestsPage.jsx';
+import { useFirebase } from '../../providers/FirebaseProvider.jsx';
 import './AdminPage.css';
 
 const normaliseGuest = (guest) => {
@@ -32,8 +34,56 @@ const normaliseGuest = (guest) => {
     contact: guest.contact ?? '',
     rsvpStatus: guest.rsvpStatus ?? 'pending',
     notes: guest.notes ?? '',
+    additionalGuests: guest.additionalGuests ?? 0,
     lastUpdated: guest.lastUpdated ?? null,
   };
+};
+
+const formatGuestNames = (names = []) => names.map((value) => value?.trim()).filter(Boolean);
+
+const lettersOnly = (value = '') => value.replace(/[^a-z]/gi, '').toUpperCase();
+
+const computeNextHouseholdId = (entries = []) => {
+  const highest = entries.reduce((acc, guest) => {
+    const match = /H(\d+)/i.exec(guest.householdId ?? '');
+    if (!match) return acc;
+    const numeric = Number(match[1]);
+    return Number.isFinite(numeric) ? Math.max(acc, numeric) : acc;
+  }, 0);
+
+  return `H${String(highest + 1).padStart(3, '0')}`;
+};
+
+const computeInviteCode = (
+  entries = [],
+  primaryName = '',
+  partnerName = '',
+  preferredCode,
+  excludeCode
+) => {
+  const used = new Set(entries.map((guest) => guest.code?.toUpperCase()).filter(Boolean));
+  if (excludeCode) {
+    used.delete(excludeCode.toUpperCase());
+  }
+
+  if (preferredCode) {
+    const candidate = preferredCode.toUpperCase();
+    if (!used.has(candidate)) {
+      return candidate;
+    }
+  }
+
+  const baseLetters = lettersOnly(primaryName) || lettersOnly(partnerName) || 'RAZI';
+  const prefix = (baseLetters.length >= 4 ? baseLetters.slice(0, 4) : baseLetters.padEnd(4, 'A')).toUpperCase();
+  let counter = entries.length + 1;
+  let candidate = `${prefix}${String(counter).padStart(4, '0')}`;
+
+  while (used.has(candidate)) {
+    counter += 1;
+    candidate = `${prefix}${String(counter).padStart(4, '0')}`;
+  }
+
+  return candidate;
 };
 
 const DashboardOverview = ({ entries, stats, updateGuestStatus }) => (
@@ -64,7 +114,7 @@ const DashboardOverview = ({ entries, stats, updateGuestStatus }) => (
     <div className="guest-table">
       <div className="guest-table__header">
         <span>Guest</span>
-        <span>Partner</span>
+        <span>Companions</span>
         <span>Household</span>
         <span>Status</span>
         <span>Notes</span>
@@ -76,8 +126,20 @@ const DashboardOverview = ({ entries, stats, updateGuestStatus }) => (
             <strong>{guest.primaryGuest || '—'}</strong>
             <small>{guest.code}</small>
           </span>
-          <span>{guest.partnerName ?? '—'}</span>
-          <span>{guest.householdId ?? guest.householdCount ?? '—'}</span>
+          <span>
+            {guest.guestNames.slice(1).length > 0
+              ? guest.guestNames.slice(1).join(' & ')
+              : '—'}
+            {guest.additionalGuests > 0 && (
+              <small>
+                +{guest.additionalGuests} guest{guest.additionalGuests > 1 ? 's' : ''}
+              </small>
+            )}
+          </span>
+          <span>
+            <strong>{guest.householdId ?? '—'}</strong>
+            <small>{guest.householdCount ?? 1} invited</small>
+          </span>
           <span className={`status status--${guest.rsvpStatus}`}>{guest.rsvpStatus}</span>
           <span className="notes">{guest.notes || '—'}</span>
           <span className="actions">
@@ -109,6 +171,23 @@ const AdminPage = () => {
   });
 
   const [entries, setEntries] = useState(() => {
+    const storedAdmin = (() => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEYS.adminGuests);
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch (err) {
+        return null;
+      }
+    })();
+
+    if (storedAdmin && storedAdmin.length > 0) {
+      return storedAdmin.map((guest) => normaliseGuest(guest)).sort((a, b) =>
+        a.primaryGuest.localeCompare(b.primaryGuest)
+      );
+    }
+
     const storedGuest = (() => {
       try {
         const stored = localStorage.getItem(STORAGE_KEYS.guest);
@@ -124,8 +203,27 @@ const AdminPage = () => {
       ? [...localGuests, storedGuest]
       : localGuests;
 
-    return combined.map((guest) => normaliseGuest(guest));
+    return combined
+      .map((guest) => normaliseGuest(guest))
+      .sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest));
   });
+
+  const updateEntries = useCallback((mutator) => {
+    setEntries((prev) => {
+      const next = mutator(prev);
+      try {
+        localStorage.setItem(STORAGE_KEYS.adminGuests, JSON.stringify(next));
+      } catch (err) {
+        /* storage unavailable; skip persistence */
+      }
+      return next;
+    });
+  }, []);
+
+  const firebase = useFirebase();
+  const remoteAddGuest = firebase?.addGuest;
+  const remoteDeleteGuest = firebase?.deleteGuest;
+  const remoteSaveRSVP = firebase?.saveRSVP;
 
   const stats = useMemo(() => {
     const total = entries.length;
@@ -159,14 +257,140 @@ const AdminPage = () => {
   };
 
   const updateGuestStatus = (code, status) => {
-    setEntries((prev) =>
+    const timestamp = new Date().toISOString();
+    updateEntries((prev) =>
       prev.map((guest) =>
-        guest.code === code
-          ? { ...guest, rsvpStatus: status, lastUpdated: new Date().toISOString() }
-          : guest
+        guest.code === code ? { ...guest, rsvpStatus: status, lastUpdated: timestamp } : guest
       )
     );
+    if (remoteSaveRSVP) {
+      remoteSaveRSVP(code, { rsvpStatus: status, lastUpdated: timestamp }).catch(() => {});
+    }
   };
+
+  const handleAddGuest = useCallback(
+    (payload) => {
+      const names = formatGuestNames(payload.guestNames);
+      const primary = names[0] ?? '';
+      const partner = names[1] ?? '';
+      const code = computeInviteCode(entries, primary, partner, payload.code);
+      const householdId = payload.householdId?.trim()
+        ? payload.householdId.trim().toUpperCase()
+        : computeNextHouseholdId(entries);
+      const timestamp = new Date().toISOString();
+      const guest = normaliseGuest({
+        ...payload,
+        code,
+        guestNames: names,
+        householdId,
+        householdCount: Math.max(Number(payload.householdCount) || names.length, names.length),
+        contact: payload.contact ?? '',
+        notes: payload.notes ?? '',
+        lastUpdated: timestamp,
+      });
+
+      updateEntries((prev) => [...prev, guest].sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest)));
+
+      if (remoteAddGuest) {
+        remoteAddGuest(code, {
+          ...guest,
+          lastUpdated: timestamp,
+        }).catch(() => {});
+      }
+    },
+    [entries, remoteAddGuest, updateEntries]
+  );
+
+  const handleUpdateGuest = useCallback(
+    (existingCode, payload) => {
+      const current = entries.find((guest) => guest.code === existingCode);
+      if (!current) return;
+
+      const names = formatGuestNames(payload.guestNames ?? current.guestNames);
+      const primary = names[0] ?? '';
+      const partner = names[1] ?? '';
+      const code = computeInviteCode(entries, primary, partner, payload.code ?? existingCode, existingCode);
+      const householdId = payload.householdId?.trim()
+        ? payload.householdId.trim().toUpperCase()
+        : current.householdId ?? computeNextHouseholdId(entries);
+      const timestamp = new Date().toISOString();
+      const guest = normaliseGuest({
+        ...current,
+        ...payload,
+        code,
+        guestNames: names,
+        householdId,
+        householdCount: Math.max(Number(payload.householdCount) || names.length, names.length),
+        contact: payload.contact ?? current.contact ?? '',
+        notes: payload.notes ?? current.notes ?? '',
+        lastUpdated: timestamp,
+      });
+
+      updateEntries((prev) =>
+        [...prev.filter((entry) => entry.code !== existingCode), guest].sort((a, b) =>
+          a.primaryGuest.localeCompare(b.primaryGuest)
+        )
+      );
+
+      if (remoteAddGuest) {
+        remoteAddGuest(code, {
+          ...guest,
+          lastUpdated: timestamp,
+        }).catch(() => {});
+      }
+
+      if (remoteDeleteGuest && code !== existingCode) {
+        remoteDeleteGuest(existingCode).catch(() => {});
+      }
+    },
+    [entries, remoteAddGuest, remoteDeleteGuest, updateEntries]
+  );
+
+  const handleDeleteGuest = useCallback(
+    (code) => {
+      updateEntries((prev) => prev.filter((guest) => guest.code !== code));
+      if (remoteDeleteGuest) {
+        remoteDeleteGuest(code).catch(() => {});
+      }
+    },
+    [remoteDeleteGuest, updateEntries]
+  );
+
+  const handleExportCsv = useCallback(() => {
+    if (typeof document === 'undefined') return;
+    const headers = ['code', 'guestNames', 'householdId', 'householdCount', 'contact', 'status', 'notes'];
+    const rows = entries.map((guest) => [
+      guest.code,
+      guest.guestNames.join(' & '),
+      guest.householdId ?? '',
+      guest.householdCount ?? '',
+      guest.contact ?? '',
+      guest.rsvpStatus,
+      guest.notes ?? '',
+    ]);
+    const encode = (value) =>
+      `"${String(value ?? '')
+        .replace(/"/g, '""')
+        .replace(/\r?\n|\r/g, ' ')}"`;
+    const csv = [headers.join(','), ...rows.map((row) => row.map(encode).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `guest-list-${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }, [entries]);
+
+  const generateInviteCode = useCallback(
+    (primary, partner, preferred, exclude) =>
+      computeInviteCode(entries, primary, partner, preferred, exclude),
+    [entries]
+  );
+
+  const getNextHouseholdId = useCallback(() => computeNextHouseholdId(entries), [entries]);
 
   if (!isAuthenticated) {
     return (
@@ -204,6 +428,12 @@ const AdminPage = () => {
             Overview
           </NavLink>
           <NavLink
+            to="/admin/guests"
+            className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}
+          >
+            Guests
+          </NavLink>
+          <NavLink
             to="/admin/import"
             className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}
           >
@@ -219,10 +449,30 @@ const AdminPage = () => {
       </aside>
 
       <section className="admin-content">
+        <div className="admin-content__header">
+          <Link to="/invite" className="admin-content__back">
+            ⬅ Back to Invitation
+          </Link>
+        </div>
         <Routes>
           <Route
             index
             element={<DashboardOverview entries={entries} stats={stats} updateGuestStatus={updateGuestStatus} />}
+          />
+          <Route
+            path="guests"
+            element={
+              <AdminGuestsPage
+                entries={entries}
+                onAddGuest={handleAddGuest}
+                onUpdateGuest={handleUpdateGuest}
+                onDeleteGuest={handleDeleteGuest}
+                onStatusChange={updateGuestStatus}
+                onExportCsv={handleExportCsv}
+                generateInviteCode={generateInviteCode}
+                getNextHouseholdId={getNextHouseholdId}
+              />
+            }
           />
           <Route path="import" element={<GuestSpreadsheetImporter existingGuests={entries} />} />
           <Route path="studio" element={<ThemeStudioPage />} />

@@ -38,6 +38,11 @@
   font-size: 0.85rem;
 }
 
+.ui-button--sm {
+  padding: 10px 20px;
+  font-size: 0.74rem;
+}
+
 .ui-button--lg {
   padding: 18px 42px;
   font-size: 0.92rem;

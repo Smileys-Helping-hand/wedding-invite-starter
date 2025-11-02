@@ -5,6 +5,7 @@ import { useHijriDate } from '../../hooks/useHijriDate.js';
 import CountdownDisplay from './CountdownDisplay.jsx';
 import Button from '../common/Button.jsx';
 import { useTheme } from '../../providers/ThemeProvider.jsx';
+import { getAssetPath } from '../../utils/assetPaths.js';
 import './InviteDetails.css';
 
 const statusCopy = {
@@ -17,6 +18,7 @@ const InviteDetails = ({ onRSVP, loading }) => {
   const { guest } = useGuest();
   const { gregorian, hijri } = useHijriDate(EVENT_DATE_GREGORIAN);
   const { theme } = useTheme();
+  const cardBackground = theme?.assets?.cardBackground ?? getAssetPath('cardBackground');
 
   if (!guest) return null;
 
@@ -27,30 +29,44 @@ const InviteDetails = ({ onRSVP, loading }) => {
   const greeting = theme?.text?.greeting ?? 'Assalamu Alaikum';
   const greetingSuffix = theme?.text?.greetingSuffix ?? ' wa Rahmatullah';
   const salaam = guest.partnerName ? `${greeting}${greetingSuffix}` : greeting;
-  const bismillahArabic = theme?.text?.bismillahArabic ?? 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ';
+  const bismillahArabic =
+    theme?.text?.bismillahArabic ?? 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ';
   const bismillahTranslation =
     theme?.text?.bismillahTranslation ??
     'In the name of Allah, The Most Merciful, The Most Compassionate';
   const englishIntro =
-    theme?.text?.englishIntro ?? 'In the name of Allah, The Most Merciful, The Most Compassionate';
-  const englishInviteLine = theme?.text?.englishInviteLine ?? 'You are warmly invited to the';
+    theme?.text?.englishIntro ?? 'In the name of Allah, the Most Merciful, the Most Compassionate';
+  const englishInviteLine =
+    theme?.text?.englishInviteLine ?? 'You are warmly invited to the';
   const englishEventTitle = theme?.text?.englishEventTitle ?? 'Engagement Soirée of';
   const brideFormal = theme?.text?.brideFullName ?? 'Razia bint Sabri';
   const groomFormal = theme?.text?.groomFullName ?? 'Abduraziq ibn Abdusataar';
   const englishBlessing =
     theme?.text?.englishBlessing ?? 'May Allah fill this union with love and barakah.';
   const arabicIntro = theme?.text?.arabicIntro ?? 'حضوركم يشرفنا في';
-  const arabicBrideLine = theme?.text?.arabicBrideLine ?? 'أمسية خطوبة رزيـا بنت صبري';
+  const arabicBrideLine =
+    theme?.text?.arabicBrideLine ?? 'أمسية خطوبة رزيـا بنت صبري';
   const arabicConnector = theme?.text?.arabicConnector ?? 'و';
-  const arabicGroomLine = theme?.text?.arabicGroomLine ?? 'عبدالرزاق بن عبدالستار';
+  const arabicGroomLine =
+    theme?.text?.arabicGroomLine ?? 'عبدالرزاق بن عبدالستار';
+  const showArabic = theme?.toggles?.showArabicText !== false;
+  const scheduleGregorian = theme?.text?.scheduleGregorian ?? gregorian ?? 'Tuesday, 16 December 2025';
+  const scheduleHijri =
+    theme?.text?.scheduleHijri ?? hijri ?? 'Tuesday, Jumada II 26, 1447 AH';
 
   return (
     <section className="invite-details">
       <motion.div
         className="invite-card-panel"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{
+          duration: 1.1,
+          ease: [0.16, 1, 0.3, 1],
+          scale: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+        }}
+        data-show-arabic={showArabic ? 'true' : 'false'}
+        style={{ '--card-bg-image': `url(${cardBackground})` }}
       >
         <motion.div
           className="bismillah-text"
@@ -76,24 +92,39 @@ const InviteDetails = ({ onRSVP, loading }) => {
           </p>
           <p className="invite-english__blessing">{englishBlessing}</p>
         </div>
-        <div className="invite-arabic" lang="ar" dir="rtl">
-          <p>{arabicIntro}</p>
-          <p>{arabicBrideLine}</p>
-          <p className="invite-arabic__ampersand">{arabicConnector}</p>
-          <p>{arabicGroomLine}</p>
-        </div>
-        <div className="date-block">
-          <span className="date-label">Gregorian</span>
-          <span className="date-text">{gregorian}</span>
-        </div>
-        <div className="date-block">
-          <span className="date-label">Hijri</span>
-          <span className="date-text">{hijri}</span>
-        </div>
-        <div className="venue">
-          <span className="venue-name">{EVENT_VENUE.name}</span>
-          <span>{EVENT_VENUE.addressLine1}</span>
-          <span>{EVENT_VENUE.addressLine2}</span>
+        {showArabic && (
+          <div className="invite-arabic" lang="ar" dir="rtl">
+            <p>{arabicIntro}</p>
+            <p>{arabicBrideLine}</p>
+            <p className="invite-arabic__ampersand">{arabicConnector}</p>
+            <p>{arabicGroomLine}</p>
+          </div>
+        )}
+        <div className="invite-schedule">
+          <div className="invite-schedule__section">
+            <span className="invite-schedule__label">𝗚𝗥𝗘𝗚𝗢𝗥𝗜𝗔𝗡</span>
+            <span className="invite-schedule__value">{scheduleGregorian}</span>
+          </div>
+          <div className="invite-schedule__section">
+            <span className="invite-schedule__label">𝗛𝗜𝗝𝗥𝗜</span>
+            <span className="invite-schedule__value">{scheduleHijri}</span>
+          </div>
+          <span className="invite-schedule__flourish" aria-hidden="true" />
+          <div className="invite-schedule__section invite-schedule__section--venue">
+            <span className="invite-schedule__label">𝗩𝗘𝗡𝗨𝗘</span>
+            <span className="invite-schedule__venue">{EVENT_VENUE.name}</span>
+            <span className="invite-schedule__address">{EVENT_VENUE.addressLine1}</span>
+            <span className="invite-schedule__address">{EVENT_VENUE.addressLine2}</span>
+          </div>
+          <div className="invite-schedule__section invite-schedule__section--time">
+            <span className="invite-schedule__label">𝗧𝗜𝗠𝗘</span>
+            <span className="invite-schedule__value invite-schedule__value--italic">
+              {EVENT_VENUE.gatheringTime}
+            </span>
+            <span className="invite-schedule__value invite-schedule__value--italic">
+              {EVENT_VENUE.programTime}
+            </span>
+          </div>
         </div>
         <p className="invite-copy">{copy}</p>
         <CountdownDisplay />
@@ -112,7 +143,7 @@ const InviteDetails = ({ onRSVP, loading }) => {
             onClick={() => onRSVP(RSVP_STATUSES.declined)}
             loading={loading}
           >
-            Send Regrets
+            Decline with Warm Wishes
           </Button>
         </div>
       </motion.div>

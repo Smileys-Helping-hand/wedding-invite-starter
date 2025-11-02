@@ -27,6 +27,7 @@ export const AudioProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.4);
   const [audioSource, setAudioSource] = useState(() => getAssetPath('nasheed'));
+  const autoplayEnabled = theme?.toggles?.nasheedAutoplay !== false;
 
   useEffect(() => {
     const nextSource = theme?.assets?.nasheed ?? getAssetPath('nasheed');
@@ -60,7 +61,7 @@ export const AudioProvider = ({ children }) => {
   }, []);
 
   const fadeVolume = useCallback(
-    (targetVolume, { duration = 900, pauseAfter = false, onComplete } = {}) => {
+    (targetVolume, { duration = 1400, pauseAfter = false, onComplete } = {}) => {
       const audio = audioRef.current;
       if (!audio) return;
 
@@ -102,7 +103,7 @@ export const AudioProvider = ({ children }) => {
     [clearFade]
   );
 
-  const playWithFade = useCallback(async () => {
+  const playWithFade = useCallback(async (fadeDuration = 1200) => {
     const audio = audioRef.current;
     if (!audio) return false;
 
@@ -111,7 +112,7 @@ export const AudioProvider = ({ children }) => {
       await audio.play();
       hasAutoplayedRef.current = true;
       setIsPlaying(true);
-      fadeVolume(volumeRef.current, { duration: 1200 });
+      fadeVolume(volumeRef.current, { duration: fadeDuration });
       return true;
     } catch (err) {
       setIsPlaying(false);
@@ -128,9 +129,12 @@ export const AudioProvider = ({ children }) => {
 
     const handleReady = () => {
       setIsReady(true);
-      if (pendingStartRef.current && !hasAutoplayedRef.current) {
-        pendingStartRef.current = false;
-        playWithFade();
+      if (pendingStartRef.current) {
+        const shouldForce = pendingStartRef.current === 'force';
+        if (!hasAutoplayedRef.current || shouldForce) {
+          pendingStartRef.current = false;
+          playWithFade(1200);
+        }
       }
     };
     audio.addEventListener('canplaythrough', handleReady, { once: true });
@@ -176,42 +180,57 @@ export const AudioProvider = ({ children }) => {
     resumeOnSourceChangeRef.current = isPlaying;
   }, [isPlaying]);
 
-  const startAudio = useCallback(async () => {
-    const audio = audioRef.current;
-    if (!audio || hasAutoplayedRef.current || isPlaying) {
-      return;
-    }
+  const startAudio = useCallback(
+    async ({ force = false } = {}) => {
+      const audio = audioRef.current;
+      if (!audio) return;
 
-    if (!isReady) {
-      pendingStartRef.current = true;
-      try {
-        audio.load();
-      } catch (err) {
-        /* ignore load failures */
+      if (isPlaying) return;
+
+      if (!force && !autoplayEnabled && hasAutoplayedRef.current) {
+        return;
       }
-      return;
-    }
 
-    pendingStartRef.current = false;
-    await playWithFade();
-  }, [isReady, isPlaying, playWithFade]);
+      if (!isReady) {
+        pendingStartRef.current = force ? 'force' : 'auto';
+        try {
+          audio.load();
+        } catch (err) {
+          /* ignore load failures */
+        }
+        return;
+      }
+
+      pendingStartRef.current = false;
+      await playWithFade(1200);
+    },
+    [autoplayEnabled, isReady, isPlaying, playWithFade]
+  );
 
   const toggleAudio = async () => {
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    if (audioRef.current.paused) {
+    if (isPlaying && !audio.paused) {
+      hasAutoplayedRef.current = true;
+      fadeVolume(0, {
+        duration: 1100,
+        pauseAfter: true,
+        onComplete: () => {
+          setIsPlaying(false);
+        },
+      });
       return;
     }
 
-    hasAutoplayedRef.current = true;
-    fadeVolume(0, {
-      duration: 800,
-      pauseAfter: true,
-      onComplete: () => {
-        setIsPlaying(false);
-      },
-    });
+    await startAudio({ force: true });
   };
+
+  useEffect(() => {
+    if (!autoplayEnabled && isPlaying) {
+      toggleAudio();
+    }
+  }, [autoplayEnabled, isPlaying, toggleAudio]);
 
   const value = useMemo(
     () => ({

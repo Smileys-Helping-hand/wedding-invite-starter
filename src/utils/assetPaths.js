@@ -1,6 +1,7 @@
 export const defaultAssets = {
   envelope: '/assets/envelope.png',
   inviteCard: '/assets/invitecard.png',
+  cardBackground: '/assets/card-bg.png',
   sparklesVideo: '/assets/sparkles.mp4',
   nasheed: '/assets/nasheed.mp3',
 };

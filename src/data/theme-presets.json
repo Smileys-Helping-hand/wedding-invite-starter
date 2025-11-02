@@ -170,6 +170,222 @@
     }
   },
   {
+    "id": "ivory-gold-classic",
+    "label": "Ivory Gold (Classic)",
+    "description": "Timeless ivory marble with champagne gold foil and soft sparkles.",
+    "palette": {
+      "background": "#fbf9f3",
+      "accent": "#d3b36b",
+      "accentSoft": "#f4e6cd",
+      "text": "#2f261f",
+      "textMuted": "rgba(47, 38, 31, 0.72)",
+      "glass": "rgba(255, 252, 244, 0.78)",
+      "border": "rgba(211, 179, 107, 0.34)"
+    },
+    "fonts": {
+      "heading": "'Playfair Display', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.52,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.32,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.62,
+      "foilSheenIntensity": 0.62,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "rounded",
+      "showArabicText": true
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "blush-silk-gold",
+    "label": "Blush Silk + Gold",
+    "description": "Blush silk gradients with warm gold foil and romantic glow.",
+    "palette": {
+      "background": "#fdf7f9",
+      "accent": "#d89aa8",
+      "accentSoft": "#f6d8df",
+      "text": "#2e1c24",
+      "textMuted": "rgba(46, 28, 36, 0.7)",
+      "glass": "rgba(255, 244, 248, 0.85)",
+      "border": "rgba(216, 154, 168, 0.3)"
+    },
+    "fonts": {
+      "heading": "'Parisienne', cursive",
+      "body": "'Lato', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.7,
+      "lightBokeh": true,
+      "petals": true,
+      "vignetteStrength": 0.4,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.66,
+      "foilSheenIntensity": 0.66,
+      "waxSealShape": "oval",
+      "cardEdgeStyle": "deckled",
+      "showArabicText": true
+    },
+    "assets": {
+      "waxSealVariant": "rosegold"
+    }
+  },
+  {
+    "id": "emerald-malachite-gold",
+    "label": "Emerald Malachite + Gold",
+    "description": "Striking malachite textures with glowing gold foil and evening bokeh.",
+    "palette": {
+      "background": "#f3f6f2",
+      "accent": "#0f8a70",
+      "accentSoft": "#b1e5d4",
+      "text": "#1d201d",
+      "textMuted": "rgba(29, 32, 29, 0.68)",
+      "glass": "rgba(246, 252, 248, 0.78)",
+      "border": "rgba(15, 138, 112, 0.32)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Source Sans 3', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "grand",
+      "sparkleAmount": 0.56,
+      "lightBokeh": true,
+      "petals": false,
+      "vignetteStrength": 0.46,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.72,
+      "foilSheenIntensity": 0.72,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "soft-bevel",
+      "showArabicText": true
+    },
+    "assets": {
+      "waxSealVariant": "emerald"
+    }
+  },
+  {
+    "id": "pearl-lavender-rose-gold",
+    "label": "Pearl Lavender + Rose Gold",
+    "description": "Lavender pearl hues with rose gold foil and airy shimmer.",
+    "palette": {
+      "background": "#f6f3fb",
+      "accent": "#c79bbd",
+      "accentSoft": "#eadbf0",
+      "text": "#2d2230",
+      "textMuted": "rgba(45, 34, 48, 0.68)",
+      "glass": "rgba(251, 247, 255, 0.78)",
+      "border": "rgba(199, 155, 189, 0.32)"
+    },
+    "fonts": {
+      "heading": "'Didot', 'Playfair Display', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.58,
+      "lightBokeh": true,
+      "petals": false,
+      "vignetteStrength": 0.38,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.64,
+      "foilSheenIntensity": 0.64,
+      "waxSealShape": "floral",
+      "cardEdgeStyle": "rounded",
+      "showArabicText": true
+    },
+    "assets": {
+      "waxSealVariant": "flower"
+    }
+  },
+  {
+    "id": "black-onyx-champagne",
+    "label": "Black Onyx + Champagne Gold",
+    "description": "Evening gala black onyx with glowing champagne foils.",
+    "palette": {
+      "background": "#f4f1ed",
+      "accent": "#d5b98b",
+      "accentSoft": "#f0dfc3",
+      "text": "#1b1916",
+      "textMuted": "rgba(27, 25, 22, 0.72)",
+      "glass": "rgba(255, 252, 246, 0.82)",
+      "border": "rgba(213, 185, 139, 0.4)"
+    },
+    "fonts": {
+      "heading": "'Cormorant Garamond', serif",
+      "body": "'Source Sans 3', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "grand",
+      "sparkleAmount": 0.48,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.52,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.74,
+      "foilSheenIntensity": 0.74,
+      "waxSealShape": "oval",
+      "cardEdgeStyle": "bevel",
+      "showArabicText": true
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "desert-sand-warm-gold",
+    "label": "Desert Sand + Warm Gold",
+    "description": "Desert sands with warm golden hour glow and gentle vignette.",
+    "palette": {
+      "background": "#f9f3ea",
+      "accent": "#c99a5e",
+      "accentSoft": "#f3ddba",
+      "text": "#2f241a",
+      "textMuted": "rgba(47, 36, 26, 0.7)",
+      "glass": "rgba(255, 249, 239, 0.8)",
+      "border": "rgba(201, 154, 94, 0.35)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.5,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.44,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.68,
+      "foilSheenIntensity": 0.68,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "soft-bevel",
+      "showArabicText": true
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
     "id": "midnight-garden",
     "label": "Midnight Garden",
     "description": "Midnight noir with rose gold foiling for a black-tie garden reception.",
@@ -299,6 +515,176 @@
       "paperTexture": true,
       "goldFoilIntensity": 0.58,
       "waxSealShape": "round",
+      "cardEdgeStyle": "soft-bevel"
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "ivory-gold-classic",
+    "label": "Ivory Gold",
+    "description": "Classic ivory marble with champagne gold foiling and soft vignette.",
+    "palette": {
+      "background": "#f9f6f2",
+      "accent": "#d4b276",
+      "accentSoft": "#efe2cc",
+      "text": "#2d2420",
+      "textMuted": "rgba(45, 36, 32, 0.68)",
+      "glass": "rgba(255, 255, 255, 0.74)",
+      "border": "rgba(206, 174, 122, 0.38)"
+    },
+    "fonts": {
+      "heading": "'Playfair Display', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.52,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.3,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.66,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "rounded"
+    },
+    "assets": {
+      "waxSealVariant": "gold"
+    }
+  },
+  {
+    "id": "blush-silk-gold",
+    "label": "Blush Silk + Gold",
+    "description": "Blush silk gradients with molten gold foil and romantic sparkles.",
+    "palette": {
+      "background": "#f8f1ee",
+      "accent": "#d6a98c",
+      "accentSoft": "#f4d6c6",
+      "text": "#2f2721",
+      "textMuted": "rgba(47, 39, 33, 0.7)",
+      "glass": "rgba(255, 247, 243, 0.78)",
+      "border": "rgba(214, 169, 140, 0.4)"
+    },
+    "fonts": {
+      "heading": "'Didot', 'Playfair Display', serif",
+      "body": "'Lato', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "gentle",
+      "sparkleAmount": 0.6,
+      "lightBokeh": true,
+      "petals": true,
+      "vignetteStrength": 0.28,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.58,
+      "waxSealShape": "oval",
+      "cardEdgeStyle": "soft-bevel"
+    },
+    "assets": {
+      "waxSealVariant": "rosegold"
+    }
+  },
+  {
+    "id": "emerald-malachite",
+    "label": "Emerald Malachite + Gold",
+    "description": "Deep emerald malachite veining with radiant gold foil and evening glow.",
+    "palette": {
+      "background": "#123b36",
+      "accent": "#c8b17a",
+      "accentSoft": "#2b594f",
+      "text": "#f5f0e8",
+      "textMuted": "rgba(245, 240, 232, 0.78)",
+      "glass": "rgba(12, 47, 42, 0.72)",
+      "border": "rgba(200, 177, 122, 0.48)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Source Sans 3', sans-serif"
+    },
+    "toggles": {
+      "sparkles": false,
+      "glow": true,
+      "animationIntensity": "grand",
+      "sparkleAmount": 0.35,
+      "lightBokeh": true,
+      "petals": false,
+      "vignetteStrength": 0.46,
+      "paperTexture": false,
+      "goldFoilIntensity": 0.72,
+      "waxSealShape": "round",
+      "cardEdgeStyle": "bevel"
+    },
+    "assets": {
+      "waxSealVariant": "emerald"
+    }
+  },
+  {
+    "id": "pearl-lavender-rose",
+    "label": "Pearl Lavender + Rose Gold",
+    "description": "Pearlescent lavender with rose-gold shimmer and airy sparkle.",
+    "palette": {
+      "background": "#f5f2f8",
+      "accent": "#d9a6b4",
+      "accentSoft": "#f3ddec",
+      "text": "#2f2531",
+      "textMuted": "rgba(47, 37, 49, 0.68)",
+      "glass": "rgba(255, 255, 255, 0.78)",
+      "border": "rgba(217, 166, 180, 0.4)"
+    },
+    "fonts": {
+      "heading": "'Cormorant Garamond', serif",
+      "body": "'Nunito', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.68,
+      "lightBokeh": true,
+      "petals": true,
+      "vignetteStrength": 0.34,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.55,
+      "waxSealShape": "floral",
+      "cardEdgeStyle": "deckled"
+    },
+    "assets": {
+      "waxSealVariant": "flower"
+    }
+  },
+  {
+    "id": "desert-sand-gold",
+    "label": "Desert Sand + Warm Gold",
+    "description": "Desert sunset neutrals with warm gold foil and soft vignette glow.",
+    "palette": {
+      "background": "#f3ede4",
+      "accent": "#c89b5d",
+      "accentSoft": "#ead6b9",
+      "text": "#2d2218",
+      "textMuted": "rgba(45, 34, 24, 0.7)",
+      "glass": "rgba(255, 249, 240, 0.78)",
+      "border": "rgba(200, 155, 93, 0.42)"
+    },
+    "fonts": {
+      "heading": "'Cinzel', serif",
+      "body": "'Inter', sans-serif"
+    },
+    "toggles": {
+      "sparkles": true,
+      "glow": true,
+      "animationIntensity": "medium",
+      "sparkleAmount": 0.48,
+      "lightBokeh": false,
+      "petals": false,
+      "vignetteStrength": 0.36,
+      "paperTexture": true,
+      "goldFoilIntensity": 0.6,
+      "waxSealShape": "oval",
       "cardEdgeStyle": "soft-bevel"
     },
     "assets": {
