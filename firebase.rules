@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /config/{document=**} {
+      allow read: if true;
+      allow write: if request.time < timestamp.date(2030, 1, 1)
+                   && request.auth == null
+                   && request.query == null
+                   && request.resource.data.keys().hasOnly(['theme']);
+    }
+
+    match /guests/{docId} {
+      allow read: if true;
+      allow write: if false; // Admin writes happen via admin UI only
+    }
+  }
+}
