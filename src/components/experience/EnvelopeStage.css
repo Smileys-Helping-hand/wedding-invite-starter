@@ -2,8 +2,8 @@
   position: relative;
   width: min(760px, 90vw);
   min-height: clamp(340px, 48vw, 500px);
-  margin: clamp(0px, 1.2vw, 12px) auto 0;
-  padding: clamp(18px, 2.8vw, 28px) clamp(16px, 3vw, 26px) clamp(42px, 5.4vw, 68px);
+  margin: clamp(-16px, -2.6vw, 8px) auto 0;
+  padding: clamp(16px, 2.4vw, 26px) clamp(16px, 2.8vw, 24px) clamp(36px, 4.8vw, 52px);
   display: grid;
   place-items: center;
   border-radius: clamp(34px, 6vw, 44px);
@@ -83,7 +83,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: clamp(16px, 2.4vw, 28px);
+  padding-bottom: clamp(12px, 2vw, 22px);
 }
 
 .envelope-shell {
@@ -93,10 +93,11 @@
   filter: drop-shadow(0 32px 56px rgba(31, 26, 20, 0.18));
   transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
   will-change: transform, opacity;
+  overflow: visible;
 }
 
 .envelope-shell.is-open {
-  transform: translateY(34px) scale(0.94);
+  transform: translateY(28px) scale(0.94);
   opacity: 0.32;
 }
 
@@ -131,15 +132,17 @@
 
 .wax-button {
   position: absolute;
+  top: 50%;
   left: 50%;
-  top: calc(56% + clamp(18px, 4vw, 34px));
   z-index: 3;
   border: none;
   background: transparent;
   cursor: pointer;
   padding: 0;
   transition: filter 0.3s ease;
-  transform: translate(-50%, -52%);
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
 }
 
 .wax-button[data-melting='true'] {
@@ -175,7 +178,7 @@
 
 .waxseal {
   position: relative;
-  width: clamp(72px, 9.4vw, 104px);
+  width: clamp(68px, 9vw, 98px);
   filter: drop-shadow(0 22px 38px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 52%, rgba(0, 0, 0, 0)));
   transition: transform 0.35s ease, filter 0.35s ease;
 }
@@ -202,7 +205,7 @@
 
 .invite-card-wrapper {
   position: absolute;
-  bottom: clamp(-120px, -9.4vw, -82px);
+  bottom: clamp(-110px, -8vw, -76px);
   display: grid;
   place-items: center;
   width: 100%;
@@ -332,48 +335,40 @@
 
 @media (max-width: 720px) {
   .envelope-stage {
-    padding: 30px 16px 108px;
+    width: min(92vw, 560px);
+    padding: clamp(14px, 3vw, 24px) clamp(12px, 4vw, 22px) clamp(32px, 7vw, 48px);
     border-radius: 34px;
   }
 
   .envelope-stage__stack {
-    padding-bottom: 28px;
+    padding-bottom: clamp(14px, 4vw, 28px);
   }
 
   .envelope-shell {
-    width: min(500px, 90vw);
-  }
-
-  .wax-button {
-    top: calc(58% + clamp(10px, 6.4vw, 24px));
-    transform: translate(-50%, -54%);
+    width: min(520px, 92vw);
   }
 
   .waxseal {
-    width: clamp(92px, 30vw, 144px);
-  }
-
-  .invite-card-wrapper {
-    bottom: clamp(-160px, -26vw, -108px);
+    width: clamp(72px, 18vw, 108px);
   }
 
   .invite-card {
-    width: min(440px, 86vw);
+    width: min(440px, 88vw);
   }
 }
 
 @media (max-width: 520px) {
   .envelope-stage {
-    padding: 26px 12px 112px;
+    padding: clamp(12px, 5vw, 20px) clamp(10px, 6vw, 18px) clamp(30px, 9vw, 44px);
     border-radius: 30px;
   }
 
   .envelope-stage__stack {
-    padding-bottom: 26px;
+    padding-bottom: clamp(16px, 6vw, 28px);
   }
 
   .waxseal {
-    width: clamp(90px, 38vw, 138px);
+    width: clamp(68px, 28vw, 98px);
   }
 
   .invite-card {

@@ -1,16 +1,16 @@
 .invite-details {
-  margin-top: clamp(-28px, -3vw, -4px);
+  margin-top: clamp(-36px, -4vw, -12px);
 }
 
 .invite-card-panel {
   position: relative;
   overflow: hidden;
-  padding: clamp(16px, 2.6vw, 26px) clamp(18px, 3vw, 28px) clamp(18px, 3vw, 26px);
+  padding: clamp(14px, 2.3vw, 24px) clamp(18px, 3vw, 28px) clamp(16px, 2.8vw, 24px);
   border-radius: clamp(28px, 4.6vw, 36px);
   border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 46%, transparent);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 244, 225, 0.58)),
-    var(--card-bg-image, var(--theme-card-background, url('/assets/card-bg.png')));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 244, 225, 0.56)),
+    var(--card-bg-image, var(--theme-card-background, url('/assets/floral-panel.png')));
   background-size: cover;
   background-position: center top;
   background-blend-mode: soft-light;
@@ -20,7 +20,7 @@
   text-align: center;
   backdrop-filter: blur(14px);
   display: grid;
-  gap: clamp(2px, 1vw, 10px);
+  gap: clamp(0px, 0.8vw, 8px);
   justify-items: center;
   align-content: start;
   grid-auto-rows: minmax(min-content, max-content);
@@ -80,23 +80,23 @@
 }
 
 .invite-english__intro {
-  font-size: 0.84rem;
-  letter-spacing: 0.06em;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 72%, rgba(47, 39, 33, 0.55));
 }
 
 .invite-english__line {
-  font-size: 0.9rem;
-  letter-spacing: 0.06em;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
 
 .invite-english__event {
   font-family: var(--font-display);
-  font-size: clamp(1.14rem, 2.2vw, 1.58rem);
-  letter-spacing: 0.06em;
+  font-size: clamp(1.08rem, 2vw, 1.52rem);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 86%, rgba(47, 39, 33, 0.12));
   font-weight: 600;
@@ -120,6 +120,7 @@
   line-height: 1.2;
   font-weight: 600;
   letter-spacing: -0.2px;
+  margin-inline: 2px;
 }
 
 .invite-english__ampersand {
@@ -128,7 +129,7 @@
 }
 
 .invite-english__blessing {
-  margin-top: 2px;
+  margin-top: 0;
   font-size: 0.9rem;
   letter-spacing: -0.2px;
   color: var(--ink-soft);
@@ -138,10 +139,10 @@
   display: grid;
   gap: 2px;
   font-family: 'Scheherazade New', 'Amiri', 'Reem Kufi Fun', serif;
-  font-size: clamp(1.2rem, 2vw, 1.64rem);
+  font-size: clamp(1.18rem, 1.9vw, 1.6rem);
   color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 90%, rgba(47, 39, 33, 0.12));
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.58;
   padding-top: 0;
   letter-spacing: -0.2px;
 }
@@ -153,8 +154,8 @@
 
 .invite-schedule {
   position: relative;
-  margin-top: clamp(6px, 1vw, 10px);
-  padding: clamp(12px, 2vw, 18px) clamp(16px, 2.4vw, 22px);
+  margin-top: clamp(4px, 0.8vw, 8px);
+  padding: clamp(12px, 1.8vw, 18px) clamp(16px, 2vw, 22px);
   border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 46%, transparent);
   border-radius: clamp(20px, 3.2vw, 26px);
   display: grid;
@@ -184,13 +185,13 @@
 .invite-schedule__section {
   position: relative;
   display: grid;
-  gap: 6px;
+  gap: 4px;
   justify-items: center;
 }
 
 .invite-schedule__label {
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   font-variant: small-caps;
   color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 82%, rgba(47, 39, 33, 0.26));
@@ -210,9 +211,9 @@
 
 .invite-schedule__value {
   font-family: var(--font-display);
-  font-size: 1.06rem;
+  font-size: 1.04rem;
   color: color-mix(in srgb, var(--ink) 90%, var(--theme-color-accent, #d2b16a) 10%);
-  letter-spacing: -0.15px;
+  letter-spacing: -0.1px;
 }
 
 .invite-schedule__value--italic {
@@ -266,7 +267,7 @@
 }
 
 .invite-copy {
-  margin-top: 2px;
+  margin-top: 0;
   font-size: 0.92rem;
   line-height: 1.52;
   letter-spacing: -0.2px;
@@ -274,7 +275,7 @@
 }
 
 .rsvp-actions {
-  margin: clamp(6px, 1vw, 12px) auto 0;
+  margin: clamp(4px, 0.8vw, 10px) auto 0;
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
