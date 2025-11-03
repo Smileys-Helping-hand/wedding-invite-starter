@@ -1,0 +1,65 @@
+./
+├── README.md
+├── index.html
+├── package-lock.json
+├── package.json
+├── public/
+│   └── assets/
+│       └── README.md
+├── src/
+│   ├── App.jsx
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Button.css
+│   │   │   ├── Button.jsx
+│   │   │   ├── Loader.css
+│   │   │   ├── Loader.jsx
+│   │   │   ├── TextInput.css
+│   │   │   └── TextInput.jsx
+│   │   ├── experience/
+│   │   │   ├── BismillahReveal.css
+│   │   │   ├── BismillahReveal.jsx
+│   │   │   ├── CountdownDisplay.css
+│   │   │   ├── CountdownDisplay.jsx
+│   │   │   ├── CurtainReveal.css
+│   │   │   ├── CurtainReveal.jsx
+│   │   │   ├── EnvelopeStage.css
+│   │   │   ├── EnvelopeStage.jsx
+│   │   │   ├── InviteDetails.css
+│   │   │   ├── InviteDetails.jsx
+│   │   │   ├── MemoryWallPlaceholder.css
+│   │   │   └── MemoryWallPlaceholder.jsx
+│   │   └── layout/
+│   │       ├── AppBackground.css
+│   │       ├── AppBackground.jsx
+│   │       ├── TopBar.css
+│   │       └── TopBar.jsx
+│   ├── data/
+│   │   └── local-guests.json
+│   ├── hooks/
+│   │   ├── useCountdown.js
+│   │   └── useHijriDate.js
+│   ├── main.jsx
+│   ├── pages/
+│   │   ├── InviteEntryPage.css
+│   │   ├── InviteEntryPage.jsx
+│   │   ├── InviteExperiencePage.css
+│   │   ├── InviteExperiencePage.jsx
+│   │   ├── NotFoundPage.css
+│   │   ├── NotFoundPage.jsx
+│   │   └── admin/
+│   │       ├── AdminPage.css
+│   │       └── AdminPage.jsx
+│   ├── providers/
+│   │   ├── AudioProvider.jsx
+│   │   ├── FirebaseProvider.jsx
+│   │   └── GuestProvider.jsx
+│   ├── routes.jsx
+│   ├── styles/
+│   │   ├── app.css
+│   │   └── global.css
+│   └── utils/
+│       ├── assetPaths.js
+│       └── constants.js
+├── structure.txt
+└── vite.config.js
