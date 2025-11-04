@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;600&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Josefin+Sans:wght@300;400;500;600&family=Lato:wght@300;400;500;600;700&family=Parisienne&family=Playfair+Display:wght@400;500;600;700&family=Scheherazade+New:wght@400;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+:root {
+  color-scheme: light;
+  font-family: var(--theme-font-body, 'Inter'), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--theme-color-background, #f8f6f2);
+  color: var(--theme-color-text, #2f2721);
+  --font-display: var(--theme-font-heading, 'Playfair Display', serif);
+  --ink: var(--theme-color-text, #2f2721);
+  --ink-soft: color-mix(in srgb, var(--theme-color-text, #2f2721) 78%, transparent);
+  --ink-subtle: color-mix(in srgb, var(--theme-color-text, #2f2721) 62%, transparent);
+  --gold-soft: var(--theme-color-accent, #d2b16a);
+  --gold-rich: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 88%, #6f530f 12%);
+  --gold-pale: var(--theme-color-accent-soft, #f4e3c3);
+  --cream: color-mix(in srgb, var(--theme-color-background, #f8f6f2) 92%, white 8%);
+  --marble: var(--theme-color-background, #f8f6f2);
+  --marble-vein: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 24%, transparent);
+  --glass-border: var(--theme-glass-border, rgba(210, 177, 107, 0.38));
+  --glass-bg: var(--theme-glass-bg, rgba(255, 255, 255, 0.7));
+  --shadow-soft: 0 35px 70px color-mix(in srgb, var(--theme-color-text, #2f2721) 28%, transparent);
+  --shadow-gold: 0 18px 34px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 45%, transparent);
+  --radius-xl: 40px;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --theme-vignette-enabled: 1;
+  --theme-drip-shimmer: 0;
+  --theme-gold-foil-intensity: 0.6;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+*,
+*::before,
+*::after {
+  max-width: 100vw !important;
+  box-sizing: border-box;
+}
+
+.invite-card,
+.envelope-stage,
+.invite-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.header-container,
+.invite-header {
+  width: 100vw !important;
+  overflow: hidden;
+}
+
+.rtl-text,
+.arabic-line {
+  white-space: normal !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+@media (max-width: 480px) {
+  .invite-card,
+  .envelope-shell,
+  .envelope-stage {
+    width: 94vw !important;
+  }
+
+  .invite-card * {
+    font-size: clamp(14px, 3.5vw, 18px);
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--theme-font-body, 'Inter', sans-serif);
+  background-color: var(--marble);
+  background-image:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(255, 219, 178, 0.2), transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(210, 177, 107, 0.18), transparent 65%);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160"><filter id="n" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11"/></filter><rect width="160" height="160" filter="url(%23n)" opacity="0.05"/></svg>');
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: -2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold-rich));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.fade-glow {
+  box-shadow: 0 0 30px rgba(210, 177, 107, 0.38), inset 0 0 60px rgba(255, 255, 255, 0.45);
+}
+
+.text-script {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.text-gold {
+  color: var(--gold-rich);
+}
+
+.text-muted {
+  color: var(--ink-subtle);
+}
+
+.container {
+  width: min(1200px, 92vw);
+  margin: 0 auto;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

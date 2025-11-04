@@ -1,0 +1,339 @@
+.invite-details {
+  margin-top: clamp(-36px, -4vw, -12px);
+}
+
+.invite-card-panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(14px, 2.3vw, 24px) clamp(18px, 3vw, 28px) clamp(16px, 2.8vw, 24px);
+  border-radius: clamp(28px, 4.6vw, 36px);
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 46%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 244, 225, 0.56)),
+    var(--card-bg-image, var(--theme-card-background, url('/assets/floral-panel.png')));
+  background-size: cover;
+  background-position: center top;
+  background-blend-mode: soft-light;
+  box-shadow:
+    0 48px 90px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 30%, rgba(41, 32, 24, 0.08)),
+    0 0 0 1px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 14%, transparent);
+  text-align: center;
+  backdrop-filter: blur(14px);
+  display: grid;
+  gap: clamp(0px, 0.8vw, 8px);
+  justify-items: center;
+  align-content: start;
+  grid-auto-rows: minmax(min-content, max-content);
+  max-width: min(850px, 92%);
+  margin-inline: auto;
+  transform-origin: center;
+}
+
+.bismillah-text {
+  display: grid;
+  gap: 2px;
+  text-align: center;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 94%, rgba(255, 255, 255, 0.12));
+  max-width: min(520px, 90%);
+}
+
+.bismillah-text__arabic {
+  font-family: 'Scheherazade New', 'Amiri', var(--font-display);
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  letter-spacing: 0.001em;
+  font-weight: 680;
+  text-shadow:
+    0 0 14px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 26%, rgba(255, 255, 255, 0)),
+    0 0 24px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 22%, transparent);
+}
+
+.bismillah-text__translation {
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 68%, rgba(60, 51, 41, 0.45));
+}
+
+.invite-address {
+  display: grid;
+  gap: 2px;
+}
+
+.invite-salaam {
+  font-size: 0.84rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-subtle);
+}
+
+.invite-guest {
+  font-family: var(--font-display);
+  font-size: clamp(1.36rem, 3vw, 2rem);
+  letter-spacing: 0.14em;
+  color: var(--ink);
+}
+
+.invite-english {
+  display: grid;
+  gap: clamp(2px, 0.6vw, 8px);
+  max-width: min(600px, 92%);
+}
+
+.invite-english__intro {
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 72%, rgba(47, 39, 33, 0.55));
+}
+
+.invite-english__line {
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.invite-english__event {
+  font-family: var(--font-display);
+  font-size: clamp(1.08rem, 2vw, 1.52rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 86%, rgba(47, 39, 33, 0.12));
+  font-weight: 600;
+}
+
+.invite-english__names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(6px, 1.2vw, 14px);
+  font-family: var(--font-display);
+  font-size: clamp(1.38rem, 2.4vw, 1.96rem);
+  letter-spacing: clamp(0.02em, 0.5vw, 0.05em);
+  color: var(--ink);
+}
+
+.invite-english__names span {
+  display: block;
+  text-transform: uppercase;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  margin-inline: 2px;
+}
+
+.invite-english__ampersand {
+  font-size: 1.2em;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 82%, rgba(47, 39, 33, 0.18));
+}
+
+.invite-english__blessing {
+  margin-top: 0;
+  font-size: 0.9rem;
+  letter-spacing: -0.2px;
+  color: var(--ink-soft);
+}
+
+.invite-arabic {
+  display: grid;
+  gap: 2px;
+  font-family: 'Scheherazade New', 'Amiri', 'Reem Kufi Fun', serif;
+  font-size: clamp(1.18rem, 1.9vw, 1.6rem);
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 90%, rgba(47, 39, 33, 0.12));
+  text-align: center;
+  line-height: 1.58;
+  padding-top: 0;
+  letter-spacing: -0.2px;
+}
+
+.invite-arabic__ampersand {
+  font-size: 1.2em;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 92%, rgba(47, 39, 33, 0.16));
+}
+
+.invite-schedule {
+  position: relative;
+  margin-top: clamp(4px, 0.8vw, 8px);
+  padding: clamp(12px, 1.8vw, 18px) clamp(16px, 2vw, 22px);
+  border: 1px solid color-mix(in srgb, var(--theme-color-accent, #d2b16a) 46%, transparent);
+  border-radius: clamp(20px, 3.2vw, 26px);
+  display: grid;
+  gap: clamp(6px, 1vw, 10px);
+  width: min(520px, 100%);
+  background: color-mix(in srgb, rgba(255, 255, 255, 0.9) 78%, transparent);
+}
+
+.invite-schedule::before,
+.invite-schedule::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 42%, transparent);
+}
+
+.invite-schedule::before {
+  top: clamp(12px, 2vw, 18px);
+}
+
+.invite-schedule::after {
+  bottom: clamp(12px, 2vw, 18px);
+}
+
+.invite-schedule__section {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.invite-schedule__label {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant: small-caps;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 82%, rgba(47, 39, 33, 0.26));
+  position: relative;
+}
+
+.invite-schedule__label::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: clamp(32px, 6.4vw, 48px);
+  height: 1px;
+  background: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 60%, transparent);
+}
+
+.invite-schedule__value {
+  font-family: var(--font-display);
+  font-size: 1.04rem;
+  color: color-mix(in srgb, var(--ink) 90%, var(--theme-color-accent, #d2b16a) 10%);
+  letter-spacing: -0.1px;
+}
+
+.invite-schedule__value--italic {
+  font-style: italic;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 86%, rgba(47, 39, 33, 0.12));
+  animation: timeFade 1.6s ease-in-out;
+}
+
+.invite-schedule__section--venue {
+  gap: 4px;
+}
+
+.invite-schedule__section--venue::before {
+  content: '';
+  width: clamp(18px, 4.4vw, 28px);
+  height: clamp(8px, 1.8vw, 12px);
+  background: radial-gradient(circle at center, rgba(210, 177, 107, 0.5), rgba(210, 177, 107, 0));
+  opacity: 0.7;
+  margin-inline: auto;
+}
+
+.invite-schedule__venue {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 90%, rgba(47, 39, 33, 0.12));
+}
+
+.invite-schedule__address {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-variant: small-caps;
+  text-transform: none;
+  color: color-mix(in srgb, var(--theme-color-accent-soft, #f1dcc0) 52%, rgba(47, 39, 33, 0.52));
+}
+
+.invite-schedule__section--time {
+  gap: 2px;
+}
+
+.invite-schedule__flourish {
+  display: inline-block;
+  width: clamp(46px, 8vw, 72px);
+  height: clamp(12px, 2.4vw, 18px);
+  margin: 2px auto;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(210, 177, 107, 0.52), transparent 60%),
+    radial-gradient(circle at 80% 50%, rgba(210, 177, 107, 0.52), transparent 60%),
+    linear-gradient(90deg, rgba(210, 177, 107, 0), rgba(210, 177, 107, 0.62), rgba(210, 177, 107, 0));
+  opacity: 0.7;
+}
+
+.invite-copy {
+  margin-top: 0;
+  font-size: 0.92rem;
+  line-height: 1.52;
+  letter-spacing: -0.2px;
+  color: var(--ink-soft);
+}
+
+.rsvp-actions {
+  margin: clamp(4px, 0.8vw, 10px) auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+}
+
+.rsvp-actions .ui-button--primary:not(:disabled):hover {
+  box-shadow: 0 34px 52px rgba(210, 177, 107, 0.42), 0 0 18px rgba(210, 177, 107, 0.34);
+}
+
+.invite-card-panel[data-show-arabic='false'] .invite-arabic {
+  display: none;
+}
+
+@keyframes timeFade {
+  0% {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.92;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .invite-card-panel {
+    padding: 20px 16px 22px;
+    border-radius: 30px;
+    max-width: 94%;
+  }
+
+  .invite-english__names {
+    font-size: clamp(1.24rem, 5.6vw, 1.82rem);
+  }
+
+  .invite-schedule {
+    width: 100%;
+  }
+
+  .rsvp-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .invite-card-panel {
+    padding: 18px 12px 22px;
+    max-width: 94%;
+  }
+
+  .invite-schedule {
+    gap: 8px;
+  }
+}
