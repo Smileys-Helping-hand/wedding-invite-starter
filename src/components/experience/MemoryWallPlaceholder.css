@@ -1,0 +1,43 @@
+.memory-wall {
+  margin-top: clamp(60px, 8vw, 120px);
+  padding: clamp(32px, 6vw, 64px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(16px);
+}
+
+.memory-wall__content {
+  display: grid;
+  gap: clamp(24px, 5vw, 36px);
+  text-align: center;
+}
+
+.memory-wall__title {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: var(--ink);
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.memory-tile {
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px dashed rgba(210, 177, 107, 0.6);
+  min-height: 140px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-subtle);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
