@@ -23,7 +23,6 @@
   margin: 0 auto !important;
   left: 50%;
   transform: translateX(-50%);
-  translate: -50% 0;
 }
 
 .envelope-stage {
@@ -111,8 +110,7 @@
 }
 
 .envelope-shell.is-open {
-  transform: translateY(28px) scale(0.94);
-  translate: -50% 28px;
+  transform: translateX(-50%) translateY(28px) scale(0.94);
   opacity: 0.32;
 }
 
@@ -368,7 +366,7 @@
     width: min(92vw, 420px);
     max-width: 420px;
     margin: 0 auto !important;
-    translate: -50% 0;
+    transform: translateX(-50%);
   }
 
   .wax-button {
@@ -385,7 +383,7 @@
     width: min(92vw, 420px);
     max-width: 420px;
     margin: 0 auto !important;
-    translate: -50% 0;
+    transform: translateX(-50%);
   }
 }
 
@@ -418,7 +416,7 @@
     width: min(92vw, 400px);
     max-width: 400px;
     margin: 0 auto !important;
-    translate: -50% 0;
+    transform: translateX(-50%);
   }
 }
 
@@ -437,12 +435,10 @@
   .envelope-shell {
     width: min(560px, 86vw) !important;
     max-width: 600px;
-    translate: -50% 0;
   }
 
   .invite-card {
     width: min(540px, 84vw) !important;
     max-width: 540px;
-    translate: -50% 0;
   }
 }
