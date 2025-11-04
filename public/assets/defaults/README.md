@@ -8,9 +8,9 @@ Required files:
 - `golden-hour-piano.mp3`
 - `sparkles.mp4`
 - `wax-seal-gold.png`
-- `waxseal_rosegold.png`
-- `waxseal_emerald.png`
-- `waxseal_flower.png`
+- `wax-seal-rosegold.png`
+- `wax-seal-emerald.png`
+- `wax-seal-flower.png`
 - `emblem-gold.png`
 
 These files are intentionally excluded from version control. Maintain identical filenames when publishing to your hosting provider.

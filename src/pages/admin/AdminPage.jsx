@@ -104,6 +104,26 @@ const buildGuestPayload = (payload, options) => {
   });
 };
 
+const encodeSessionToken = (code) => {
+  if (typeof window === 'undefined') return null;
+  try {
+    return window.btoa(`${code}|${Date.now()}`);
+  } catch (err) {
+    return null;
+  }
+};
+
+const decodeSessionToken = (token) => {
+  if (typeof window === 'undefined') return null;
+  if (!token) return null;
+  try {
+    const decoded = window.atob(token);
+    return decoded.split('|')[0] ?? null;
+  } catch (err) {
+    return null;
+  }
+};
+
 const tabs = [
   { to: '', label: 'Overview' },
   { to: 'guests', label: 'Guests' },
@@ -115,13 +135,16 @@ const tabs = [
 const AdminPage = () => {
   const navigate = useNavigate();
   const firebase = useFirebase();
+  const adminCode = (import.meta.env.VITE_ADMIN_CODE ?? '2025').toString();
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
   const [toast, setToast] = useState('');
   const [undoStack, setUndoStack] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window === 'undefined') return false;
     try {
-      return Boolean(localStorage.getItem(STORAGE_KEYS.adminSession));
+      const stored = window.sessionStorage.getItem(STORAGE_KEYS.adminSession);
+      return decodeSessionToken(stored) === adminCode;
     } catch (err) {
       return false;
     }
@@ -222,12 +245,18 @@ const AdminPage = () => {
 
   const authenticate = (event) => {
     event.preventDefault();
-    const expected = (import.meta.env.VITE_ADMIN_CODE || import.meta.env.VITE_ADMIN_PASSCODE || 'emerald-veil').toString();
+    const expected = adminCode;
     if (passcode.trim() === expected) {
       setIsAuthenticated(true);
       setError('');
       try {
-        localStorage.setItem(STORAGE_KEYS.adminSession, 'true');
+        if (typeof window !== 'undefined') {
+          const encoded = encodeSessionToken(expected);
+          if (encoded) {
+            window.sessionStorage.setItem(STORAGE_KEYS.adminSession, encoded);
+          }
+          window.localStorage?.removeItem?.(STORAGE_KEYS.adminSession);
+        }
       } catch (err) {
         /* ignore */
       }

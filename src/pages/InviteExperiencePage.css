@@ -4,11 +4,11 @@
 
 .experience-content {
   display: grid;
-  gap: clamp(10px, 2.2vw, 20px);
+  gap: clamp(6px, 1.6vw, 16px);
 }
 
 .rsvp-form {
-  margin-top: clamp(2px, 1vw, 10px);
+  margin-top: clamp(0px, 0.8vw, 8px);
   padding: clamp(28px, 4.2vw, 48px);
   border-radius: var(--radius-xl);
   border: 1px solid var(--glass-border);

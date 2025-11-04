@@ -128,38 +128,38 @@ const EnvelopeStage = ({ onOpened, sealVariant = 'default' }) => {
             className="envelope"
             onError={() => setEnvelopeSrc(defaultEnvelope)}
           />
+          <motion.button
+            type="button"
+            className="wax-button"
+            onClick={handleClick}
+            aria-label="Open invitation"
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ delay: 0.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            data-melting={isMelting}
+            data-premelt={isPreMelt}
+            data-shape={waxShape}
+          >
+            <span className="wax-button__glow" aria-hidden="true" />
+            <span className="wax-button__pulse" aria-hidden="true" />
+            <motion.img
+              src={waxSrc ?? getWaxSeal('default')}
+              alt="Wax seal"
+              className="waxseal"
+              animate={waxAnimate}
+              transition={{ duration: 1.4, ease: [0.42, 0, 0.58, 1] }}
+              onError={() => setWaxSrc(getWaxSeal('default'))}
+            />
+          </motion.button>
         </motion.div>
-        <motion.button
-          type="button"
-          className="wax-button"
-          onClick={handleClick}
-          aria-label="Open invitation"
-          initial={{ scale: 0.6, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ delay: 0.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          data-melting={isMelting}
-          data-premelt={isPreMelt}
-          data-shape={waxShape}
-        >
-          <span className="wax-button__glow" aria-hidden="true" />
-          <span className="wax-button__pulse" aria-hidden="true" />
-          <motion.img
-            src={waxSrc ?? getWaxSeal('default')}
-            alt="Wax seal"
-            className="waxseal"
-            animate={waxAnimate}
-            transition={{ duration: 1.4, ease: [0.42, 0, 0.58, 1] }}
-            onError={() => setWaxSrc(getWaxSeal('default'))}
-          />
-        </motion.button>
       </div>
       {isOpen && (
         <motion.div
           className="invite-card-wrapper"
           initial={{ opacity: 0, y: 160, scale: 0.95 }}
-          animate={{ opacity: 1, y: -28, scale: 1 }}
+          animate={{ opacity: 1, y: -24, scale: 1 }}
           transition={{
             opacity: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
             y: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
