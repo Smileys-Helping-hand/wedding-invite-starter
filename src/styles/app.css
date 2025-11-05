@@ -95,13 +95,18 @@
   color: var(--gold-rich);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .app-main {
-    padding-top: 90px;
+    padding: 80px 0 96px;
   }
 
   .page-panel {
-    padding: 28px 22px 48px;
-    border-radius: 28px;
+    width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
   }
 }
