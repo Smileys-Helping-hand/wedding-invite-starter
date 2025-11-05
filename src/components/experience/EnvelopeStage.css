@@ -133,8 +133,8 @@
 
 .wax-button {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 41.6%;
+  left: 39%;
   z-index: 3;
   border: none;
   background: transparent;
@@ -178,10 +178,10 @@
 }
 
 .waxseal {
-  position: relative;
-  width: clamp(68px, 9vw, 98px);
-  filter: drop-shadow(0 22px 38px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 52%, rgba(0, 0, 0, 0)));
-  transition: transform 0.35s ease, filter 0.35s ease;
+    position: relative;
+    width: clamp(80px, 24vw, 120px) !important;
+    filter: drop-shadow(0 22px 38px color-mix(in srgb, var(--theme-color-accent, #d2b16a) 52%, rgba(0, 0, 0, 0)));
+    transition: transform 0.35s ease, filter 0.35s ease;
 }
 
 .wax-button:hover .waxseal {
@@ -336,50 +336,60 @@
 }
 
 @media (max-width: 760px) {
-  .envelope-stage-wrapper,
-  .envelope-stage-container {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-  }
 
-  .envelope-stage {
-    width: 100vw !important;
-    max-width: 480px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0 auto !important;
-    padding: clamp(14px, 3vw, 24px) clamp(14px, 4.6vw, 26px) clamp(32px, 7vw, 48px);
-    border-radius: 34px;
-    overflow: visible !important;
-  }
+    .envelope-stage-wrapper,
+    .envelope-stage-container {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+    }
 
-  .envelope-stage__stack {
-    padding-bottom: clamp(12px, 3.6vw, 26px);
-  }
+    .envelope-stage {
+        width: 100vw !important;
+        max-width: 480px !important;
+        margin: 0 auto !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: clamp(14px, 3vw, 24px) clamp(12px, 4vw, 22px) clamp(32px, 7vw, 48px) !important;
+        border-radius: 34px;
+        overflow: visible !important;
+    }
 
-  .envelope-shell,
-  .invite-card {
-    width: 94vw !important;
-    max-width: 460px;
-    margin: 0 auto !important;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 18px;
-  }
+    .envelope-stage__stack {
+        padding-bottom: clamp(12px, 4vw, 28px) !important;
+        width: 100% !important;
+        display: flex;
+        justify-content: center;
+    }
 
-  .wax-button {
-    top: 48% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-  }
+    .envelope-shell,
+    .invite-card {
+        position: relative !important;
+        width: 94vw !important;
+        max-width: 420px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin: 0 auto !important;
+        border-radius: 18px;
+    }
 
-  .waxseal {
-    width: clamp(72px, 18vw, 104px);
-  }
+    .wax-button {
+        left: 40% !important;
+        top: 39% !important;
+        transform: translate(-50%, -50%) !important;
+        z-index: 10 !important;
+    }
+
+    .waxseal {
+        width: clamp(80px, 24vw, 120px) !important;
+    }
 }
 
 @media (max-width: 520px) {
@@ -392,9 +402,9 @@
     padding-bottom: clamp(14px, 5.6vw, 26px);
   }
 
-  .waxseal {
-    width: clamp(68px, 28vw, 98px);
-  }
+    .waxseal {
+        width: clamp(80px, 24vw, 120px) !important;
+    }
 
   .invite-card {
     max-width: 420px;
@@ -421,5 +431,50 @@
   .invite-card {
     width: min(540px, 84vw) !important;
     max-width: 540px;
+  }
+}
+
+/* --- Android / Huawei WebView Fix --- */
+/* --- Huawei / some Android WebView centering + overflow fix --- */
+@media (max-width: 820px) {
+  /* force true full width container */
+  .envelope-stage-wrapper,
+  .envelope-stage-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 5vw !important;
+    padding-right: 5vw !important;
+    padding-top: 100px !important;  /* increase top spacing */
+    box-sizing: border-box !important;
+  }
+
+  /* center envelope block more aggressively */
+  .envelope-stage {
+    left: 50% !important;
+    transform: translateX(-50%) translateY(30px) !important; /* push lower */
+    width: 100% !important;
+    max-width: 500px !important;
+  }
+
+  /* fix width bug (Huawei breaks on vw, so use %) */
+  .envelope-shell,
+  .invite-card {
+    width: 100% !important;
+    max-width: 440px !important;
+    margin: 0 auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  /* wax seal stays centered */
+  .wax-button {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  /* add little breathing at bottom so it doesn't feel cut */
+  .envelope-stage__stack {
+    padding-bottom: 40px !important;
   }
 }
