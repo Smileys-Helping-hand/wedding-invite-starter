@@ -1,0 +1,116 @@
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.app-background::after {
+  content: '';
+  position: absolute;
+  inset: -4%;
+  pointer-events: none;
+  background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0) calc(55% + var(--theme-vignette-strength, 0.35) * 20%),
+      rgba(23, 18, 12, 0.25) calc(75% + var(--theme-vignette-strength, 0.35) * 18%),
+      rgba(18, 12, 8, 0.4)
+    );
+  mix-blend-mode: multiply;
+  opacity: calc((var(--theme-vignette-strength, 0.35) + 0.12) * var(--theme-vignette-enabled, 1));
+  transition: opacity 0.4s ease;
+}
+
+.sparkle-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  filter: saturate(0.85) brightness(1.15);
+}
+
+.gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-color-background, #f8f6f2) 92%, white 8%),
+    color-mix(in srgb, var(--theme-color-accent, #d2b16a) 6%, rgba(255, 255, 255, 0.95))
+  );
+  backdrop-filter: blur(12px);
+}
+
+.bokeh-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
+    radial-gradient(circle at 80% 20%, rgba(255, 226, 200, 0.2), transparent 50%),
+    radial-gradient(circle at 50% 70%, rgba(210, 177, 107, 0.16), transparent 60%);
+  mix-blend-mode: screen;
+  animation: bokehDrift 16s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.petal-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  width: clamp(12px, 3vw, 22px);
+  height: clamp(16px, 4vw, 28px);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 192, 203, 0.25));
+  border-radius: 50% 40% 60% 50%;
+  filter: blur(0.5px);
+  animation: petalFall 14s linear infinite;
+  opacity: 0.65;
+}
+
+.petal:nth-child(odd) {
+  animation-duration: 18s;
+  opacity: 0.55;
+}
+
+.petal:nth-child(3n) {
+  animation-duration: 16s;
+  opacity: 0.45;
+}
+
+.petal:nth-child(n) {
+  left: calc(100% * var(--petal-x, 0.5));
+  animation-delay: calc(-2s * var(--petal-x, 0.5));
+}
+
+.petal-overlay .petal {
+  --petal-x: calc(var(--index, 0) / 12);
+}
+
+@keyframes bokehDrift {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4%) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes petalFall {
+  0% {
+    transform: translate3d(-20%, -120%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(10%, -20%, 0) rotate(80deg);
+  }
+  100% {
+    transform: translate3d(-10%, 120%, 0) rotate(160deg);
+  }
+}
