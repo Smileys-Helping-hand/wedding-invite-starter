@@ -1,0 +1,57 @@
+.rsvp-detail-form {
+  margin-top: clamp(18px, 3vw, 28px);
+  padding: clamp(18px, 3vw, 26px);
+  border-radius: clamp(24px, 4vw, 30px);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  box-shadow: 0 20px 48px rgba(80, 60, 30, 0.1);
+  display: grid;
+  gap: clamp(14px, 2vw, 18px);
+}
+
+.rsvp-detail-form__row {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.rsvp-detail-form__field {
+  display: grid;
+  gap: 8px;
+  font-size: 0.92rem;
+  color: var(--ink-subtle);
+}
+
+.rsvp-detail-form__field select {
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(210, 177, 107, 0.35);
+  background: rgba(255, 255, 255, 0.8);
+  font: inherit;
+  color: inherit;
+}
+
+.rsvp-detail-form__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.rsvp-detail-form__error {
+  margin: 0;
+  color: #a3524b;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.rsvp-detail-form__success {
+  margin: 0;
+  text-align: center;
+  color: color-mix(in srgb, var(--theme-color-accent, #d4af37) 70%, var(--ink) 30%);
+}
+
+@media (max-width: 720px) {
+  .rsvp-detail-form {
+    padding: clamp(16px, 5vw, 22px);
+  }
+}
