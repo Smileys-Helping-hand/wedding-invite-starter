@@ -16,6 +16,8 @@ export const routeDefinitions = [
     meta: {
       title: 'Enter Invite Code',
       requiresGuest: false,
+      entryAnimationDuration: 6000,
+      nextPath: ROUTE_PATHS.inviteExperience,
     },
   },
   {
