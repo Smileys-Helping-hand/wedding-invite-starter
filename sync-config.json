@@ -1,0 +1,11 @@
+{
+  "exportPaths": [
+    "src/components/experience",
+    "src/components/common",
+    "src/providers",
+    "src/hooks",
+    "src/utils"
+  ],
+  "targetRepo": "../wedding-invite-saas",
+  "exclude": ["admin", "__tests__"]
+}
