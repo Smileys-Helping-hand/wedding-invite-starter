@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "crons": [
+    { "path": "/api/heartbeat", "schedule": "0 * * * *" },
+    { "path": "/api/pruneHeartbeats", "schedule": "0 2 * * 0" },
+    { "path": "/api/checkCdnIntegrity", "schedule": "0 3 * * *" }
+  ]
+}

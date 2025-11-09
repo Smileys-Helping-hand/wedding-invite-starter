@@ -1,0 +1,16 @@
+.invite-entry-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 2rem;
+  position: relative;
+  z-index: 50;
+}
+
+@media (max-width: 768px) {
+  .invite-prompt-card {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+}
