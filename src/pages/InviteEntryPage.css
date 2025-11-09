@@ -1,0 +1,20 @@
+.invite-entry-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.app-background {
+  pointer-events: none; /* allow form inputs */
+}
+
+@media (max-width: 768px) {
+  .invite-code-prompt {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+}

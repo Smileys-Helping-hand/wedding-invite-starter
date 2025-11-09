@@ -1,0 +1,107 @@
+.admin-export {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vw, 36px);
+}
+
+.admin-export__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(12px, 2vw, 24px);
+}
+
+.admin-export__previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(18px, 3vw, 28px);
+}
+
+.export-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.export-preview__label {
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 70%, transparent);
+}
+
+.export-card {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 42px rgba(38, 32, 24, 0.16);
+  background: color-mix(in srgb, var(--theme-color-background, #f8f6f2) 92%, white 8%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(18px, 4vw, 42px);
+}
+
+.export-card--square {
+  aspect-ratio: 1 / 1;
+}
+
+.export-card--story {
+  aspect-ratio: 9 / 16;
+}
+
+.export-card__panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-size: cover;
+  background-position: center;
+  padding: clamp(28px, 6vw, 52px);
+  display: grid;
+  place-items: center;
+  gap: clamp(18px, 4vw, 42px);
+  text-align: center;
+  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 90%, transparent);
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.export-card__blessing {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+  color: color-mix(in srgb, var(--theme-color-accent, #d2b16a) 70%, #fff 30%);
+}
+
+.export-card__names {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 2.8vw, 3.2rem);
+  letter-spacing: 0.05em;
+}
+
+.export-card__schedule {
+  display: grid;
+  gap: clamp(4px, 1.2vw, 10px);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 76%, transparent);
+}
+
+.export-card__note {
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 70%, transparent);
+}
+
+.admin-export__hint {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--theme-color-text, #2f2721) 58%, transparent);
+}
+
+@media (max-width: 720px) {
+  .admin-export__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
