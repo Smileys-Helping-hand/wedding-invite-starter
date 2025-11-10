@@ -1,0 +1,48 @@
+.invite-code-card {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.invite-code-card input {
+  width: 100%;
+  max-width: 250px;
+  text-align: center;
+  padding: 0.6rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background: transparent;
+  border: 2px solid gold;
+  border-radius: 0.5rem;
+  outline: none;
+  margin-top: 1rem;
+}
+
+.invite-code-card input:focus {
+  box-shadow: 0 0 10px gold;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.invite-code-card button {
+  margin-top: 1rem;
+  background: linear-gradient(90deg, gold, #facc15);
+  color: #222;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.invite-code-card button:hover {
+  filter: brightness(1.1);
+}

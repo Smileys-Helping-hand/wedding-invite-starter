@@ -1,0 +1,15 @@
+.invite-entry {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(180deg, #fffdf8 0%, #f8f5ec 100%);
+}
+
+@media (max-width: 768px) {
+  .invite-code-card {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+}

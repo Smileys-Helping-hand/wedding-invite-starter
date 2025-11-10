@@ -1,0 +1,12 @@
+{
+  "greeting": "Assalamu Alaikum",
+  "greetingSuffix": "wa Rahmatullah",
+  "invite": {
+    "title": "Engagement Soirée",
+    "blessing": "May Allah fill this union with love and barakah."
+  },
+  "buttons": {
+    "accept": "Accept Invitation",
+    "decline": "Decline with Warm Wishes"
+  }
+}
