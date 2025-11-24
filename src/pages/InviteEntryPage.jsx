@@ -5,6 +5,7 @@ import TextInput from '../components/common/TextInput.jsx';
 import Button from '../components/common/Button.jsx';
 import Loader from '../components/common/Loader.jsx';
 import { useGuest } from '../providers/GuestProvider.jsx';
+import { isEventDayModeEnabled } from '../utils/guestUtils.js';
 import './InviteEntryPage.css';
 
 const InviteEntryPage = () => {
@@ -24,6 +25,10 @@ const InviteEntryPage = () => {
 
     const guestData = await lookupGuest(code);
     if (guestData) {
+      if (isEventDayModeEnabled()) {
+        navigate('/event-day/guest');
+        return;
+      }
       navigate('/invite');
     }
   };
