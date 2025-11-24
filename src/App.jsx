@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import InviteEntryPage from './pages/InviteEntryPage.jsx';
 import InviteExperiencePage from './pages/InviteExperiencePage.jsx';
+import CheckInPage from './pages/CheckInPage.jsx';
 import AdminPage from './pages/admin/AdminPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import AppBackground from './components/layout/AppBackground.jsx';
@@ -47,6 +48,8 @@ const App = () => {
                 </RequireGuest>
               }
             />
+            <Route path="/checkin" element={<CheckInPage />} />
+            <Route path="/check" element={<CheckInPage />} />
             <Route path="/admin/*" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
