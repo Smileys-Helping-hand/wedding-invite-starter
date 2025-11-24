@@ -175,6 +175,16 @@
   align-content: start;
 }
 
+.code-cell .qr-card {
+  width: 140px;
+  padding: 8px;
+}
+
+.code-cell .qr-card__image {
+  width: 120px;
+  height: 120px;
+}
+
 .code-cell code {
   display: inline-flex;
   align-items: center;
