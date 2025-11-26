@@ -3,6 +3,7 @@ import { RSVP_STATUSES } from './constants.js';
 const CHECKIN_STORAGE_KEY = 'hs_event_checkins';
 const CHECKIN_META_STORAGE_KEY = 'hs_event_meta';
 const CHECKIN_CHANNEL = 'hs_checkins_channel';
+const EVENT_DAY_MODE_KEY = 'hs_eventday_enabled';
 
 const normalizeGuest = (guest = {}) => {
   const guestNames = Array.isArray(guest.guestNames)
@@ -236,6 +237,28 @@ const clearMetaStorage = () => {
   }
 };
 
+const isEventDayModeEnabled = () => {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.localStorage.getItem(EVENT_DAY_MODE_KEY) === 'true';
+  } catch (err) {
+    return false;
+  }
+};
+
+const setEventDayModeEnabled = (enabled) => {
+  if (typeof window === 'undefined') return;
+  try {
+    if (enabled) {
+      window.localStorage.setItem(EVENT_DAY_MODE_KEY, 'true');
+    } else {
+      window.localStorage.removeItem(EVENT_DAY_MODE_KEY);
+    }
+  } catch (err) {
+    /* ignore */
+  }
+};
+
 const applyMetaToEntries = (entries = [], meta = {}) =>
   entries.map((guest) => {
     const overlay = meta[guest.code?.toUpperCase()] ?? {};
@@ -279,6 +302,16 @@ const encodeCsvValue = (value) =>
   `"${String(value ?? '')
     .replace(/"/g, '""')
     .replace(/\r?\n|\r/g, ' ')}"`;
+
+const parseCheckInPayload = (value = '') => {
+  const trimmed = String(value).trim();
+  if (!trimmed) return '';
+  const upper = trimmed.toUpperCase();
+  if (upper.includes('CHECKIN:')) {
+    return upper.split('CHECKIN:').pop().trim();
+  }
+  return upper;
+};
 
 const computeArrivalStats = (entries = [], checkIns = {}) => {
   const summary = entries.reduce(
@@ -449,4 +482,8 @@ export {
   subscribeToEventState,
   CHECKIN_STORAGE_KEY,
   CHECKIN_META_STORAGE_KEY,
+  EVENT_DAY_MODE_KEY,
+  isEventDayModeEnabled,
+  setEventDayModeEnabled,
+  parseCheckInPayload,
 };

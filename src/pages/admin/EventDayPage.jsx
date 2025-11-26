@@ -13,6 +13,9 @@ import {
   ensureCheckInsForEntries,
   formatCheckInTime,
   formatRelativeCheckInTime,
+  EVENT_DAY_MODE_KEY,
+  isEventDayModeEnabled,
+  setEventDayModeEnabled,
   readStoredCheckIns,
   readStoredMeta,
   sortEntriesForEventDay,
@@ -39,6 +42,7 @@ const EventDayPage = ({ entries = [] }) => {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [vipToast, setVipToast] = useState('');
+  const [eventDayEnabled, setEventDayEnabled] = useState(() => isEventDayModeEnabled());
   const [staffRole] = useState(() => {
     if (typeof window === 'undefined') return STAFF_ROLES.manager;
     return window.localStorage.getItem(STAFF_ROLE_STORAGE_KEY) || STAFF_ROLES.manager;
@@ -68,6 +72,16 @@ const EventDayPage = ({ entries = [] }) => {
     const timer = window.setTimeout(() => setVipToast(''), 2000);
     return () => window.clearTimeout(timer);
   }, [vipToast]);
+
+  useEffect(() => {
+    const syncToggle = (event) => {
+      if (event.key === EVENT_DAY_MODE_KEY) {
+        setEventDayEnabled(isEventDayModeEnabled());
+      }
+    };
+    window.addEventListener('storage', syncToggle);
+    return () => window.removeEventListener('storage', syncToggle);
+  }, []);
 
   const stats = useMemo(() => computeArrivalStats(entriesWithMeta, checkIns), [checkIns, entriesWithMeta]);
 
@@ -109,6 +123,12 @@ const EventDayPage = ({ entries = [] }) => {
   const handlePrint = () => openArrivalsPrintView(entriesWithMeta, checkIns);
 
   const handleReset = () => setShowResetConfirm(true);
+
+  const handleToggleEventDay = () => {
+    const next = !eventDayEnabled;
+    setEventDayModeEnabled(next);
+    setEventDayEnabled(next);
+  };
 
   const confirmReset = () => {
     broadcastReset();
@@ -167,6 +187,18 @@ const EventDayPage = ({ entries = [] }) => {
         </div>
         <div className="event-day-page__actions">
           <div className="event-day-page__role">{roleLabel}</div>
+          <div className="event-day-toggle">
+            <label className="event-day-toggle__label" htmlFor="eventday-toggle">Enable Event Day Mode for Guests</label>
+            <button
+              id="eventday-toggle"
+              type="button"
+              className={eventDayEnabled ? 'toggle toggle--on' : 'toggle'}
+              onClick={handleToggleEventDay}
+              aria-pressed={eventDayEnabled}
+            >
+              <span className="toggle__knob" />
+            </button>
+          </div>
           <Button variant="ghost" onClick={handlePrint}>
             Print arrivals list
           </Button>

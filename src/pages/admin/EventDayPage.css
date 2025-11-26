@@ -17,6 +17,50 @@
   justify-items: end;
 }
 
+.event-day-toggle {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.event-day-toggle__label {
+  font-size: 0.95rem;
+  color: var(--ink-subtle);
+}
+
+.toggle {
+  position: relative;
+  width: 56px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.toggle__knob {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease;
+}
+
+.toggle--on {
+  background: linear-gradient(135deg, rgba(238, 210, 160, 0.9), rgba(210, 177, 107, 0.85));
+  border-color: rgba(210, 177, 107, 0.7);
+}
+
+.toggle--on .toggle__knob {
+  transform: translateX(24px);
+}
+
 .event-day-page__role {
   justify-self: end;
   padding: 6px 10px;
