@@ -16,6 +16,7 @@ import {
   formatCheckInTime,
   formatRelativeCheckInTime,
   normalizeGuest,
+  parseCheckInPayload,
   readStoredCheckIns,
   readStoredMeta,
   sortEntriesForEventDay,
@@ -166,6 +167,11 @@ const CheckInPage = () => {
 
   const handleScanSubmit = (event) => {
     if (event.key !== 'Enter') return;
+    const value = parseCheckInPayload(scanInput);
+    if (!value) return;
+    const match = entries.find((guest) => guest.code === value);
+    if (match) {
+      setSelectedGuest(match.code);
     const value = scanInput.trim().toUpperCase();
     if (!value) return;
     const match = entries.find((guest) => guest.code === value);
@@ -179,6 +185,10 @@ const CheckInPage = () => {
 
   const handleScanResult = (result, error) => {
     if (result?.text) {
+      const value = parseCheckInPayload(result.text);
+      const match = entries.find((guest) => guest.code === value);
+      if (match) {
+        setSelectedGuest(match.code);
       const value = result.text.trim().toUpperCase();
       const match = entries.find((guest) => guest.code === value);
       if (match) {

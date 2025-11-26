@@ -9,6 +9,7 @@ import {
   ensureCheckInsForEntries,
   formatCheckInTime,
   formatRelativeCheckInTime,
+  EVENT_DAY_MODE_KEY,
   isEventDayModeEnabled,
   normalizeGuest,
   parseCheckInPayload,
@@ -23,6 +24,7 @@ const EventDayGuestPage = () => {
   const { guest, inviteCode } = useGuest();
   const [checkIns, setCheckIns] = useState(() => readStoredCheckIns());
   const [meta, setMeta] = useState(() => readStoredMeta());
+  const [eventModeEnabled, setEventModeEnabled] = useState(() => isEventDayModeEnabled());
 
   const normalizedGuest = useMemo(() => {
     if (!guest) return null;
@@ -50,6 +52,28 @@ const EventDayGuestPage = () => {
   }, [normalizedGuest]);
 
   useEffect(() => {
+    const syncEventMode = () => setEventModeEnabled(isEventDayModeEnabled());
+    const storageHandler = (event) => {
+      if (event.key === EVENT_DAY_MODE_KEY) {
+        syncEventMode();
+      }
+    };
+
+    syncEventMode();
+    window.addEventListener('storage', storageHandler);
+    window.addEventListener('hs:event-mode-change', syncEventMode);
+
+    return () => {
+      window.removeEventListener('storage', storageHandler);
+      window.removeEventListener('hs:event-mode-change', syncEventMode);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!eventModeEnabled) {
+      navigate('/invite', { replace: true });
+    }
+  }, [eventModeEnabled, navigate]);
     if (!isEventDayModeEnabled()) {
       navigate('/invite', { replace: true });
     }
