@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import TextInput from '../components/common/TextInput.jsx';
 import Button from '../components/common/Button.jsx';
 import Loader from '../components/common/Loader.jsx';
 import { useGuest } from '../providers/GuestProvider.jsx';
+import { EVENT_DAY_MODE_KEY, isEventDayModeEnabled } from '../utils/guestUtils.js';
 import './InviteEntryPage.css';
 
 const InviteEntryPage = () => {
@@ -12,6 +13,30 @@ const InviteEntryPage = () => {
   const { lookupGuest, error, loading, guest } = useGuest();
   const [code, setCode] = useState('');
   const [localError, setLocalError] = useState('');
+
+  useEffect(() => {
+    const attemptRedirect = () => {
+      if (guest && isEventDayModeEnabled()) {
+        navigate('/event-day/guest', { replace: true });
+      }
+    };
+
+    attemptRedirect();
+
+    const storageHandler = (event) => {
+      if (event.key === EVENT_DAY_MODE_KEY) {
+        attemptRedirect();
+      }
+    };
+
+    window.addEventListener('storage', storageHandler);
+    window.addEventListener('hs:event-mode-change', attemptRedirect);
+
+    return () => {
+      window.removeEventListener('storage', storageHandler);
+      window.removeEventListener('hs:event-mode-change', attemptRedirect);
+    };
+  }, [guest, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,6 +49,10 @@ const InviteEntryPage = () => {
 
     const guestData = await lookupGuest(code);
     if (guestData) {
+      if (isEventDayModeEnabled()) {
+        navigate('/event-day/guest');
+        return;
+      }
       navigate('/invite');
     }
   };

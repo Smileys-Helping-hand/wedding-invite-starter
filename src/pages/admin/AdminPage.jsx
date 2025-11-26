@@ -5,104 +5,24 @@ import Button from '../../components/common/Button.jsx';
 import TextInput from '../../components/common/TextInput.jsx';
 import localGuests from '../../data/local-guests.json';
 import { RSVP_STATUSES, STORAGE_KEYS } from '../../utils/constants.js';
+import {
+  buildGuestPayload,
+  computeInviteCode,
+  computeNextHouseholdId,
+  encodeCsvValue,
+  normaliseGuest,
+  readStoredCheckIns,
+  subscribeToEventState,
+} from '../../utils/guestUtils.js';
 import GuestSpreadsheetImporter from '../../tools/GuestSpreadsheetImporter.jsx';
 import ThemeStudioPage from './ThemeStudioPage.jsx';
 import AdminGuestsPage from './AdminGuestsPage.jsx';
 import ExportInviteCard from './ExportInviteCard.jsx';
 import { useFirebase } from '../../providers/FirebaseProvider.jsx';
+import EventDayPage from './EventDayPage.jsx';
+import AnalyticsPage from './AnalyticsPage.jsx';
+import { STAFF_ROLES, STAFF_ROLE_STORAGE_KEY } from '../../utils/roles.js';
 import './AdminPage.css';
-
-const normaliseGuest = (guest) => {
-  const guestNames = Array.isArray(guest.guestNames)
-    ? guest.guestNames.filter(Boolean).map((value) => value.trim())
-    : [guest.guestName, guest.partnerName].filter(Boolean).map((value) => value.trim());
-
-  const primaryGuest = guestNames[0] ?? '';
-  const partnerName = guestNames[1] ?? null;
-  const householdCount = Number.isFinite(guest.householdCount)
-    ? guest.householdCount
-    : Number.isFinite(guest.household)
-      ? guest.household
-      : Math.max(guestNames.length, 1);
-
-  return {
-    code: guest.code?.toUpperCase(),
-    guestNames,
-    primaryGuest,
-    partnerName,
-    householdCount,
-    householdId: guest.householdId ?? null,
-    contact: guest.contact ?? '',
-    rsvpStatus: guest.rsvpStatus ?? RSVP_STATUSES.pending,
-    notes: guest.notes ?? '',
-    additionalGuests: guest.additionalGuests ?? 0,
-    lastUpdated: guest.lastUpdated ?? null,
-    role: guest.role ?? 'guest',
-  };
-};
-
-const lettersOnly = (value = '') => value.replace(/[^a-z]/gi, '').toUpperCase();
-
-const computeNextHouseholdId = (entries = []) => {
-  const highest = entries.reduce((acc, guest) => {
-    const match = /H(\d+)/i.exec(guest.householdId ?? '');
-    if (!match) return acc;
-    const numeric = Number(match[1]);
-    return Number.isFinite(numeric) ? Math.max(acc, numeric) : acc;
-  }, 0);
-
-  return `H${String(highest + 1).padStart(3, '0')}`;
-};
-
-const computeInviteCode = (entries = [], primaryName = '', partnerName = '', preferredCode, excludeCode) => {
-  const used = new Set(entries.map((guest) => guest.code?.toUpperCase()).filter(Boolean));
-  if (excludeCode) {
-    used.delete(excludeCode.toUpperCase());
-  }
-
-  if (preferredCode) {
-    const candidate = preferredCode.toUpperCase();
-    if (!used.has(candidate)) {
-      return candidate;
-    }
-  }
-
-  const baseLetters = lettersOnly(primaryName) || lettersOnly(partnerName) || 'RAZI';
-  const prefix = (baseLetters.length >= 4 ? baseLetters.slice(0, 4) : baseLetters.padEnd(4, 'A')).toUpperCase();
-  let counter = entries.length + 1;
-  let candidate = `${prefix}${String(counter).padStart(4, '0')}`;
-
-  while (used.has(candidate)) {
-    counter += 1;
-    candidate = `${prefix}${String(counter).padStart(4, '0')}`;
-  }
-
-  return candidate;
-};
-
-const buildGuestPayload = (payload, options) => {
-  const names = payload.guestNames?.length ? payload.guestNames : [payload.guestName, payload.partnerName];
-  const guestNames = names.filter(Boolean).map((value) => value.trim());
-  const primary = guestNames[0] ?? '';
-  const partner = guestNames[1] ?? '';
-  const code = computeInviteCode(options.entries, primary, partner, payload.code, options.excludeCode);
-  const householdId = payload.householdId?.trim()
-    ? payload.householdId.trim().toUpperCase()
-    : options.currentHouseholdId ?? computeNextHouseholdId(options.entries);
-  const timestamp = new Date().toISOString();
-
-  return normaliseGuest({
-    ...payload,
-    code,
-    guestNames,
-    householdId,
-    householdCount: Math.max(Number(payload.householdCount) || guestNames.length || 1, guestNames.length || 1),
-    contact: payload.contact ?? '',
-    notes: payload.notes ?? '',
-    lastUpdated: timestamp,
-    role: payload.role ?? 'guest',
-  });
-};
 
 const encodeSessionToken = (code) => {
   if (typeof window === 'undefined') return null;
@@ -130,6 +50,8 @@ const tabs = [
   { to: 'studio', label: 'Theme Studio' },
   { to: 'import', label: 'Import CSV' },
   { to: 'export', label: 'Export Cards' },
+  { to: 'event-day', label: 'Event Day' },
+  { to: 'analytics', label: 'Analytics' },
 ];
 
 const AdminPage = () => {
@@ -184,6 +106,7 @@ const AdminPage = () => {
       .map((guest) => normaliseGuest(guest))
       .sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest));
   });
+  const [checkIns, setCheckIns] = useState(() => readStoredCheckIns());
 
   useEffect(() => {
     if (!firebase?.subscribeToGuests) return undefined;
@@ -201,6 +124,11 @@ const AdminPage = () => {
     });
     return unsubscribe;
   }, [firebase?.subscribeToGuests]);
+
+  useEffect(() => {
+    const cleanup = subscribeToEventState(entries, { onCheckIns: setCheckIns });
+    return () => cleanup?.();
+  }, [entries]);
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -256,6 +184,7 @@ const AdminPage = () => {
             window.sessionStorage.setItem(STORAGE_KEYS.adminSession, encoded);
           }
           window.localStorage?.removeItem?.(STORAGE_KEYS.adminSession);
+          window.localStorage.setItem(STAFF_ROLE_STORAGE_KEY, STAFF_ROLES.manager);
         }
       } catch (err) {
         /* ignore */
@@ -366,11 +295,7 @@ const AdminPage = () => {
       guest.rsvpStatus,
       guest.notes ?? '',
     ]);
-    const encode = (value) =>
-      `"${String(value ?? '')
-        .replace(/"/g, '""')
-        .replace(/\r?\n|\r/g, ' ')}"`;
-    const csv = [headers.join(','), ...rows.map((row) => row.map(encode).join(','))].join('\n');
+    const csv = [headers.join(','), ...rows.map((row) => row.map(encodeCsvValue).join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -456,9 +381,14 @@ const AdminPage = () => {
                     <h1 className="page-title">Dashboard</h1>
                     <p className="page-subtitle">Live RSVP status with quick insight into your honoured guests.</p>
                   </div>
-                  <Button variant="ghost" size="md" onClick={() => navigate('guests')}>
-                    Manage guests
-                  </Button>
+                  <div className="admin-dashboard__actions">
+                    <Button variant="outline" size="md" onClick={() => navigate('/checkin', { state: { entries } })}>
+                      Open Staff Check-In
+                    </Button>
+                    <Button variant="ghost" size="md" onClick={() => navigate('guests')}>
+                      Manage guests
+                    </Button>
+                  </div>
                 </header>
                 <div className="admin-dashboard__stats">
                   <div className="stat-card">
@@ -504,6 +434,8 @@ const AdminPage = () => {
           <Route path="studio" element={<ThemeStudioPage entries={entries} />} />
           <Route path="import" element={<GuestSpreadsheetImporter existingGuests={entries} />} />
           <Route path="export" element={<ExportInviteCard guests={entries} />} />
+          <Route path="event-day" element={<EventDayPage entries={entries} />} />
+          <Route path="analytics" element={<AnalyticsPage entries={entries} checkIns={checkIns} />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </div>

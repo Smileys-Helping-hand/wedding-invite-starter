@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Button from '../../components/common/Button.jsx';
 import TextInput from '../../components/common/TextInput.jsx';
+import QRCodeCard from '../../components/QRCodeCard.jsx';
 import { RSVP_STATUSES } from '../../utils/constants.js';
 import './AdminGuestsPage.css';
 
@@ -308,14 +309,15 @@ const AdminGuestsPage = ({
         </div>
       </div>
 
-      <div className="admin-guests__table" role="table">
-        <div className="admin-guests__row admin-guests__row--head" role="row">
-          <span role="columnheader">Guest household</span>
-          <span role="columnheader">Status</span>
-          <span role="columnheader">Invite code</span>
-          <span role="columnheader">Share</span>
-          <span role="columnheader">Edit</span>
-          <span role="columnheader">Delete</span>
+        <div className="admin-guests__table" role="table">
+          <div className="admin-guests__row admin-guests__row--head" role="row">
+            <span role="columnheader">Guest household</span>
+            <span role="columnheader">Status</span>
+            <span role="columnheader">Invite code</span>
+            <span role="columnheader">QR</span>
+            <span role="columnheader">Share</span>
+            <span role="columnheader">Edit</span>
+            <span role="columnheader">Delete</span>
         </div>
         {filteredEntries.map((guest) => (
           <div key={guest.code} className="admin-guests__row" role="row">
@@ -346,6 +348,9 @@ const AdminGuestsPage = ({
               <button type="button" onClick={() => handleCopyLink(guest)} className="link-button">
                 Copy invite link
               </button>
+            </span>
+            <span role="cell" className="code-cell">
+              <QRCodeCard code={`CHECKIN:${guest.code}`} label="Scan" />
             </span>
             <span role="cell" className="code-cell">
               <button type="button" onClick={() => handleShare(guest)} className="link-button">
