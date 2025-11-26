@@ -88,6 +88,13 @@ const EventDayPage = ({ entries = [] }) => {
       window.removeEventListener('storage', storageHandler);
       window.removeEventListener('hs:event-mode-change', syncToggle);
     };
+    const syncToggle = (event) => {
+      if (event.key === EVENT_DAY_MODE_KEY) {
+        setEventDayEnabled(isEventDayModeEnabled());
+      }
+    };
+    window.addEventListener('storage', syncToggle);
+    return () => window.removeEventListener('storage', syncToggle);
   }, []);
 
   const stats = useMemo(() => computeArrivalStats(entriesWithMeta, checkIns), [checkIns, entriesWithMeta]);

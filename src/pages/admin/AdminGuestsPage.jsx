@@ -351,6 +351,7 @@ const AdminGuestsPage = ({
             </span>
             <span role="cell" className="code-cell">
               <QRCodeCard code={`CHECKIN:${guest.code}`} label="Scan" />
+              <QRCodeCard code={guest.code} label="Scan" />
             </span>
             <span role="cell" className="code-cell">
               <button type="button" onClick={() => handleShare(guest)} className="link-button">

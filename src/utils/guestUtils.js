@@ -4,6 +4,7 @@ const CHECKIN_STORAGE_KEY = 'hs_event_checkins';
 const CHECKIN_META_STORAGE_KEY = 'hs_event_meta';
 const CHECKIN_CHANNEL = 'hs_checkins_channel';
 const EVENT_DAY_MODE_KEY = 'hs_event_mode';
+const EVENT_DAY_MODE_KEY = 'hs_eventday_enabled';
 
 const normalizeGuest = (guest = {}) => {
   const guestNames = Array.isArray(guest.guestNames)
@@ -243,6 +244,7 @@ const isEventDayModeEnabled = () => {
     const value = window.localStorage.getItem(EVENT_DAY_MODE_KEY);
     if (value === null) return false;
     return value === 'on' || value === 'true';
+    return window.localStorage.getItem(EVENT_DAY_MODE_KEY) === 'true';
   } catch (err) {
     return false;
   }
@@ -253,6 +255,11 @@ const setEventDayModeEnabled = (enabled) => {
   try {
     window.localStorage.setItem(EVENT_DAY_MODE_KEY, enabled ? 'on' : 'off');
     window.dispatchEvent(new Event('hs:event-mode-change'));
+    if (enabled) {
+      window.localStorage.setItem(EVENT_DAY_MODE_KEY, 'true');
+    } else {
+      window.localStorage.removeItem(EVENT_DAY_MODE_KEY);
+    }
   } catch (err) {
     /* ignore */
   }

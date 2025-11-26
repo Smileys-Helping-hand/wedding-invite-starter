@@ -172,6 +172,10 @@ const CheckInPage = () => {
     const match = entries.find((guest) => guest.code === value);
     if (match) {
       setSelectedGuest(match.code);
+    const value = scanInput.trim().toUpperCase();
+    if (!value) return;
+    const match = entries.find((guest) => guest.code === value);
+    if (match) {
       toggleArrival(match.code, true);
       setScanInput('');
     } else {
@@ -185,6 +189,9 @@ const CheckInPage = () => {
       const match = entries.find((guest) => guest.code === value);
       if (match) {
         setSelectedGuest(match.code);
+      const value = result.text.trim().toUpperCase();
+      const match = entries.find((guest) => guest.code === value);
+      if (match) {
         toggleArrival(match.code, true);
       }
     }

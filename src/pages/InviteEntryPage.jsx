@@ -6,6 +6,7 @@ import Button from '../components/common/Button.jsx';
 import Loader from '../components/common/Loader.jsx';
 import { useGuest } from '../providers/GuestProvider.jsx';
 import { EVENT_DAY_MODE_KEY, isEventDayModeEnabled } from '../utils/guestUtils.js';
+import { isEventDayModeEnabled } from '../utils/guestUtils.js';
 import './InviteEntryPage.css';
 
 const InviteEntryPage = () => {

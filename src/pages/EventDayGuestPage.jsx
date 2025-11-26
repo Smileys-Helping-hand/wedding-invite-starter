@@ -74,6 +74,10 @@ const EventDayGuestPage = () => {
       navigate('/invite', { replace: true });
     }
   }, [eventModeEnabled, navigate]);
+    if (!isEventDayModeEnabled()) {
+      navigate('/invite', { replace: true });
+    }
+  }, [navigate]);
 
   if (!entry) {
     return (
