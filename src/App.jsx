@@ -4,7 +4,6 @@ import { AnimatePresence } from 'framer-motion';
 import InviteEntryPage from './pages/InviteEntryPage.jsx';
 import InviteExperiencePage from './pages/InviteExperiencePage.jsx';
 import CheckInPage from './pages/CheckInPage.jsx';
-import EventDayGuestPage from './pages/EventDayGuestPage.jsx';
 import AdminPage from './pages/admin/AdminPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import AppBackground from './components/layout/AppBackground.jsx';
@@ -46,14 +45,6 @@ const App = () => {
               element={
                 <RequireGuest guest={guest}>
                   <InviteExperiencePage />
-                </RequireGuest>
-              }
-            />
-            <Route
-              path="/event-day/guest"
-              element={
-                <RequireGuest guest={guest}>
-                  <EventDayGuestPage />
                 </RequireGuest>
               }
             />
