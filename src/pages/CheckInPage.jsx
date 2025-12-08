@@ -244,10 +244,10 @@ const CheckInPage = () => {
           <Tag tone={isOnline ? 'success' : 'neutral'}>{isOnline ? 'Offline-ready' : 'Offline'}</Tag>
           <Tag tone="info">{roleLabel}</Tag>
           <Button variant="ghost" onClick={() => setDarkMode((prev) => !prev)}>
-            {darkMode ? 'Light mode' : 'Dark mode'}
+            {darkMode ? '☀️ Light mode' : '🌙 Dark mode'}
           </Button>
-          <Button variant="outline" onClick={() => setShowScanner((prev) => !prev)} aria-pressed={showScanner}>
-            {showScanner ? 'Hide scanner' : 'QR scanner'}
+          <Button variant={showScanner ? 'primary' : 'outline'} onClick={() => setShowScanner((prev) => !prev)} aria-pressed={showScanner}>
+            {showScanner ? '✓ Scanner Active' : '📷 Camera QR Scanner'}
           </Button>
           <Button variant="ghost" onClick={() => navigate('/admin/event-day')}>Back to admin</Button>
         </div>
@@ -256,18 +256,33 @@ const CheckInPage = () => {
       {showScanner && (
         <div className="scanner-panel">
           <div className="scanner-panel__header">
-            <p className="detail-label">Scan invite QR</p>
-            <Tag tone="info">Live camera</Tag>
+            <div>
+              <p className="detail-label">📷 Live Camera QR Scanner</p>
+              <p className="scanner-instructions">Point your camera at the guest's QR code to automatically check them in</p>
+            </div>
+            <Tag tone="success">Camera Active</Tag>
           </div>
-          <QRCodeScanner
-            onScan={(text) => {
-              const value = String(text || '').trim().toUpperCase();
-              if (!value) return;
-              const match = entries.find((guest) => guest.code === value);
-              if (match) toggleArrival(match.code, true);
-            }}
-            facingMode="environment"
-          />
+          <div className="scanner-container">
+            <QRCodeScanner
+              onScan={(text) => {
+                const value = String(text || '').trim().toUpperCase();
+                if (!value) return;
+                const match = entries.find((guest) => guest.code === value);
+                if (match) {
+                  toggleArrival(match.code, true);
+                  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                  }
+                }
+              }}
+              facingMode="environment"
+              fps={15}
+            />
+          </div>
+          <div className="scanner-panel__footer">
+            <p className="scanner-hint">✓ Guests will be automatically checked in when QR code is detected</p>
+            <p className="scanner-hint">✓ Search results will update to show the checked-in guest</p>
+          </div>
         </div>
       )}
 
