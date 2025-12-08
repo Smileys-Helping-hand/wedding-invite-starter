@@ -3,7 +3,6 @@ import { RSVP_STATUSES } from './constants.js';
 const CHECKIN_STORAGE_KEY = 'hs_event_checkins';
 const CHECKIN_META_STORAGE_KEY = 'hs_event_meta';
 const CHECKIN_CHANNEL = 'hs_checkins_channel';
-const EVENT_DAY_MODE_KEY = 'hs_event_mode';
 const EVENT_DAY_MODE_KEY = 'hs_eventday_enabled';
 
 const normalizeGuest = (guest = {}) => {

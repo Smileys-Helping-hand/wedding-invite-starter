@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button.jsx';
 import Tag from '../components/common/Tag.jsx';
 import QRCodeCard from '../components/QRCodeCard.jsx';
+import MemoryWallPlaceholder from '../components/experience/MemoryWallPlaceholder.jsx';
 import { useGuest } from '../providers/GuestProvider.jsx';
 import {
   applyMetaToEntries,
@@ -11,11 +12,14 @@ import {
   formatRelativeCheckInTime,
   EVENT_DAY_MODE_KEY,
   isEventDayModeEnabled,
+  setEventDayModeEnabled,
   normalizeGuest,
   parseCheckInPayload,
   readStoredCheckIns,
   readStoredMeta,
   subscribeToEventState,
+  applyCheckInState,
+  broadcastCheckIns,
 } from '../utils/guestUtils.js';
 import './EventDayGuestPage.css';
 
@@ -74,10 +78,6 @@ const EventDayGuestPage = () => {
       navigate('/invite', { replace: true });
     }
   }, [eventModeEnabled, navigate]);
-    if (!isEventDayModeEnabled()) {
-      navigate('/invite', { replace: true });
-    }
-  }, [navigate]);
 
   if (!entry) {
     return (
@@ -99,7 +99,8 @@ const EventDayGuestPage = () => {
     : 'Awaiting arrival';
 
   return (
-    <div className="event-guest-shell">
+    <>
+      <div className="event-guest-shell">
       <div className="event-guest-card">
         <header className="event-guest-header">
           <div>
@@ -137,7 +138,22 @@ const EventDayGuestPage = () => {
               </div>
               <div className="event-guest-qr">
                 <QRCodeCard code={`CHECKIN:${parseCheckInPayload(entry.code)}`} label="Your arrival QR" />
-                <p className="qr-hint">Our team can scan this to mark your arrival instantly.</p>
+                {eventModeEnabled && (
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <Button
+                      variant={arrived ? 'ghost' : 'primary'}
+                      onClick={() => {
+                        // mark arrival locally and broadcast
+                        const next = applyCheckInState(checkIns, entry.code, { checkedIn: true, checkedInAt: new Date().toISOString() });
+                        setCheckIns(next);
+                        try { broadcastCheckIns(next); } catch (err) { /* ignore */ }
+                      }}
+                      disabled={arrived}
+                    >
+                      {arrived ? 'Arrived' : 'Mark arrived'}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -179,7 +195,9 @@ const EventDayGuestPage = () => {
           </aside>
         </div>
       </div>
-    </div>
+      </div>
+      {eventModeEnabled && <MemoryWallPlaceholder />}
+    </>
   );
 };
 

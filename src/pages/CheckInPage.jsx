@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { QrReader } from 'react-qr-reader';
+import QRCodeScanner from '../components/QRCodeScanner.jsx';
 import Button from '../components/common/Button.jsx';
 import TextInput from '../components/common/TextInput.jsx';
 import Tag from '../components/common/Tag.jsx';
@@ -167,11 +167,6 @@ const CheckInPage = () => {
 
   const handleScanSubmit = (event) => {
     if (event.key !== 'Enter') return;
-    const value = parseCheckInPayload(scanInput);
-    if (!value) return;
-    const match = entries.find((guest) => guest.code === value);
-    if (match) {
-      setSelectedGuest(match.code);
     const value = scanInput.trim().toUpperCase();
     if (!value) return;
     const match = entries.find((guest) => guest.code === value);
@@ -185,10 +180,6 @@ const CheckInPage = () => {
 
   const handleScanResult = (result, error) => {
     if (result?.text) {
-      const value = parseCheckInPayload(result.text);
-      const match = entries.find((guest) => guest.code === value);
-      if (match) {
-        setSelectedGuest(match.code);
       const value = result.text.trim().toUpperCase();
       const match = entries.find((guest) => guest.code === value);
       if (match) {
@@ -268,7 +259,15 @@ const CheckInPage = () => {
             <p className="detail-label">Scan invite QR</p>
             <Tag tone="info">Live camera</Tag>
           </div>
-          <QrReader onResult={handleScanResult} constraints={{ facingMode: 'environment' }} style={{ width: '100%' }} />
+          <QRCodeScanner
+            onScan={(text) => {
+              const value = String(text || '').trim().toUpperCase();
+              if (!value) return;
+              const match = entries.find((guest) => guest.code === value);
+              if (match) toggleArrival(match.code, true);
+            }}
+            facingMode="environment"
+          />
         </div>
       )}
 

@@ -74,27 +74,21 @@ const EventDayPage = ({ entries = [] }) => {
   }, [vipToast]);
 
   useEffect(() => {
-    const syncToggle = () => setEventDayEnabled(isEventDayModeEnabled());
     const storageHandler = (event) => {
-      if (event.key === EVENT_DAY_MODE_KEY) {
-        syncToggle();
-      }
-    };
-
-    window.addEventListener('storage', storageHandler);
-    window.addEventListener('hs:event-mode-change', syncToggle);
-
-    return () => {
-      window.removeEventListener('storage', storageHandler);
-      window.removeEventListener('hs:event-mode-change', syncToggle);
-    };
-    const syncToggle = (event) => {
-      if (event.key === EVENT_DAY_MODE_KEY) {
+      if (event?.key === EVENT_DAY_MODE_KEY) {
         setEventDayEnabled(isEventDayModeEnabled());
       }
     };
-    window.addEventListener('storage', syncToggle);
-    return () => window.removeEventListener('storage', syncToggle);
+
+    const broadcastHandler = () => setEventDayEnabled(isEventDayModeEnabled());
+
+    window.addEventListener('storage', storageHandler);
+    window.addEventListener('hs:event-mode-change', broadcastHandler);
+
+    return () => {
+      window.removeEventListener('storage', storageHandler);
+      window.removeEventListener('hs:event-mode-change', broadcastHandler);
+    };
   }, []);
 
   const stats = useMemo(() => computeArrivalStats(entriesWithMeta, checkIns), [checkIns, entriesWithMeta]);
