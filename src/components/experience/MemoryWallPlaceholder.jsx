@@ -10,7 +10,7 @@ const STORAGE_KEY = 'hs_memory_wall_images';
 
 const MemoryWallPlaceholder = () => {
   const navigate = useNavigate();
-  const { uploadMedia, isReady } = useFirebase();
+  const { uploadMedia, isReady, syncEventPhoto } = useFirebase();
   const [images, setImages] = useState(() => {
     try {
       const raw = typeof window !== 'undefined' ? window.localStorage.getItem(STORAGE_KEY) : null;
@@ -64,8 +64,23 @@ const MemoryWallPlaceholder = () => {
   const readFileFallback = (file) =>
     new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const data = e.target.result;
+        const photoEntry = {
+          url: data,
+          timestamp: new Date().toISOString(),
+          type: 'upload',
+        };
+        
+        // Try to sync to Firebase (optional)
+        if (syncEventPhoto) {
+          try {
+            await syncEventPhoto(photoEntry);
+          } catch (err) {
+            // Firebase sync failed, continue with localStorage only
+          }
+        }
+        
         setImages((prev) => {
           const next = [data, ...prev].slice(0, 50);
           persistLocal(next);
@@ -82,6 +97,23 @@ const MemoryWallPlaceholder = () => {
       if (uploadMedia && isReady) {
         try {
           const { url } = await uploadMedia(file, { directory: 'memory-wall' });
+          
+          const photoEntry = {
+            url,
+            timestamp: new Date().toISOString(),
+            type: 'upload',
+            fileName: file.name,
+          };
+          
+          // Sync to Firebase collection (optional)
+          if (syncEventPhoto) {
+            try {
+              await syncEventPhoto(photoEntry);
+            } catch (err) {
+              // Sync failed, continue with storage URL
+            }
+          }
+          
           setImages((prev) => [url, ...prev].slice(0, 50));
         } catch (err) {
           await readFileFallback(file);

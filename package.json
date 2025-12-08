@@ -11,7 +11,8 @@
     "test:e2e": "playwright test",
     "build": "vite build",
     "preview": "vite preview",
-    "predeploy": "npm run build && npm run preview"
+    "predeploy": "npm run build && npm run preview",
+    "verify": "node tools/verify-deployment.js"
   },
   "dependencies": {
     "chart.js": "4.4.4",
