@@ -196,6 +196,51 @@ export const FirebaseProvider = ({ children }) => {
     }
   };
 
+  const setEventDayMode = async (enabled) => {
+    if (!firestore) return;
+    try {
+      const ref = doc(firestore, 'config', 'eventDayMode');
+      await setDoc(ref, { enabled, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      // Fallback to localStorage only
+    }
+  };
+
+  const getEventDayMode = async () => {
+    if (!firestore) return null;
+    try {
+      const ref = doc(firestore, 'config', 'eventDayMode');
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        return snap.data().enabled;
+      }
+      return null;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  const subscribeToEventDayMode = (callback) => {
+    if (!firestore || typeof callback !== 'function') {
+      return () => {};
+    }
+
+    const ref = doc(firestore, 'config', 'eventDayMode');
+    const unsubscribe = onSnapshot(
+      ref,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          callback(snapshot.data().enabled);
+        }
+      },
+      () => {
+        // Error handler
+      }
+    );
+
+    return unsubscribe;
+  };
+
   return (
     <FirebaseContext.Provider
       value={{
@@ -214,6 +259,9 @@ export const FirebaseProvider = ({ children }) => {
         syncEventPhoto,
         syncCheckIn,
         syncGameGuess,
+        setEventDayMode,
+        getEventDayMode,
+        subscribeToEventDayMode,
       }}
     >
       {children}

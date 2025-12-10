@@ -3,6 +3,7 @@ import Button from '../../components/common/Button.jsx';
 import Tag from '../../components/common/Tag.jsx';
 import GuestModal from '../../components/GuestModal.jsx';
 import { RSVP_STATUSES } from '../../utils/constants.js';
+import { useFirebase } from '../../providers/FirebaseProvider.jsx';
 import {
   applyMetaToEntries,
   broadcastCheckIns,
@@ -35,6 +36,7 @@ const FILTERS = [
 ];
 
 const EventDayPage = ({ entries = [] }) => {
+  const { setEventDayMode, getEventDayMode, subscribeToEventDayMode, isReady } = useFirebase();
   const [filter, setFilter] = useState('all');
   const [checkIns, setCheckIns] = useState({});
   const [meta, setMeta] = useState(() => readStoredMeta());
@@ -43,6 +45,7 @@ const EventDayPage = ({ entries = [] }) => {
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [vipToast, setVipToast] = useState('');
   const [eventDayEnabled, setEventDayEnabled] = useState(() => isEventDayModeEnabled());
+  const [loadingToggle, setLoadingToggle] = useState(false);
   const [staffRole] = useState(() => {
     if (typeof window === 'undefined') return STAFF_ROLES.manager;
     return window.localStorage.getItem(STAFF_ROLE_STORAGE_KEY) || STAFF_ROLES.manager;
@@ -72,6 +75,38 @@ const EventDayPage = ({ entries = [] }) => {
     const timer = window.setTimeout(() => setVipToast(''), 2000);
     return () => window.clearTimeout(timer);
   }, [vipToast]);
+
+  // Load initial Event Day state from Firebase
+  useEffect(() => {
+    if (!isReady || !getEventDayMode) return;
+    
+    const loadInitialState = async () => {
+      try {
+        const firebaseState = await getEventDayMode();
+        if (firebaseState !== null) {
+          // Firebase state exists, use it and sync to localStorage
+          setEventDayModeEnabled(firebaseState);
+          setEventDayEnabled(firebaseState);
+        }
+      } catch (err) {
+        // Fallback to localStorage only
+      }
+    };
+
+    loadInitialState();
+  }, [isReady, getEventDayMode]);
+
+  // Subscribe to Firebase changes for real-time sync
+  useEffect(() => {
+    if (!subscribeToEventDayMode) return undefined;
+
+    const unsubscribe = subscribeToEventDayMode((enabled) => {
+      setEventDayModeEnabled(enabled);
+      setEventDayEnabled(enabled);
+    });
+
+    return () => unsubscribe?.();
+  }, [subscribeToEventDayMode]);
 
   useEffect(() => {
     const storageHandler = (event) => {
@@ -132,10 +167,24 @@ const EventDayPage = ({ entries = [] }) => {
 
   const handleReset = () => setShowResetConfirm(true);
 
-  const handleToggleEventDay = () => {
+  const handleToggleEventDay = async () => {
     const next = !eventDayEnabled;
+    setLoadingToggle(true);
+    
+    // Update localStorage first for immediate feedback
     setEventDayModeEnabled(next);
     setEventDayEnabled(next);
+    
+    // Sync to Firebase for global state
+    if (setEventDayMode) {
+      try {
+        await setEventDayMode(next);
+      } catch (err) {
+        console.warn('Failed to sync Event Day mode to Firebase', err);
+      }
+    }
+    
+    setLoadingToggle(false);
   };
 
   const confirmReset = () => {

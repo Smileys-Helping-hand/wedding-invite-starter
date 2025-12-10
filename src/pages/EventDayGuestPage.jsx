@@ -5,6 +5,7 @@ import Tag from '../components/common/Tag.jsx';
 import QRCodeCard from '../components/QRCodeCard.jsx';
 import MemoryWallPlaceholder from '../components/experience/MemoryWallPlaceholder.jsx';
 import { useGuest } from '../providers/GuestProvider.jsx';
+import { useFirebase } from '../providers/FirebaseProvider.jsx';
 import {
   applyMetaToEntries,
   ensureCheckInsForEntries,
@@ -26,6 +27,7 @@ import './EventDayGuestPage.css';
 const EventDayGuestPage = () => {
   const navigate = useNavigate();
   const { guest, inviteCode } = useGuest();
+  const { subscribeToEventDayMode, getEventDayMode, isReady } = useFirebase();
   const [checkIns, setCheckIns] = useState(() => readStoredCheckIns());
   const [meta, setMeta] = useState(() => readStoredMeta());
   const [eventModeEnabled, setEventModeEnabled] = useState(() => isEventDayModeEnabled());
@@ -54,6 +56,37 @@ const EventDayGuestPage = () => {
 
     return () => cleanup?.();
   }, [normalizedGuest]);
+
+  // Load initial Event Day state from Firebase
+  useEffect(() => {
+    if (!isReady || !getEventDayMode) return;
+    
+    const loadInitialState = async () => {
+      try {
+        const firebaseState = await getEventDayMode();
+        if (firebaseState !== null) {
+          setEventDayModeEnabled(firebaseState);
+          setEventModeEnabled(firebaseState);
+        }
+      } catch (err) {
+        // Fallback to localStorage only
+      }
+    };
+
+    loadInitialState();
+  }, [isReady, getEventDayMode]);
+
+  // Subscribe to Firebase changes for real-time sync
+  useEffect(() => {
+    if (!subscribeToEventDayMode) return undefined;
+
+    const unsubscribe = subscribeToEventDayMode((enabled) => {
+      setEventDayModeEnabled(enabled);
+      setEventModeEnabled(enabled);
+    });
+
+    return () => unsubscribe?.();
+  }, [subscribeToEventDayMode]);
 
   useEffect(() => {
     const syncEventMode = () => setEventModeEnabled(isEventDayModeEnabled());
