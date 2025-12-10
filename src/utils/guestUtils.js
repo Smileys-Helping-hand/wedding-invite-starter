@@ -3,7 +3,6 @@ import { RSVP_STATUSES } from './constants.js';
 const CHECKIN_STORAGE_KEY = 'hs_event_checkins';
 const CHECKIN_META_STORAGE_KEY = 'hs_event_meta';
 const CHECKIN_CHANNEL = 'hs_checkins_channel';
-const EVENT_DAY_MODE_KEY = 'hs_event_mode';
 const EVENT_DAY_MODE_KEY = 'hs_eventday_enabled';
 
 const normalizeGuest = (guest = {}) => {
@@ -244,7 +243,6 @@ const isEventDayModeEnabled = () => {
     const value = window.localStorage.getItem(EVENT_DAY_MODE_KEY);
     if (value === null) return false;
     return value === 'on' || value === 'true';
-    return window.localStorage.getItem(EVENT_DAY_MODE_KEY) === 'true';
   } catch (err) {
     return false;
   }
@@ -253,13 +251,15 @@ const isEventDayModeEnabled = () => {
 const setEventDayModeEnabled = (enabled) => {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(EVENT_DAY_MODE_KEY, enabled ? 'on' : 'off');
+    window.localStorage.setItem(EVENT_DAY_MODE_KEY, enabled ? 'true' : 'false');
     window.dispatchEvent(new Event('hs:event-mode-change'));
-    if (enabled) {
-      window.localStorage.setItem(EVENT_DAY_MODE_KEY, 'true');
-    } else {
-      window.localStorage.removeItem(EVENT_DAY_MODE_KEY);
-    }
+    
+    // Trigger storage event for cross-tab sync
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: EVENT_DAY_MODE_KEY,
+      newValue: enabled ? 'true' : 'false',
+      url: window.location.href
+    }));
   } catch (err) {
     /* ignore */
   }

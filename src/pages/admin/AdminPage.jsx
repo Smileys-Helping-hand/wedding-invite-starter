@@ -20,8 +20,11 @@ import AdminGuestsPage from './AdminGuestsPage.jsx';
 import ExportInviteCard from './ExportInviteCard.jsx';
 import { useFirebase } from '../../providers/FirebaseProvider.jsx';
 import EventDayPage from './EventDayPage.jsx';
+import EventDashboardPage from './EventDashboardPage.jsx';
+import LayoutCustomizerPage from './LayoutCustomizerPage.jsx';
 import AnalyticsPage from './AnalyticsPage.jsx';
 import { STAFF_ROLES, STAFF_ROLE_STORAGE_KEY } from '../../utils/roles.js';
+import { isEventDayModeEnabled, setEventDayModeEnabled, EVENT_DAY_MODE_KEY } from '../../utils/guestUtils.js';
 import './AdminPage.css';
 
 const encodeSessionToken = (code) => {
@@ -48,9 +51,11 @@ const tabs = [
   { to: '', label: 'Overview' },
   { to: 'guests', label: 'Guests' },
   { to: 'studio', label: 'Theme Studio' },
+  { to: 'layout', label: 'Layout Builder' },
   { to: 'import', label: 'Import CSV' },
   { to: 'export', label: 'Export Cards' },
   { to: 'event-day', label: 'Event Day' },
+  { to: 'dashboard', label: 'Event Dashboard' },
   { to: 'analytics', label: 'Analytics' },
 ];
 
@@ -71,6 +76,7 @@ const AdminPage = () => {
       return false;
     }
   });
+  const [eventDayEnabled, setEventDayEnabled] = useState(() => isEventDayModeEnabled());
   const [entries, setEntries] = useState(() => {
     const storedAdmin = (() => {
       try {
@@ -129,6 +135,30 @@ const AdminPage = () => {
     const cleanup = subscribeToEventState(entries, { onCheckIns: setCheckIns });
     return () => cleanup?.();
   }, [entries]);
+
+  useEffect(() => {
+    const syncEventMode = () => setEventDayEnabled(isEventDayModeEnabled());
+    const storageHandler = (event) => {
+      if (event.key === EVENT_DAY_MODE_KEY) {
+        syncEventMode();
+      }
+    };
+
+    window.addEventListener('storage', storageHandler);
+    window.addEventListener('hs:event-mode-change', syncEventMode);
+
+    return () => {
+      window.removeEventListener('storage', storageHandler);
+      window.removeEventListener('hs:event-mode-change', syncEventMode);
+    };
+  }, []);
+
+  const toggleEventDay = () => {
+    const next = !eventDayEnabled;
+    setEventDayModeEnabled(next);
+    setEventDayEnabled(next);
+    setToast(next ? 'Event Day mode enabled' : 'Event Day mode disabled');
+  };
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -382,10 +412,17 @@ const AdminPage = () => {
                     <p className="page-subtitle">Live RSVP status with quick insight into your honoured guests.</p>
                   </div>
                   <div className="admin-dashboard__actions">
-                    <Button variant="outline" size="md" onClick={() => navigate('/checkin', { state: { entries } })}>
-                      Open Staff Check-In
+                    <Button 
+                      variant={eventDayEnabled ? "primary" : "outline"} 
+                      size="md" 
+                      onClick={toggleEventDay}
+                    >
+                      {eventDayEnabled ? '✓ Event Day Active' : 'Activate Event Day'}
                     </Button>
-                    <Button variant="ghost" size="md" onClick={() => navigate('guests')}>
+                    <Button variant="primary" size="md" onClick={() => navigate('/checkin', { state: { entries } })}>
+                      📱 Staff Check-In
+                    </Button>
+                    <Button variant="outline" size="md" onClick={() => navigate('guests')}>
                       Manage guests
                     </Button>
                   </div>
@@ -432,9 +469,11 @@ const AdminPage = () => {
             }
           />
           <Route path="studio" element={<ThemeStudioPage entries={entries} />} />
+          <Route path="layout" element={<LayoutCustomizerPage />} />
           <Route path="import" element={<GuestSpreadsheetImporter existingGuests={entries} />} />
           <Route path="export" element={<ExportInviteCard guests={entries} />} />
           <Route path="event-day" element={<EventDayPage entries={entries} />} />
+          <Route path="dashboard" element={<EventDashboardPage />} />
           <Route path="analytics" element={<AnalyticsPage entries={entries} checkIns={checkIns} />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>

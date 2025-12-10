@@ -152,6 +152,95 @@ export const FirebaseProvider = ({ children }) => {
     });
   };
 
+  // Event Day Features (Optional Firebase sync - fallback to localStorage)
+  const syncEventPhoto = async (photoData) => {
+    if (!firestore || !bucket) return null;
+    try {
+      const ref = doc(collection(firestore, 'eventPhotos'));
+      await setDoc(ref, {
+        ...photoData,
+        uploadedAt: serverTimestamp(),
+      });
+      return ref.id;
+    } catch (err) {
+      // Fallback to localStorage only
+      return null;
+    }
+  };
+
+  const syncCheckIn = async (code, checkInData) => {
+    if (!firestore) return;
+    try {
+      const ref = doc(collection(firestore, 'checkIns'), code.toLowerCase());
+      await setDoc(ref, {
+        ...checkInData,
+        timestamp: serverTimestamp(),
+      }, { merge: true });
+    } catch (err) {
+      // Fallback to localStorage only
+    }
+  };
+
+  const syncGameGuess = async (guessData) => {
+    if (!firestore) return null;
+    try {
+      const ref = doc(collection(firestore, 'eventGuesses'));
+      await setDoc(ref, {
+        ...guessData,
+        submittedAt: serverTimestamp(),
+      });
+      return ref.id;
+    } catch (err) {
+      // Fallback to localStorage only
+      return null;
+    }
+  };
+
+  const setEventDayMode = async (enabled) => {
+    if (!firestore) return;
+    try {
+      const ref = doc(firestore, 'config', 'eventDayMode');
+      await setDoc(ref, { enabled, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      // Fallback to localStorage only
+    }
+  };
+
+  const getEventDayMode = async () => {
+    if (!firestore) return null;
+    try {
+      const ref = doc(firestore, 'config', 'eventDayMode');
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        return snap.data().enabled;
+      }
+      return null;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  const subscribeToEventDayMode = (callback) => {
+    if (!firestore || typeof callback !== 'function') {
+      return () => {};
+    }
+
+    const ref = doc(firestore, 'config', 'eventDayMode');
+    const unsubscribe = onSnapshot(
+      ref,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          callback(snapshot.data().enabled);
+        }
+      },
+      () => {
+        // Error handler
+      }
+    );
+
+    return unsubscribe;
+  };
+
   return (
     <FirebaseContext.Provider
       value={{
@@ -166,6 +255,13 @@ export const FirebaseProvider = ({ children }) => {
         uploadMedia,
         subscribeToGuests,
         appendAdminLog,
+        // Event Day Features (optional sync)
+        syncEventPhoto,
+        syncCheckIn,
+        syncGameGuess,
+        setEventDayMode,
+        getEventDayMode,
+        subscribeToEventDayMode,
       }}
     >
       {children}

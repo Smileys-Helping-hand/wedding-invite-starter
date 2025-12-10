@@ -1,46 +1,82 @@
-# Luxury Engagement Invitation Experience
+# Luxury Wedding Invitation Experience
 
-A Vite + React single-page experience celebrating the engagement of Razia &amp; Abduraziq. Guests unlock an animated reveal, RSVP within the app, and admins can track attendance with a passcode-protected dashboard.
+A Vite + React single-page application for Razia & Abduraziq's wedding celebration. Features immersive animations, RSVP tracking, event day experiences, and comprehensive admin tools.
 
-## Features
+## ✨ Features
 
-- Invite code validation with Firestore integration and local fallback dataset
-- Immersive reveal sequence: silk curtains, Bismillah glow, wax seal melt, and invitation card slide
-- Hijri and Gregorian date display, plus countdown to 16 December 2025
-- Nasheed audio playback with persistent preferences
-- RSVP submission, additional guest tracking, and personalised messages
-- Memory wall placeholder unlocking after the celebration
-- Admin portal for RSVP overview, statistics, manual status updates, and bulk guest import
-- Canva-style theme studio with live preview, Firebase Storage uploads, and preset palettes/fonts
+### Guest Experience
+- **Invite Code Validation** - Secure access with Firestore integration and local fallback
+- **Immersive Reveal Sequence** - Silk curtains, Bismillah glow, wax seal melt, and invitation card animation
+- **Countdown Timer** - Hijri and Gregorian date display with live countdown
+- **RSVP System** - Guest submission with household tracking and personalized messages
+- **Event Day Features**:
+  - QR code for check-in
+  - Live camera photo capture
+  - Memory wall gallery
+  - Games & guesses with community voting
+  - Real-time check-in status
 
-## Getting started
+### Admin Portal
+- **Dashboard Overview** - RSVP statistics and attendance tracking
+- **Guest Management** - Manual status updates, household details, bulk import
+- **Event Day Dashboard** - View photos, guesses, and votes in real-time
+- **Staff Check-In** - QR code scanner for guest arrival tracking
+- **Theme Studio** - Canva-style customization with live preview
+- **Layout Customizer** - Drag-and-drop page builder with alignment controls
+- **Analytics Page** - Charts and insights for event planning
+
+### Community Features
+- **Memory Wall** - Public photo gallery with Firebase Storage backup
+- **Games & Voting** - Community guesses with voting system
+- **Community Dashboard** - Public view at `/community` for all submissions
+
+## 🚀 Quick Start
 
 ```bash
-npm install
+# Install dependencies (uses legacy peer deps for compatibility)
+npm install --legacy-peer-deps
+
+# Start development server
 npm run dev
+
+# Open in browser automatically
+npm run dev:open
 ```
 
-Create a local environment file using the provided template:
+## 📋 Environment Setup
 
 ```bash
+# Copy environment template
 cp .env.example .env
 ```
 
-Fill in `VITE_FIREBASE_*` values from your Firebase console and update `VITE_ADMIN_CODE` with your private dashboard passcode. The `.env`
-file is ignored by Git to prevent accidental secrets commits.
+Fill in Firebase credentials from your Firebase Console (optional - app works with localStorage fallback):
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- And other Firebase config values
 
-## Tech stack
+## 🛠️ Tech Stack
 
-- React 18 with Vite
-- Framer Motion for cinematic transitions
-- Firebase SDK for Firestore integrations
-- Custom-designed imagery, audio, and sparkles video sourced separately (see `public/assets/README.md`)
+- **Frontend**: React 18.3.1 with Vite 6.x
+- **Routing**: React Router DOM 6.27.0
+- **Animations**: Framer Motion 11.x
+- **QR Handling**: html5-qrcode 2.3.8 + qrcode 1.5.4
+- **Storage**: localStorage (primary) + Firebase (optional sync)
+- **Charts**: Chart.js 4.4.4
+- **Testing**: Playwright for E2E tests
 
-## Scripts
+## 📦 Scripts
 
-- `npm run dev` – start development server
-- `npm run build` – build production bundle
-- `npm run preview` – preview production build
+```bash
+npm run dev          # Start development server
+npm run dev:open     # Start dev server and open browser
+npm run build        # Build production bundle
+npm run preview      # Preview production build
+npm run test:qr      # Run headless QR check-in test
+npm run test:e2e     # Run Playwright E2E tests
+npm run predeploy    # Build and preview (pre-deployment check)
+```
 
 ## Bulk import guests instructions
 
