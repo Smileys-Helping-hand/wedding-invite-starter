@@ -7,7 +7,8 @@
 }
 
 .event-guest-card {
-  width: min(1100px, 100%);
+  max-width: 1400px;
+  width: 100%;
   background: rgba(255, 255, 255, 0.96);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -33,8 +34,9 @@
 
 .event-guest-grid {
   display: grid;
-  grid-template-columns: 2fr 0.9fr;
-  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
 }
 
 .event-guest-main {
@@ -103,9 +105,10 @@
   align-content: start;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1200px) {
   .event-guest-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .event-guest-status {
