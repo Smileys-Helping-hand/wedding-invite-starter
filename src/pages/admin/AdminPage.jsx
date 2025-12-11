@@ -77,56 +77,47 @@ const AdminPage = () => {
     }
   });
   const [eventDayEnabled, setEventDayEnabled] = useState(() => isEventDayModeEnabled());
-  const [entries, setEntries] = useState(() => {
-    const storedAdmin = (() => {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEYS.adminGuests);
-        if (!stored) return null;
-        const parsed = JSON.parse(stored);
-        return Array.isArray(parsed) ? parsed : null;
-      } catch (err) {
-        return null;
-      }
-    })();
-
-    if (storedAdmin && storedAdmin.length > 0) {
-      return storedAdmin.map((guest) => normaliseGuest(guest)).sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest));
-    }
-
-    const storedGuest = (() => {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEYS.guest);
-        if (!stored) return null;
-        const parsed = JSON.parse(stored);
-        return parsed?.guest ? { ...parsed.guest, code: parsed.inviteCode } : null;
-      } catch (err) {
-        return null;
-      }
-    })();
-
-    const combined = storedGuest && !localGuests.some((guest) => guest.code === storedGuest.code)
-      ? [...localGuests, storedGuest]
-      : localGuests;
-
-    return combined
-      .map((guest) => normaliseGuest(guest))
-      .sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest));
-  });
+  const [entries, setEntries] = useState([]);
+  const [loadingGuests, setLoadingGuests] = useState(true);
   const [checkIns, setCheckIns] = useState(() => readStoredCheckIns());
 
   useEffect(() => {
-    if (!firebase?.subscribeToGuests) return undefined;
-    const unsubscribe = firebase.subscribeToGuests((data) => {
-      if (!data) return;
-      setEntries((prev) => {
-        const normalised = data.map((guest) => normaliseGuest(guest));
+    if (!firebase?.subscribeToGuests) {
+      // No Firebase - load from localStorage or local JSON
+      const storedAdmin = (() => {
         try {
-          localStorage.setItem(STORAGE_KEYS.adminGuests, JSON.stringify(normalised));
+          const stored = localStorage.getItem(STORAGE_KEYS.adminGuests);
+          if (!stored) return null;
+          const parsed = JSON.parse(stored);
+          return Array.isArray(parsed) ? parsed : null;
         } catch (err) {
-          /* ignore */
+          return null;
         }
-        return normalised.sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest));
-      });
+      })();
+
+      if (storedAdmin && storedAdmin.length > 0) {
+        setEntries(storedAdmin.map((guest) => normaliseGuest(guest)).sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest)));
+      } else {
+        setEntries(localGuests.map((guest) => normaliseGuest(guest)).sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest)));
+      }
+      setLoadingGuests(false);
+      return undefined;
+    }
+
+    // Firebase available - subscribe to real-time updates
+    const unsubscribe = firebase.subscribeToGuests((data) => {
+      if (!data) {
+        setLoadingGuests(false);
+        return;
+      }
+      const normalised = data.map((guest) => normaliseGuest(guest));
+      try {
+        localStorage.setItem(STORAGE_KEYS.adminGuests, JSON.stringify(normalised));
+      } catch (err) {
+        /* ignore */
+      }
+      setEntries(normalised.sort((a, b) => a.primaryGuest.localeCompare(b.primaryGuest)));
+      setLoadingGuests(false);
     });
     return unsubscribe;
   }, [firebase?.subscribeToGuests]);
