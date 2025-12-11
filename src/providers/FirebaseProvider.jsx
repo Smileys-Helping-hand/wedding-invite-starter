@@ -35,10 +35,25 @@ let db;
 let storage;
 
 if (hasFirebaseConfig) {
-  const existingApps = getApps();
-  app = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  storage = getStorage(app);
+  try {
+    const existingApps = getApps();
+    app = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    storage = getStorage(app);
+    console.log('✅ Firebase initialized successfully:', firebaseConfig.projectId);
+  } catch (error) {
+    console.error('❌ Firebase initialization failed:', error);
+  }
+} else {
+  console.warn('⚠️ Firebase not configured - missing environment variables');
+  console.log('Firebase config status:', {
+    apiKey: firebaseConfig.apiKey ? '✅' : '❌',
+    authDomain: firebaseConfig.authDomain ? '✅' : '❌',
+    projectId: firebaseConfig.projectId ? '✅' : '❌',
+    storageBucket: firebaseConfig.storageBucket ? '✅' : '❌',
+    messagingSenderId: firebaseConfig.messagingSenderId ? '✅' : '❌',
+    appId: firebaseConfig.appId ? '✅' : '❌',
+  });
 }
 
 export const FirebaseProvider = ({ children }) => {
@@ -125,17 +140,21 @@ export const FirebaseProvider = ({ children }) => {
 
   const subscribeToGuests = (callback) => {
     if (!firestore || typeof callback !== 'function') {
+      console.warn('⚠️ subscribeToGuests called but Firebase not available');
       return () => {};
     }
 
+    console.log('📡 Setting up Firebase guests subscription...');
     const guestsQuery = query(collection(firestore, 'guests'), orderBy('primaryGuest', 'asc'));
     const unsubscribe = onSnapshot(
       guestsQuery,
       (snapshot) => {
+        console.log(`✅ Firebase guests loaded: ${snapshot.docs.length} guests`);
         const data = snapshot.docs.map((docItem) => ({ code: docItem.id.toUpperCase(), ...docItem.data() }));
         callback(data);
       },
-      () => {
+      (error) => {
+        console.error('❌ Firebase subscription error:', error);
         callback(null);
       }
     );
