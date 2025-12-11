@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /config/{document=**} {
+    match /config/currentTheme {
       allow read: if true;
       allow write: if request.time < timestamp.date(2030, 1, 1)
                    && request.auth == null
@@ -9,9 +9,38 @@ service cloud.firestore {
                    && request.resource.data.keys().hasOnly(['theme']);
     }
 
+    match /config/eventDayMode {
+      allow read: if true;
+      allow write: if true; // Allow admin to toggle Event Day mode
+    }
+
+    match /config/{document} {
+      allow read: if true;
+    }
+
     match /guests/{docId} {
       allow read: if true;
       allow write: if false; // Admin writes happen via admin UI only
+    }
+
+    match /eventPhotos/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /eventGuesses/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /checkIns/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /adminLogs/{docId} {
+      allow read: if false;
+      allow write: if true;
     }
   }
 }
