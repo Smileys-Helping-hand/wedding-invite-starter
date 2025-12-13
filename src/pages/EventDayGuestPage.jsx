@@ -31,6 +31,8 @@ const EventDayGuestPage = () => {
   const [checkIns, setCheckIns] = useState(() => readStoredCheckIns());
   const [meta, setMeta] = useState(() => readStoredMeta());
   const [eventModeEnabled, setEventModeEnabled] = useState(() => isEventDayModeEnabled());
+  const [syncStatus, setSyncStatus] = useState('connecting');
+  const [lastSyncTime, setLastSyncTime] = useState(null);
 
   const normalizedGuest = useMemo(() => {
     if (!guest) return null;
@@ -78,11 +80,17 @@ const EventDayGuestPage = () => {
 
   // Subscribe to Firebase changes for real-time sync
   useEffect(() => {
-    if (!subscribeToEventDayMode) return undefined;
+    if (!subscribeToEventDayMode) {
+      setSyncStatus('offline');
+      return undefined;
+    }
 
+    setSyncStatus('connected');
     const unsubscribe = subscribeToEventDayMode((enabled) => {
       setEventDayModeEnabled(enabled);
       setEventModeEnabled(enabled);
+      setLastSyncTime(new Date());
+      setSyncStatus('connected');
     });
 
     return () => unsubscribe?.();
@@ -103,9 +111,13 @@ const EventDayGuestPage = () => {
         if (firebaseState !== null) {
           setEventDayModeEnabled(firebaseState);
           setEventModeEnabled(firebaseState);
+          setLastSyncTime(new Date());
+          if (syncStatus !== 'connected') {
+            setSyncStatus('polling');
+          }
         }
       } catch (err) {
-        // ignore polling errors
+        setSyncStatus('error');
       }
     };
 
@@ -117,7 +129,7 @@ const EventDayGuestPage = () => {
       cancelled = true;
       if (intervalId) window.clearInterval(intervalId);
     };
-  }, [getEventDayMode]);
+  }, [getEventDayMode, syncStatus]);
 
   useEffect(() => {
     const syncEventMode = () => setEventModeEnabled(isEventDayModeEnabled());
@@ -162,6 +174,16 @@ const EventDayGuestPage = () => {
     ? formatRelativeCheckInTime(record.checkedInAt)
     : 'Awaiting arrival';
 
+  const syncStatusConfig = {
+    connecting: { icon: '⏳', text: 'Connecting...', color: '#999' },
+    connected: { icon: '✓', text: 'Live', color: '#22c55e' },
+    polling: { icon: '↻', text: 'Syncing', color: '#f59e0b' },
+    offline: { icon: '○', text: 'Offline', color: '#ef4444' },
+    error: { icon: '!', text: 'Error', color: '#ef4444' },
+  };
+
+  const currentStatus = syncStatusConfig[syncStatus] || syncStatusConfig.connecting;
+
   return (
     <>
       <div className="event-guest-shell">
@@ -173,6 +195,15 @@ const EventDayGuestPage = () => {
             <p className="page-subtitle">Your household details update live as the welcome team checks you in.</p>
           </div>
           <div className="event-guest-header__actions">
+            <div className="event-guest-sync-status" style={{ color: currentStatus.color }}>
+              <span style={{ fontSize: '16px' }}>{currentStatus.icon}</span>
+              <span>{currentStatus.text}</span>
+              {lastSyncTime && syncStatus === 'connected' && (
+                <span style={{ fontSize: '11px', opacity: 0.7 }}>
+                  {new Date(lastSyncTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              )}
+            </div>
             <Tag tone={arrived ? 'success' : 'info'}>{arrived ? 'Arrived' : 'Awaiting check-in'}</Tag>
             <Button variant="ghost" onClick={() => navigate('/invite')}>Back to invitation</Button>
           </div>
