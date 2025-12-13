@@ -88,6 +88,37 @@ const EventDayGuestPage = () => {
     return () => unsubscribe?.();
   }, [subscribeToEventDayMode]);
 
+  // Polling fallback: some mobile browsers or network conditions can delay real-time
+  // updates. Poll every 7s as a safety net so Event Day toggles appear on other
+  // devices even if onSnapshot isn't delivered promptly.
+  useEffect(() => {
+    let intervalId = null;
+    let cancelled = false;
+
+    const poll = async () => {
+      if (cancelled) return;
+      if (!getEventDayMode) return;
+      try {
+        const firebaseState = await getEventDayMode();
+        if (firebaseState !== null) {
+          setEventDayModeEnabled(firebaseState);
+          setEventModeEnabled(firebaseState);
+        }
+      } catch (err) {
+        // ignore polling errors
+      }
+    };
+
+    // Start immediate poll followed by interval
+    poll();
+    intervalId = window.setInterval(poll, 7000);
+
+    return () => {
+      cancelled = true;
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, [getEventDayMode]);
+
   useEffect(() => {
     const syncEventMode = () => setEventModeEnabled(isEventDayModeEnabled());
     const storageHandler = (event) => {
